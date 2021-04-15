@@ -1,5 +1,5 @@
-Building Zcash
+Building VoteCoin
 
-See the Zcash documentation wiki (https://zcash.readthedocs.io/en/latest/rtd_pages/user_guide.html) for instructions on building zcashd,
+See the VoteCoin documentation wiki (https://votecoin.readthedocs.io/en/latest/rtd_pages/user_guide.html) for instructions on building votecoind,
 the intended-for-services, no-graphical-interface, reference
-implementation of Zcash.
+implementation of VoteCoin.

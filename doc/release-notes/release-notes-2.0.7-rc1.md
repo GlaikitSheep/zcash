@@ -4,11 +4,11 @@ Changelog
 Daira Hopwood (10):
       Add MIT license to Makefiles
       Add MIT license to build-aux/m4/bitcoin_* scripts, and a permissive license to build-aux/m4/l_atomic.m4 .
-      Update copyright information for Zcash, leveldb, and libsnark.
+      Update copyright information for VoteCoin, leveldb, and libsnark.
       Add license information for Autoconf macros. refs #2827
       Update contrib/debian/copyright for ax_boost_thread.m4
       Replace http with https: in links to the MIT license. Also change MIT/X11 to just MIT, since no distinction was intended.
-      qa/zcash/checksec.sh is under a BSD license, with a specialized non-endorsement clause.
+      qa/votecoin/checksec.sh is under a BSD license, with a specialized non-endorsement clause.
       Link to ticket #2827 using URL
       Release process doc: add step to set the gpg key id.
       Release process doc: mention the commit message.

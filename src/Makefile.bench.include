@@ -1,4 +1,4 @@
-# Copyright (c) 2020 The Zcash developers
+# Copyright (c) 2020 The VoteCoin developers
 # Copyright (c) 2015-2016 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
@@ -36,7 +36,7 @@ bench_bench_bitcoin_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1) \
   $(LIBUNIVALUE) \
-  $(LIBZCASH) \
+  $(LIBVOTECOIN) \
   $(LIBRUSTZCASH)
 
 if ENABLE_ZMQ
@@ -47,7 +47,7 @@ if ENABLE_WALLET
 bench_bench_bitcoin_LDADD += $(LIBBITCOIN_WALLET)
 endif
 
-bench_bench_bitcoin_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(LIBZCASH_LIBS)
+bench_bench_bitcoin_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(LIBVOTECOIN_LIBS)
 bench_bench_bitcoin_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 CLEAN_BITCOIN_BENCH = bench/*.gcda bench/*.gcno

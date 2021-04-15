@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_CONSENSUS_FUNDING_H
-#define ZCASH_CONSENSUS_FUNDING_H
+#ifndef VOTECOIN_CONSENSUS_FUNDING_H
+#define VOTECOIN_CONSENSUS_FUNDING_H
 
 #include <amount.h>
 #include <consensus/params.h>
@@ -42,4 +42,4 @@ std::vector<FSInfo> GetActiveFundingStreams(
 
 } // namespace Consensus
 
-#endif // ZCASH_CONSENSUS_FUNDING_H
+#endif // VOTECOIN_CONSENSUS_FUNDING_H

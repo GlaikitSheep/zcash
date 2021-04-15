@@ -9,13 +9,13 @@ the Canopy network upgrade.
 
 The following ZIPs are being deployed as part of this upgrade:
 
-* [ZIP 207: Funding Streams](https://zips.z.cash/zip-0207) in conjunction with [ZIP 214: Consensus rules for a Zcash Development Fund](https://zips.z.cash/zip-0214)
+* [ZIP 207: Funding Streams](https://zips.z.cash/zip-0207) in conjunction with [ZIP 214: Consensus rules for a VoteCoin Development Fund](https://zips.z.cash/zip-0214)
 * [ZIP 211: Disabling Addition of New Value to the Sprout Value Pool](https://zips.z.cash/zip-0211)
 * [ZIP 212: Allow Recipient to Derive Sapling Ephemeral Secret from Note Plaintext](https://zips.z.cash/zip-0212)
 * [ZIP 215: Explicitly Defining and Modifying Ed25519 Validation Rules](https://zips.z.cash/zip-0215)
 
 In order to help the ecosystem prepare for the mainnet activation, Canopy has
-already been activated on the Zcash testnet. Any node version 3.1.0 or higher,
+already been activated on the VoteCoin testnet. Any node version 3.1.0 or higher,
 including this release, supports the Canopy activation on testnet.
 
 Disabling new value in the Sprout value pool
@@ -26,13 +26,13 @@ Sprout z-addresses from any _other_ kind of address, as described in [ZIP 211](h
 It will still be possible to send funds _from_ a Sprout z-address and to send
 funds between Sprout addresses. Users of Sprout z-addresses are encouraged to
 use Sapling z-addresses instead, and to migrate their remaining Sprout funds
-into a Sapling z-address using the migration utility in zcashd: set `migrate=1`
-in your `zcash.conf` file, or use the `z_setmigration` RPC.
+into a Sapling z-address using the migration utility in votecoind: set `migrate=1`
+in your `votecoin.conf` file, or use the `z_setmigration` RPC.
 
 New logging system
 ------------------
 
-The `zcashd` logging system is now powered by the Rust `tracing` crate. This
+The `votecoind` logging system is now powered by the Rust `tracing` crate. This
 has two main benefits:
 
 - `tracing` supports the concept of "spans", which represent periods of time
@@ -43,11 +43,11 @@ has two main benefits:
   messages. This structure can then be filtered dynamically.
 
 The existing `-debug=target` config flags are mapped to `tracing` log filters,
-and will continue to correctly enable additional logging when starting `zcashd`.
+and will continue to correctly enable additional logging when starting `votecoind`.
 A new `setlogfilter` RPC method has been introduced that enables reconfiguring
-the log filter at runtime. See `zcash-cli help setlogfilter` for its syntax.
+the log filter at runtime. See `votecoin-cli help setlogfilter` for its syntax.
 
-As a minor note, `zcashd` no longer reopens the `debug.log` file on `SIGHUP`.
+As a minor note, `votecoind` no longer reopens the `debug.log` file on `SIGHUP`.
 This behaviour was originally introduced in upstream Bitcoin Core to support log
 rotation using external tools. `tracing` supports log rotation internally (which
 is currently disabled), as well as a variety of interesting backends (such as
@@ -110,10 +110,10 @@ Dimitris Apostolou (1):
       Remove deprecated contrib utilities
 
 Jack Grigg (67):
-      Move GrothProof and SproutProof definitions into zcash/Proof.hpp
+      Move GrothProof and SproutProof definitions into votecoin/Proof.hpp
       Remove unused declarations left over from libsnark verification
       Make ZCJoinSplit::prove static and remove ZCJoinSplit globals
-      Move ProofVerifier out of the libzcash namespace
+      Move ProofVerifier out of the libvotecoin namespace
       Move JSDescription::Verify to ProofVerifier::VerifySprout
       Skip Sprout proof verification for ProofVerifier::Disabled
       Send alert to put pre-Heartwood nodes into safe mode.
@@ -132,7 +132,7 @@ Jack Grigg (67):
       Add support for reloading the tracing filter
       Add an RPC method for setting the tracing filter directives
       Add support for tracing spans
-      Add some spans to the Zcash codebase
+      Add some spans to the VoteCoin codebase
       FFI: Extract common codeunit types into a rust/types.h header
       tracing: Use 'static constexpr' hack in macros
       wallet: Fix logging to satisfy constexpr requirements
@@ -168,7 +168,7 @@ Jack Grigg (67):
       Replace libsodium's crypto_sign with ed25519-zebra
       ed25519: Panic (triggering abort) if nullptr passed into APIs
       test: Update ZIP 215 test cases from ed25519-zebra
-      depends: Migrate to zcash_* 0.3.0 Rust crates
+      depends: Migrate to votecoin_* 0.3.0 Rust crates
       FFI: Remove circuit parameter hashes from librustzcash_init_zksnark_params
       FFI: Migrate to bls12_381 and jubjub crates
       depends: cargo update

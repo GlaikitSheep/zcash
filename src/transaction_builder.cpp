@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Zcash developers
+// Copyright (c) 2018 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -10,14 +10,14 @@
 #include "rpc/protocol.h"
 #include "script/sign.h"
 #include "utilmoneystr.h"
-#include "zcash/Note.hpp"
+#include "votecoin/Note.hpp"
 
 #include <librustzcash.h>
 #include <rust/ed25519.h>
 
 SpendDescriptionInfo::SpendDescriptionInfo(
-    libzcash::SaplingExpandedSpendingKey expsk,
-    libzcash::SaplingNote note,
+    libvotecoin::SaplingExpandedSpendingKey expsk,
+    libvotecoin::SaplingNote note,
     uint256 anchor,
     SaplingWitness witness) : expsk(expsk), note(note), anchor(anchor), witness(witness)
 {
@@ -30,7 +30,7 @@ std::optional<OutputDescription> OutputDescriptionInfo::Build(void* ctx) {
         return std::nullopt;
     }
 
-    libzcash::SaplingNotePlaintext notePlaintext(this->note, this->memo);
+    libvotecoin::SaplingNotePlaintext notePlaintext(this->note, this->memo);
 
     auto res = notePlaintext.encrypt(this->note.pk_d);
     if (!res) {
@@ -39,7 +39,7 @@ std::optional<OutputDescription> OutputDescriptionInfo::Build(void* ctx) {
     auto enc = res.value();
     auto encryptor = enc.second;
 
-    libzcash::SaplingPaymentAddress address(this->note.d, this->note.pk_d);
+    libvotecoin::SaplingPaymentAddress address(this->note.d, this->note.pk_d);
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << address;
     std::vector<unsigned char> addressBytes(ss.begin(), ss.end());
@@ -61,7 +61,7 @@ std::optional<OutputDescription> OutputDescriptionInfo::Build(void* ctx) {
     odesc.ephemeralKey = encryptor.get_epk();
     odesc.encCiphertext = enc.first;
 
-    libzcash::SaplingOutgoingPlaintext outPlaintext(this->note.pk_d, encryptor.get_esk());
+    libvotecoin::SaplingOutgoingPlaintext outPlaintext(this->note.pk_d, encryptor.get_esk());
     odesc.outCiphertext = outPlaintext.encrypt(
         this->ovk,
         odesc.cv,
@@ -80,7 +80,7 @@ JSDescription JSDescriptionInfo::BuildDeterministic(
     jsdesc.vpub_new = vpub_new;
     jsdesc.anchor = anchor;
 
-    std::array<libzcash::SproutNote, ZC_NUM_JS_OUTPUTS> notes;
+    std::array<libvotecoin::SproutNote, ZC_NUM_JS_OUTPUTS> notes;
     jsdesc.proof = ZCJoinSplit::prove(
         inputs,
         outputs,
@@ -183,8 +183,8 @@ void TransactionBuilder::SetExpiryHeight(uint32_t nExpiryHeight)
 }
 
 void TransactionBuilder::AddSaplingSpend(
-    libzcash::SaplingExpandedSpendingKey expsk,
-    libzcash::SaplingNote note,
+    libvotecoin::SaplingExpandedSpendingKey expsk,
+    libvotecoin::SaplingNote note,
     uint256 anchor,
     SaplingWitness witness)
 {
@@ -204,7 +204,7 @@ void TransactionBuilder::AddSaplingSpend(
 
 void TransactionBuilder::AddSaplingOutput(
     uint256 ovk,
-    libzcash::SaplingPaymentAddress to,
+    libvotecoin::SaplingPaymentAddress to,
     CAmount value,
     std::array<unsigned char, ZC_MEMO_SIZE> memo)
 {
@@ -213,20 +213,20 @@ void TransactionBuilder::AddSaplingOutput(
         throw std::runtime_error("TransactionBuilder cannot add Sapling output to pre-Sapling transaction");
     }
 
-    libzcash::Zip212Enabled zip_212_enabled = libzcash::Zip212Enabled::BeforeZip212;
+    libvotecoin::Zip212Enabled zip_212_enabled = libvotecoin::Zip212Enabled::BeforeZip212;
     // We use nHeight = chainActive.Height() + 1 since the output will be included in the next block
     if (Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_CANOPY)) {
-        zip_212_enabled = libzcash::Zip212Enabled::AfterZip212;
+        zip_212_enabled = libvotecoin::Zip212Enabled::AfterZip212;
     }
 
-    auto note = libzcash::SaplingNote(to, value, zip_212_enabled);
+    auto note = libvotecoin::SaplingNote(to, value, zip_212_enabled);
     outputs.emplace_back(ovk, note, memo);
     mtx.valueBalance -= value;
 }
 
 void TransactionBuilder::AddSproutInput(
-    libzcash::SproutSpendingKey sk,
-    libzcash::SproutNote note,
+    libvotecoin::SproutSpendingKey sk,
+    libvotecoin::SproutNote note,
     SproutWitness witness)
 {
     // Consistency check: all anchors must equal the first one
@@ -240,11 +240,11 @@ void TransactionBuilder::AddSproutInput(
 }
 
 void TransactionBuilder::AddSproutOutput(
-    libzcash::SproutPaymentAddress to,
+    libvotecoin::SproutPaymentAddress to,
     CAmount value,
     std::array<unsigned char, ZC_MEMO_SIZE> memo)
 {
-    libzcash::JSOutput jsOutput(to, value);
+    libvotecoin::JSOutput jsOutput(to, value);
     jsOutput.memo = memo;
     jsOutputs.push_back(jsOutput);
 }
@@ -275,14 +275,14 @@ void TransactionBuilder::SetFee(CAmount fee)
     this->fee = fee;
 }
 
-void TransactionBuilder::SendChangeTo(libzcash::SaplingPaymentAddress changeAddr, uint256 ovk)
+void TransactionBuilder::SendChangeTo(libvotecoin::SaplingPaymentAddress changeAddr, uint256 ovk)
 {
     saplingChangeAddr = std::make_pair(ovk, changeAddr);
     sproutChangeAddr = std::nullopt;
     tChangeAddr = std::nullopt;
 }
 
-void TransactionBuilder::SendChangeTo(libzcash::SproutPaymentAddress changeAddr)
+void TransactionBuilder::SendChangeTo(libvotecoin::SproutPaymentAddress changeAddr)
 {
     sproutChangeAddr = changeAddr;
     saplingChangeAddr = std::nullopt;
@@ -343,7 +343,7 @@ TransactionBuilderResult TransactionBuilder::Build()
         } else if (!spends.empty()) {
             auto fvk = spends[0].expsk.full_viewing_key();
             auto note = spends[0].note;
-            libzcash::SaplingPaymentAddress changeAddr(note.d, note.pk_d);
+            libvotecoin::SaplingPaymentAddress changeAddr(note.d, note.pk_d);
             AddSaplingOutput(fvk.ovk, changeAddr, change);
         } else if (!jsInputs.empty()) {
             auto changeAddr = jsInputs[0].key.address();
@@ -507,11 +507,11 @@ TransactionBuilderResult TransactionBuilder::Build()
 void TransactionBuilder::CreateJSDescriptions()
 {
     // Copy jsInputs and jsOutputs to more flexible containers
-    std::deque<libzcash::JSInput> jsInputsDeque;
+    std::deque<libvotecoin::JSInput> jsInputsDeque;
     for (auto jsInput : jsInputs) {
         jsInputsDeque.push_back(jsInput);
     }
-    std::deque<libzcash::JSOutput> jsOutputsDeque;
+    std::deque<libvotecoin::JSOutput> jsOutputsDeque;
     for (auto jsOutput : jsOutputs) {
         jsOutputsDeque.push_back(jsOutput);
     }
@@ -523,8 +523,8 @@ void TransactionBuilder::CreateJSDescriptions()
         // Create joinsplits, where each output represents a zaddr recipient.
         while (jsOutputsDeque.size() > 0) {
             // Default array entries are dummy inputs and outputs
-            std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> vjsin;
-            std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout;
+            std::array<libvotecoin::JSInput, ZC_NUM_JS_INPUTS> vjsin;
+            std::array<libvotecoin::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout;
             uint64_t vpub_old = 0;
 
             for (int n = 0; n < ZC_NUM_JS_OUTPUTS && jsOutputsDeque.size() > 0; n++) {
@@ -568,8 +568,8 @@ void TransactionBuilder::CreateJSDescriptions()
 
     while (!vpubNewProcessed) {
         // Default array entries are dummy inputs and outputs
-        std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> vjsin;
-        std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout;
+        std::array<libvotecoin::JSInput, ZC_NUM_JS_INPUTS> vjsin;
+        std::array<libvotecoin::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout;
         uint64_t vpub_old = 0;
         uint64_t vpub_new = 0;
 
@@ -639,7 +639,7 @@ void TransactionBuilder::CreateJSDescriptions()
                 prevJoinSplit.nullifiers,
                 mtx.joinSplitPubKey);
             try {
-                auto plaintext = libzcash::SproutNotePlaintext::decrypt(
+                auto plaintext = libvotecoin::SproutNotePlaintext::decrypt(
                     decryptor,
                     prevJoinSplit.ciphertexts[changeOutputIndex],
                     prevJoinSplit.ephemeralKey,
@@ -647,7 +647,7 @@ void TransactionBuilder::CreateJSDescriptions()
                     (unsigned char)changeOutputIndex);
 
                 auto note = plaintext.note(changeAddress);
-                vjsin[0] = libzcash::JSInput(changeWitness.value(), note, changeKey);
+                vjsin[0] = libvotecoin::JSInput(changeWitness.value(), note, changeKey);
 
                 jsInputValue += plaintext.value();
 
@@ -685,7 +685,7 @@ void TransactionBuilder::CreateJSDescriptions()
         }
 
         // Find recipient to transfer funds to
-        libzcash::JSOutput recipient;
+        libvotecoin::JSOutput recipient;
         if (jsOutputsDeque.size() > 0) {
             recipient = jsOutputsDeque.front();
             jsOutputsDeque.pop_front();
@@ -714,7 +714,7 @@ void TransactionBuilder::CreateJSDescriptions()
             } else if (outAmount > jsInputValue) {
                 // Any amount due is owed to the recipient.  Let the miners fee get paid first.
                 CAmount due = outAmount - jsInputValue;
-                libzcash::JSOutput recipientDue(recipient.addr, due);
+                libvotecoin::JSOutput recipientDue(recipient.addr, due);
                 recipientDue.memo = recipient.memo;
                 jsOutputsDeque.push_front(recipientDue);
 
@@ -729,7 +729,7 @@ void TransactionBuilder::CreateJSDescriptions()
 
         // create output for any change
         if (jsChange > 0) {
-            vjsout[1] = libzcash::JSOutput(changeAddress, jsChange);
+            vjsout[1] = libvotecoin::JSOutput(changeAddress, jsChange);
 
             LogPrint("zrpcunsafe", "generating note for change (amount=%s)\n", FormatMoney(jsChange));
         }
@@ -753,8 +753,8 @@ void TransactionBuilder::CreateJSDescriptions()
 void TransactionBuilder::CreateJSDescription(
     uint64_t vpub_old,
     uint64_t vpub_new,
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> vjsin,
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout,
+    std::array<libvotecoin::JSInput, ZC_NUM_JS_INPUTS> vjsin,
+    std::array<libvotecoin::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout,
     std::array<size_t, ZC_NUM_JS_INPUTS>& inputMap,
     std::array<size_t, ZC_NUM_JS_OUTPUTS>& outputMap)
 {

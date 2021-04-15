@@ -1,9 +1,9 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_DEPRECATION_H
-#define ZCASH_DEPRECATION_H
+#ifndef VOTECOIN_DEPRECATION_H
+#define VOTECOIN_DEPRECATION_H
 
 #include "consensus/params.h"
 // Deprecation policy:
@@ -30,4 +30,4 @@ static const int DEPRECATION_WARN_LIMIT = 14 * 24 * EXPECTED_BLOCKS_PER_HOUR;
  */
 void EnforceNodeDeprecation(int nHeight, bool forceLogging=false, bool fThread=true);
 
-#endif // ZCASH_DEPRECATION_H
+#endif // VOTECOIN_DEPRECATION_H

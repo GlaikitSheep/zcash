@@ -16,7 +16,7 @@
 #include "util.h"
 #include "utiltime.h"
 #include "wallet/wallet.h"
-#include "zcash/Proof.hpp"
+#include "votecoin/Proof.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread.hpp>
@@ -108,8 +108,8 @@ bool CWalletDB::WriteCryptedKey(const CPubKey& vchPubKey,
     return true;
 }
 
-bool CWalletDB::WriteCryptedZKey(const libzcash::SproutPaymentAddress & addr,
-                                 const libzcash::ReceivingKey &rk,
+bool CWalletDB::WriteCryptedZKey(const libvotecoin::SproutPaymentAddress & addr,
+                                 const libvotecoin::ReceivingKey &rk,
                                  const std::vector<unsigned char>& vchCryptedSecret,
                                  const CKeyMetadata &keyMeta)
 {
@@ -129,7 +129,7 @@ bool CWalletDB::WriteCryptedZKey(const libzcash::SproutPaymentAddress & addr,
 }
 
 bool CWalletDB::WriteCryptedSaplingZKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk,
+    const libvotecoin::SaplingExtendedFullViewingKey &extfvk,
     const std::vector<unsigned char>& vchCryptedSecret,
     const CKeyMetadata &keyMeta)
 {
@@ -156,7 +156,7 @@ bool CWalletDB::WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey)
     return Write(std::make_pair(std::string("mkey"), nID), kMasterKey, true);
 }
 
-bool CWalletDB::WriteZKey(const libzcash::SproutPaymentAddress& addr, const libzcash::SproutSpendingKey& key, const CKeyMetadata &keyMeta)
+bool CWalletDB::WriteZKey(const libvotecoin::SproutPaymentAddress& addr, const libvotecoin::SproutSpendingKey& key, const CKeyMetadata &keyMeta)
 {
     nWalletDBUpdateCounter++;
 
@@ -166,8 +166,8 @@ bool CWalletDB::WriteZKey(const libzcash::SproutPaymentAddress& addr, const libz
     // pair is: tuple_key("zkey", paymentaddress) --> secretkey
     return Write(std::make_pair(std::string("zkey"), addr), key, false);
 }
-bool CWalletDB::WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
-                const libzcash::SaplingExtendedSpendingKey &key,
+bool CWalletDB::WriteSaplingZKey(const libvotecoin::SaplingIncomingViewingKey &ivk,
+                const libvotecoin::SaplingExtendedSpendingKey &key,
                 const CKeyMetadata &keyMeta)
 {
     nWalletDBUpdateCounter++;
@@ -179,35 +179,35 @@ bool CWalletDB::WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
 }
 
 bool CWalletDB::WriteSaplingPaymentAddress(
-    const libzcash::SaplingPaymentAddress &addr,
-    const libzcash::SaplingIncomingViewingKey &ivk)
+    const libvotecoin::SaplingPaymentAddress &addr,
+    const libvotecoin::SaplingIncomingViewingKey &ivk)
 {
     nWalletDBUpdateCounter++;
 
     return Write(std::make_pair(std::string("sapzaddr"), addr), ivk, false);
 }
 
-bool CWalletDB::WriteSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWalletDB::WriteSproutViewingKey(const libvotecoin::SproutViewingKey &vk)
 {
     nWalletDBUpdateCounter++;
     return Write(std::make_pair(std::string("vkey"), vk), '1');
 }
 
-bool CWalletDB::EraseSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWalletDB::EraseSproutViewingKey(const libvotecoin::SproutViewingKey &vk)
 {
     nWalletDBUpdateCounter++;
     return Erase(std::make_pair(std::string("vkey"), vk));
 }
 
 bool CWalletDB::WriteSaplingExtendedFullViewingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk)
+    const libvotecoin::SaplingExtendedFullViewingKey &extfvk)
 {
     nWalletDBUpdateCounter++;
     return Write(std::make_pair(std::string("sapextfvk"), extfvk), '1');
 }
 
 bool CWalletDB::EraseSaplingExtendedFullViewingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk)
+    const libvotecoin::SaplingExtendedFullViewingKey &extfvk)
 {
     nWalletDBUpdateCounter++;
     return Erase(std::make_pair(std::string("sapextfvk"), extfvk));
@@ -547,7 +547,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "vkey")
         {
-            libzcash::SproutViewingKey vk;
+            libvotecoin::SproutViewingKey vk;
             ssKey >> vk;
             char fYes;
             ssValue >> fYes;
@@ -560,9 +560,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "zkey")
         {
-            libzcash::SproutPaymentAddress addr;
+            libvotecoin::SproutPaymentAddress addr;
             ssKey >> addr;
-            libzcash::SproutSpendingKey key;
+            libvotecoin::SproutSpendingKey key;
             ssValue >> key;
 
             if (!pwallet->LoadZKey(key))
@@ -575,9 +575,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapzkey")
         {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libvotecoin::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
-            libzcash::SaplingExtendedSpendingKey key;
+            libvotecoin::SaplingExtendedSpendingKey key;
             ssValue >> key;
 
             if (!pwallet->LoadSaplingZKey(key))
@@ -591,7 +591,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapextfvk")
         {
-            libzcash::SaplingExtendedFullViewingKey extfvk;
+            libvotecoin::SaplingExtendedFullViewingKey extfvk;
             ssKey >> extfvk;
             char fYes;
             ssValue >> fYes;
@@ -700,12 +700,12 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "czkey")
         {
-            libzcash::SproutPaymentAddress addr;
+            libvotecoin::SproutPaymentAddress addr;
             ssKey >> addr;
             // Deserialization of a pair is just one item after another
             uint256 rkValue;
             ssValue >> rkValue;
-            libzcash::ReceivingKey rk(rkValue);
+            libvotecoin::ReceivingKey rk(rkValue);
             vector<unsigned char> vchCryptedSecret;
             ssValue >> vchCryptedSecret;
             wss.nCKeys++;
@@ -719,9 +719,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "csapzkey")
         {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libvotecoin::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
-            libzcash::SaplingExtendedFullViewingKey extfvk;
+            libvotecoin::SaplingExtendedFullViewingKey extfvk;
             ssValue >> extfvk;
             vector<unsigned char> vchCryptedSecret;
             ssValue >> vchCryptedSecret;
@@ -751,7 +751,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "zkeymeta")
         {
-            libzcash::SproutPaymentAddress addr;
+            libvotecoin::SproutPaymentAddress addr;
             ssKey >> addr;
             CKeyMetadata keyMeta;
             ssValue >> keyMeta;
@@ -763,7 +763,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapzkeymeta")
         {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libvotecoin::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
             CKeyMetadata keyMeta;
             ssValue >> keyMeta;
@@ -774,9 +774,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapzaddr")
         {
-            libzcash::SaplingPaymentAddress addr;
+            libvotecoin::SaplingPaymentAddress addr;
             ssKey >> addr;
-            libzcash::SaplingIncomingViewingKey ivk;
+            libvotecoin::SaplingIncomingViewingKey ivk;
             ssValue >> ivk;
 
             wss.nSapZAddrs++;
@@ -1099,7 +1099,7 @@ DBErrors CWalletDB::ZapWalletTx(CWallet* pwallet, vector<CWalletTx>& vWtx)
 void ThreadFlushWalletDB(const string& strFile)
 {
     // Make this thread recognisable as the wallet flushing thread
-    RenameThread("zcash-wallet");
+    RenameThread("votecoin-wallet");
 
     static bool fOneThread;
     if (fOneThread)

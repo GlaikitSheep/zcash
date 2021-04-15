@@ -22,7 +22,7 @@
 #include "main.h"
 #include "metrics.h"
 #include "net.h"
-#include "zcash/Note.hpp"
+#include "votecoin/Note.hpp"
 #include "policy/policy.h"
 #include "pow.h"
 #include "primitives/transaction.h"
@@ -128,17 +128,17 @@ private:
     CMutableTransaction &mtx;
     void* ctx; 
     const CAmount fundingStreamValue;
-    const libzcash::Zip212Enabled zip212Enabled;
+    const libvotecoin::Zip212Enabled zip212Enabled;
 public:
     AddFundingStreamValueToTx(
             CMutableTransaction &mtx, 
             void* ctx, 
             const CAmount fundingStreamValue,
-            const libzcash::Zip212Enabled zip212Enabled): mtx(mtx), ctx(ctx), fundingStreamValue(fundingStreamValue), zip212Enabled(zip212Enabled) {}
+            const libvotecoin::Zip212Enabled zip212Enabled): mtx(mtx), ctx(ctx), fundingStreamValue(fundingStreamValue), zip212Enabled(zip212Enabled) {}
 
-    bool operator()(const libzcash::SaplingPaymentAddress& pa) const {
+    bool operator()(const libvotecoin::SaplingPaymentAddress& pa) const {
         uint256 ovk;
-        auto note = libzcash::SaplingNote(pa, fundingStreamValue, zip212Enabled);
+        auto note = libvotecoin::SaplingNote(pa, fundingStreamValue, zip212Enabled);
         auto output = OutputDescriptionInfo(ovk, note, NO_MEMO);
 
         auto odesc = output.Build(ctx);
@@ -173,11 +173,11 @@ public:
         const int nHeight,
         const CAmount nFees) : mtx(mtx), chainparams(chainparams), nHeight(nHeight), nFees(nFees) {}
 
-    const libzcash::Zip212Enabled GetZip212Flag() const {
+    const libvotecoin::Zip212Enabled GetZip212Flag() const {
         if (chainparams.GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_CANOPY)) {
-            return libzcash::Zip212Enabled::AfterZip212;
+            return libvotecoin::Zip212Enabled::AfterZip212;
         } else {
-            return libzcash::Zip212Enabled::BeforeZip212;
+            return libvotecoin::Zip212Enabled::BeforeZip212;
         }
     }
 
@@ -200,16 +200,6 @@ public:
                         throw new std::runtime_error("Failed to add funding stream output.");
                     }
                 }
-            } else if (nHeight <= chainparams.GetConsensus().GetLastFoundersRewardBlockHeight(nHeight)) {
-                // Founders reward is 20% of the block subsidy
-                auto vFoundersReward = miner_reward / 5;
-                // Take some reward away from us
-                miner_reward -= vFoundersReward;
-                // And give it to the founders
-                mtx.vout.push_back(CTxOut(vFoundersReward, chainparams.GetFoundersRewardScriptAtHeight(nHeight)));
-            } else {
-                // Founders reward ends without replacement if Canopy is not activated by the
-                // last Founders' Reward block height + 1.
             }
         }
 
@@ -244,7 +234,7 @@ public:
     void operator()(const InvalidMinerAddress &invalid) const {}
 
     // Create shielded output
-    void operator()(const libzcash::SaplingPaymentAddress &pa) const {
+    void operator()(const libvotecoin::SaplingPaymentAddress &pa) const {
         auto ctx = librustzcash_sapling_proving_ctx_init();
 
         auto miner_reward = SetFoundersRewardAndGetMinerValue(ctx);
@@ -252,7 +242,7 @@ public:
 
         uint256 ovk;
 
-        auto note = libzcash::SaplingNote(pa, miner_reward, GetZip212Flag());
+        auto note = libvotecoin::SaplingNote(pa, miner_reward, GetZip212Flag());
         auto output = OutputDescriptionInfo(ovk, note, NO_MEMO);
 
         auto odesc = output.Build(ctx);
@@ -675,8 +665,8 @@ void GetMinerAddress(MinerAddress &minerAddress)
         // Try a Sapling address
         auto zaddr = keyIO.DecodePaymentAddress(mAddrArg);
         if (IsValidPaymentAddress(zaddr)) {
-            if (std::get_if<libzcash::SaplingPaymentAddress>(&zaddr) != nullptr) {
-                minerAddress = std::get<libzcash::SaplingPaymentAddress>(zaddr);
+            if (std::get_if<libvotecoin::SaplingPaymentAddress>(&zaddr) != nullptr) {
+                minerAddress = std::get<libvotecoin::SaplingPaymentAddress>(zaddr);
             }
         }
     }
@@ -710,7 +700,7 @@ static bool ProcessBlockFound(const CBlock* pblock, const CChainParams& chainpar
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != chainActive.Tip()->GetBlockHash())
-            return error("ZcashMiner: generated block is stale");
+            return error("VoteCoinMiner: generated block is stale");
     }
 
     // Inform about the new block
@@ -719,7 +709,7 @@ static bool ProcessBlockFound(const CBlock* pblock, const CChainParams& chainpar
     // Process this block the same as if we had received it from another node
     CValidationState state;
     if (!ProcessNewBlock(state, chainparams, NULL, pblock, true, NULL))
-        return error("ZcashMiner: ProcessNewBlock, block not accepted");
+        return error("VoteCoinMiner: ProcessNewBlock, block not accepted");
 
     TrackMinedBlock(pblock->GetHash());
 
@@ -728,9 +718,9 @@ static bool ProcessBlockFound(const CBlock* pblock, const CChainParams& chainpar
 
 void static BitcoinMiner(const CChainParams& chainparams)
 {
-    LogPrintf("ZcashMiner started\n");
+    LogPrintf("VoteCoinMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    RenameThread("zcash-miner");
+    RenameThread("votecoin-miner");
 
     // Each thread has its own counter
     unsigned int nExtraNonce = 0;
@@ -789,17 +779,17 @@ void static BitcoinMiner(const CChainParams& chainparams)
             if (!pblocktemplate.get())
             {
                 if (GetArg("-mineraddress", "").empty()) {
-                    LogPrintf("Error in ZcashMiner: Keypool ran out, please call keypoolrefill before restarting the mining thread\n");
+                    LogPrintf("Error in VoteCoinMiner: Keypool ran out, please call keypoolrefill before restarting the mining thread\n");
                 } else {
                     // Should never reach here, because -mineraddress validity is checked in init.cpp
-                    LogPrintf("Error in ZcashMiner: Invalid -mineraddress\n");
+                    LogPrintf("Error in VoteCoinMiner: Invalid -mineraddress\n");
                 }
                 return;
             }
             CBlock *pblock = &pblocktemplate->block;
             IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
-            LogPrintf("Running ZcashMiner with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
+            LogPrintf("Running VoteCoinMiner with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
                 ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
             //
@@ -844,7 +834,7 @@ void static BitcoinMiner(const CChainParams& chainparams)
 
                     // Found a solution
                     SetThreadPriority(THREAD_PRIORITY_NORMAL);
-                    LogPrintf("ZcashMiner:\n");
+                    LogPrintf("VoteCoinMiner:\n");
                     LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", pblock->GetHash().GetHex(), hashTarget.GetHex());
                     if (ProcessBlockFound(pblock, chainparams)) {
                         // Ignore chain updates caused by us
@@ -943,14 +933,14 @@ void static BitcoinMiner(const CChainParams& chainparams)
     {
         miningTimer.stop();
         c.disconnect();
-        LogPrintf("ZcashMiner terminated\n");
+        LogPrintf("VoteCoinMiner terminated\n");
         throw;
     }
     catch (const std::runtime_error &e)
     {
         miningTimer.stop();
         c.disconnect();
-        LogPrintf("ZcashMiner runtime error: %s\n", e.what());
+        LogPrintf("VoteCoinMiner runtime error: %s\n", e.what());
         return;
     }
     miningTimer.stop();

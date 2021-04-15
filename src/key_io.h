@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2016-2018 The Zcash developers
+// Copyright (c) 2016-2018 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -11,7 +11,7 @@
 #include <key.h>
 #include <pubkey.h>
 #include <script/standard.h>
-#include <zcash/Address.hpp>
+#include <votecoin/Address.hpp>
 
 #include <vector>
 #include <string>
@@ -36,15 +36,15 @@ public:
 
     bool IsValidDestinationString(const std::string& str);
 
-    std::string EncodePaymentAddress(const libzcash::PaymentAddress& zaddr);
-    libzcash::PaymentAddress DecodePaymentAddress(const std::string& str);
+    std::string EncodePaymentAddress(const libvotecoin::PaymentAddress& zaddr);
+    libvotecoin::PaymentAddress DecodePaymentAddress(const std::string& str);
     bool IsValidPaymentAddressString(const std::string& str);
 
-    std::string EncodeViewingKey(const libzcash::ViewingKey& vk);
-    libzcash::ViewingKey DecodeViewingKey(const std::string& str);
+    std::string EncodeViewingKey(const libvotecoin::ViewingKey& vk);
+    libvotecoin::ViewingKey DecodeViewingKey(const std::string& str);
 
-    std::string EncodeSpendingKey(const libzcash::SpendingKey& zkey);
-    libzcash::SpendingKey DecodeSpendingKey(const std::string& str);
+    std::string EncodeSpendingKey(const libvotecoin::SpendingKey& zkey);
+    libvotecoin::SpendingKey DecodeSpendingKey(const std::string& str);
 };
 
 #endif // BITCOIN_KEY_IO_H

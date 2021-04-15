@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Zcash developers
+# Copyright (c) 2019 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -17,13 +17,13 @@
 # when experimental feature -developersetpoolsizezero is switched on.
 #
 # To perform a manual turnstile test on testnet:
-# 1. Launch zcashd
+# 1. Launch votecoind
 # 2. Shield transparent funds
 # 3. Wait for transaction to be mined
-# 4. Restart zcashd, enabling experimental feature -developersetpoolsizezero
+# 4. Restart votecoind, enabling experimental feature -developersetpoolsizezero
 # 5. Unshield funds
 # 6. Wait for transaction to be mined (using testnet explorer or another node)
-# 7. Verify zcashd rejected the block
+# 7. Verify votecoind rejected the block
 #
 
 from test_framework.test_framework import BitcoinTestFramework

@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -114,7 +114,7 @@ TEST(MempoolLimitTests, WeightedTxInfoFromTx)
     // test_transaction_builder.cpp/TEST(TransactionBuilder, SetFee)
     auto consensusParams = RegtestActivateSapling();
 
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto testNote = GetTestSaplingNote(sk.default_address(), 50000);
 
     // Default fee

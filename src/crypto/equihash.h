@@ -1,10 +1,10 @@
 // Copyright (c) 2016 Jack Grigg
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_CRYPTO_EQUIHASH_H
-#define ZCASH_CRYPTO_EQUIHASH_H
+#ifndef VOTECOIN_CRYPTO_EQUIHASH_H
+#define VOTECOIN_CRYPTO_EQUIHASH_H
 
 #include <memory>
 #include <vector>
@@ -290,4 +290,4 @@ inline bool EhOptimisedSolveUncancellable(unsigned int n, unsigned int k, const 
 }
 #endif // ENABLE_MINING
 
-#endif // ZCASH_CRYPTO_EQUIHASH_H
+#endif // VOTECOIN_CRYPTO_EQUIHASH_H

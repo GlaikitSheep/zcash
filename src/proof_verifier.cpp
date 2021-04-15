@@ -1,10 +1,10 @@
-// Copyright (c) 2016-2020 The Zcash developers
+// Copyright (c) 2016-2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 #include <proof_verifier.h>
 
-#include <zcash/JoinSplit.hpp>
+#include <votecoin/JoinSplit.hpp>
 
 #include <variant>
 
@@ -23,14 +23,14 @@ public:
         const JSDescription& jsdesc
         ) : jsdesc(jsdesc), verifier(verifier), joinSplitPubKey(joinSplitPubKey) {}
 
-    bool operator()(const libzcash::PHGRProof& proof) const
+    bool operator()(const libvotecoin::PHGRProof& proof) const
     {
         // We checkpoint after Sapling activation, so we can skip verification
         // for all Sprout proofs.
         return true;
     }
 
-    bool operator()(const libzcash::GrothProof& proof) const
+    bool operator()(const libvotecoin::GrothProof& proof) const
     {
         uint256 h_sig = ZCJoinSplit::h_sig(jsdesc.randomSeed, jsdesc.nullifiers, joinSplitPubKey);
 

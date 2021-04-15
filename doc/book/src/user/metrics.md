@@ -1,14 +1,14 @@
-# zcashd metrics
+# votecoind metrics
 
 ## Metrics UI
 
-This is the user interface that `zcashd` displays by default when run. It
+This is the user interface that `votecoind` displays by default when run. It
 displays a small selection of interesting metrics, but is not intended for
 programmatic consumption.
 
 ## RPC methods
 
-`zcashd` provides the following JSON-RPC methods that expose node metrics:
+`votecoind` provides the following JSON-RPC methods that expose node metrics:
 
 - Chain:
   - `getblockchaininfo`: Various state info regarding block chain processing.
@@ -23,33 +23,33 @@ programmatic consumption.
   - `getmininginfo`: Mining-related information.
   - `getinfo` (deprecated): A small subset of the above metrics.
 
-You can see what each method provides with `zcash-cli help METHOD_NAME`.
+You can see what each method provides with `votecoin-cli help METHOD_NAME`.
 
 ## Prometheus support
 
-`zcashd` can optionally expose an HTTP server that acts as a Prometheus scrape
+`votecoind` can optionally expose an HTTP server that acts as a Prometheus scrape
 endpoint. The server will respond to `GET` requests on any request path.
 
-To enable the endpoint, add `-prometheusport=<port>` to your `zcashd`
-configuration (either in `zcash.conf` or on the command line). After
-restarting `zcashd` you can then test the endpoint by querying it:
+To enable the endpoint, add `-prometheusport=<port>` to your `votecoind`
+configuration (either in `votecoin.conf` or on the command line). After
+restarting `votecoind` you can then test the endpoint by querying it:
 
 ```
 $ curl http://127.0.0.1:<port>
-# TYPE zcash_net_out_messages counter
-zcash_net_out_messages 181
+# TYPE votecoin_net_out_messages counter
+votecoin_net_out_messages 181
 
-# TYPE zcash_net_in_bytes_total counter
-zcash_net_in_bytes_total 3701998
+# TYPE votecoin_net_in_bytes_total counter
+votecoin_net_in_bytes_total 3701998
 
-# TYPE zcash_net_in_messages counter
-zcash_net_in_messages 184
+# TYPE votecoin_net_in_messages counter
+votecoin_net_in_messages 184
 
-# TYPE zcashd_build_info counter
-zcashd_build_info{version="v4.2.0"} 1
+# TYPE votecoind_build_info counter
+votecoind_build_info{version="v4.2.0"} 1
 
-# TYPE zcash_chain_verified_block_total counter
-zcash_chain_verified_block_total 162
+# TYPE votecoin_chain_verified_block_total counter
+votecoin_chain_verified_block_total 162
 ...
 ```
 
@@ -64,7 +64,7 @@ wallet holding live funds.
 ### Example metrics collection with Docker
 
 The example instructions below were tested on Windows 10 using Docker Desktop
-with the WSL 2 backend, connected to a `zcashd` running inside WSL2 (but not
+with the WSL 2 backend, connected to a `votecoind` running inside WSL2 (but not
 inside Docker):
 
 ```

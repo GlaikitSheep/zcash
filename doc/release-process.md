@@ -2,7 +2,7 @@ Release Process
 ====================
 Meta: There should always be a single release engineer to disambiguate responsibility.
 
-If this is a hotfix release, please see the [Hotfix Release Process](https://github.com/zcash/zcash/blob/master/doc/hotfix-process.md) documentation before proceeding.
+If this is a hotfix release, please see the [Hotfix Release Process](https://github.com/votecoin/votecoin/blob/master/doc/hotfix-process.md) documentation before proceeding.
 
 ## Pre-release
 
@@ -29,17 +29,17 @@ Update `src/chainparams.cpp` nMinimumChainWork with information from the getbloc
 Check that dependencies are up-to-date or have been postponed:
 
 ```
-$ ./qa/zcash/updatecheck.py
+$ ./qa/votecoin/updatecheck.py
 ```
 
 If you are missing the `.updatecheck-token` file requried to run this script,
-please ask Taylor or another Zcash developer for a copy, or create an
+please ask Taylor or another VoteCoin developer for a copy, or create an
 unprivileged personal access token for a github account and save it to the
 file in the format `username:hex-token`.
 
 If there are updates that have not been postponed, review their changelogs
 for urgent security fixes, and if there aren't any, postpone the update by
-adding a line to `qa/zcash/postponed-updates.txt`.
+adding a line to `qa/votecoin/postponed-updates.txt`.
 
 ### Protocol Safety Checks:
 
@@ -93,7 +93,7 @@ Review the automated changes in git:
 
 Push the resulting branch to github:
 
-    $ git push 'git@github.com:$YOUR_GITHUB_NAME/zcash' $(git rev-parse --abbrev-ref HEAD)
+    $ git push 'git@github.com:$YOUR_GITHUB_NAME/votecoin' $(git rev-parse --abbrev-ref HEAD)
 
 Then create the PR on github. Complete the standard review process,
 then merge, then wait for CI to complete.
@@ -126,14 +126,14 @@ Enter "Release <version>." and save when prompted for a commit message.
 
 ## Make and deploy deterministic builds
 
-- Run the [Gitian deterministic build environment](https://github.com/zcash/zcash-gitian)
-- Compare the uploaded [build manifests on gitian.sigs](https://github.com/zcash/gitian.sigs)
+- Run the [Gitian deterministic build environment](https://github.com/votecoin/votecoin-gitian)
+- Compare the uploaded [build manifests on gitian.sigs](https://github.com/votecoin/gitian.sigs)
 - If all is well, the DevOps engineer will build the Debian packages and update the
   [apt.z.cash package repository](https://apt.z.cash).
 
 ## Add release notes to GitHub
 
-- Go to the [GitHub tags page](https://github.com/zcash/zcash/tags).
+- Go to the [GitHub tags page](https://github.com/votecoin/votecoin/tags).
 - Click "Add release notes" beside the tag for this release.
 - Copy the release blog post into the release description, and edit to suit
   publication on GitHub. See previous release notes for examples.
@@ -151,21 +151,21 @@ the marking to see what GitHub wants to be done.
 
 ### Deploy testnet
 
-Notify the Zcash DevOps engineer/sysadmin that the release has been tagged. They update some variables in the company's automation code and then run an Ansible playbook, which:
+Notify the VoteCoin DevOps engineer/sysadmin that the release has been tagged. They update some variables in the company's automation code and then run an Ansible playbook, which:
 
-* builds Zcash based on the specified branch
+* builds VoteCoin based on the specified branch
 * deploys it as a public service (e.g. betatestnet.z.cash, mainnet.z.cash)
 * often the same server can be re-used, and the role idempotently handles upgrades, but if not then they also need to update DNS records
 * possible manual steps: blowing away the `testnet3` dir, deleting old parameters, restarting DNS seeder
 
-Then, verify that nodes can connect to the testnet server, and update the guide on the wiki to ensure the correct hostname is listed in the recommended zcash.conf.
+Then, verify that nodes can connect to the testnet server, and update the guide on the wiki to ensure the correct hostname is listed in the recommended votecoin.conf.
 
 ### Update the 1.0 User Guide
 
-This also means updating [the translations](https://github.com/zcash/zcash-docs).
+This also means updating [the translations](https://github.com/votecoin/votecoin-docs).
 Coordinate with the translation team for now. Suggestions for improving this
 part of the process should be added to #2596.
 
-### Publish the release announcement (blog, github, zcash-dev, slack)
+### Publish the release announcement (blog, github, votecoin-dev, slack)
 
 ## Celebrate

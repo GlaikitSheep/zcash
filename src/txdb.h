@@ -16,7 +16,7 @@
 #include <vector>
 
 #include <boost/function.hpp>
-#include "zcash/History.hpp"
+#include "votecoin/History.hpp"
 
 class CBlockIndex;
 

@@ -26,8 +26,8 @@ deployment process for Heartwood.
 
 Miners and mining pools that wish to test the new "shielded coinbase" support on
 the Heartwood testnet can generate a new Sapling address with `z_getnewaddress`,
-add the config option `mineraddress=SAPLING_ADDRESS` to their `zcash.conf` file,
-and then restart their `zcashd` node. `getblocktemplate` will then return
+add the config option `mineraddress=SAPLING_ADDRESS` to their `votecoin.conf` file,
+and then restart their `votecoind` node. `getblocktemplate` will then return
 coinbase transactions containing a shielded miner output.
 
 Note that `mineraddress` should only be set to a Sapling address after the
@@ -67,7 +67,7 @@ and what guarantees you have about that information, can be found in
 Removal of time adjustment and the -maxtimeadjustment= option
 -------------------------------------------------------------
 
-Prior to v2.1.1-1, `zcashd` would adjust the local time that it used by up
+Prior to v2.1.1-1, `votecoind` would adjust the local time that it used by up
 to 70 minutes, according to a median of the times sent by the first 200 peers
 to connect to it. This mechanism was inherently insecure, since an adversary
 making multiple connections to the node could effectively control its time
@@ -88,7 +88,7 @@ a warning will still be logged and indicated on the metrics screen if enabled.
 View shielded information in wallet transactions
 ------------------------------------------------
 
-In previous `zcashd` versions, to obtain information about shielded transactions
+In previous `votecoind` versions, to obtain information about shielded transactions
 you would use either the `z_listreceivedbyaddress` RPC method (which returns all
 notes received by an address) or `z_listunspent` (which returns unspent notes,
 optionally filtered by addresses). There were no RPC methods that directly
@@ -101,7 +101,7 @@ returns detailed shielded information for all decryptable new and spent notes,
 including:
 
 - The address that each note belongs to.
-- Values in both decimal ZEC and zatoshis.
+- Values in both decimal VOT and zatoshis.
 - The ID of the transaction that each spent note was received in.
 - An `outgoing` flag on each new note, which will be `true` if the output is not
   for an address in the wallet.
@@ -116,7 +116,7 @@ with `z_getnewaddress` and imported with `z_importkey`).
 Better error messages for rejected transactions after network upgrades
 ----------------------------------------------------------------------
 
-The Zcash network upgrade process includes several features designed to protect
+The VoteCoin network upgrade process includes several features designed to protect
 users. One of these is the "consensus branch ID", which prevents transactions
 created after a network upgrade has activated from being replayed on another
 chain (that might have occurred due to, for example, a
@@ -126,8 +126,8 @@ known as "two-way replay protection", and is a core requirement by
 [members](https://trezor.io/support/general/hard-forks/) of the cryptocurrency
 ecosystem for supporting "hard fork"-style changes like our network upgrades.
 
-One downside of the way replay protection is implemented in Zcash, is that there
-is no visible difference between a transaction being rejected by a `zcashd` node
+One downside of the way replay protection is implemented in VoteCoin, is that there
+is no visible difference between a transaction being rejected by a `votecoind` node
 due to targeting a different branch, and being rejected due to an invalid
 signature. This has caused issues in the past when a user had not upgraded their
 wallet software, or when a wallet lacked support for the new network upgrade's
@@ -135,7 +135,7 @@ consensus branch ID; the resulting error messages when users tried to create
 transactions were non-intuitive, and particularly cryptic for transparent
 transactions.
 
-Starting from this release, `zcashd` nodes will re-verify invalid transparent
+Starting from this release, `votecoind` nodes will re-verify invalid transparent
 and Sprout signatures against the consensus branch ID from before the most
 recent network upgrade. If the signature then becomes valid, the transaction
 will be rejected with the error message `old-consensus-branch-id`. This error
@@ -143,14 +143,14 @@ can be handled specifically by wallet providers to inform the user that they
 need to upgrade their wallet software.
 
 Wallet software can also automatically obtain the latest consensus branch ID
-from their (up-to-date) `zcashd` node, by calling `getblockchaininfo` and
+from their (up-to-date) `votecoind` node, by calling `getblockchaininfo` and
 looking at `{'consensus': {'nextblock': BRANCH_ID, ...}, ...}` in the JSON
 output.
 
 Expired transactions notifications
 ----------------------------------
 
-A new config option `-txexpirynotify` has been added that will cause `zcashd` to
+A new config option `-txexpirynotify` has been added that will cause `votecoind` to
 execute a command when a transaction in the mempool expires. This can be used to
 notify external systems about transaction expiry, similar to the existing
 `-blocknotify` config option that notifies when the chain tip changes.
@@ -249,7 +249,7 @@ Daira Hopwood (25):
       Remove uses of GetTimeOffset().
       Replace time adjustment with warning only.
       Update GetAdjustedTime() to GetTime().
-      Sort entries in zcash_gtest_SOURCES (other than test_tautology which is deliberately first).
+      Sort entries in votecoin_gtest_SOURCES (other than test_tautology which is deliberately first).
       Add release notes for removal of -maxtimeadjustment.
       Resolve a race condition on `chainActive.Tip()` in initialization (introduced in #4379).
       Setting a std::atomic variable in a signal handler only has defined behaviour if it is lock-free.
@@ -306,7 +306,7 @@ Jack Grigg (95):
       RPC: Display valid UTF-8 memos in z_viewtransaction
       RPC: Use OutgoingViewingKeys to recover non-wallet Sapling outputs
       test: Check z_viewtransaction output in wallet_listreceived RPC test
-      Benchmark Zcash verification operations
+      Benchmark VoteCoin verification operations
       Simulate worst-case block verification
       zcutil/build.sh: Remove lcov and mining flags
       configure: Change default Proton to match build.sh
@@ -323,7 +323,7 @@ Jack Grigg (95):
       Add release notes for z_viewtransaction
       Deduplicate some wallet keystore logic
       Move Sprout and Sapling address logic into separate files
-      Move ZIP 32 classes inside zcash/Address.hpp
+      Move ZIP 32 classes inside votecoin/Address.hpp
       SaplingFullViewingKey -> SaplingExtendedFullViewingKey in keystore maps
       Remove default address parameter from Sapling keystore methods
       test: Add test for CBasicKeyStore::AddSaplingFullViewingKey
@@ -374,7 +374,7 @@ Jack Grigg (95):
       test: Verify ZIP 221 logic against reference implementation
       build: Move cargo arguments into RUST_BUILD_OPTS
       build: Correctly remove generated files from .cargo
-      test: Build Rust tests as part of qa/zcash/full_test_suite.py
+      test: Build Rust tests as part of qa/votecoin/full_test_suite.py
       build: Connect cargo verbosity to make verbosity
       test: Assert that GetValidTransaction supports the given branch ID
       Comment tweaks and cleanups
@@ -503,7 +503,7 @@ avnish (14):
       changed founders_reward_test to FoundersRewardTest
       changes tests to camelcase
       chnged keystore_tests to KeystoreTests
-      changed libzcash_utils to LibzcashUtils
+      changed libvotecoin_utils to LibvotecoinUtils
       changed test to CamelCase
       changed test to CamelCase
       changed test to CamelCase

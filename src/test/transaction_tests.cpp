@@ -36,9 +36,9 @@
 
 #include <univalue.h>
 
-#include "zcash/Note.hpp"
-#include "zcash/Address.hpp"
-#include "zcash/Proof.hpp"
+#include "votecoin/Note.hpp"
+#include "votecoin/Address.hpp"
+#include "votecoin/Proof.hpp"
 
 using namespace std;
 
@@ -286,16 +286,16 @@ BOOST_AUTO_TEST_CASE(test_basic_joinsplit_verification)
     // on all platforms and would gently push us down an ugly
     // path. We should just fix the assertions.
     //
-    // Also, it's generally libzcash's job to ensure the
+    // Also, it's generally libvotecoin's job to ensure the
     // integrity of the scheme through its own tests.
 
     // construct a merkle tree
     SproutMerkleTree merkleTree;
 
-    auto k = libzcash::SproutSpendingKey::random();
+    auto k = libvotecoin::SproutSpendingKey::random();
     auto addr = k.address();
 
-    libzcash::SproutNote note(addr.a_pk, 100, uint256(), uint256());
+    libvotecoin::SproutNote note(addr.a_pk, 100, uint256(), uint256());
 
     // commitment from coin
     uint256 commitment = note.cm();
@@ -310,13 +310,13 @@ BOOST_AUTO_TEST_CASE(test_basic_joinsplit_verification)
 
     // create JSDescription
     Ed25519VerificationKey joinSplitPubKey;
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> inputs = {
-        libzcash::JSInput(witness, note, k),
-        libzcash::JSInput() // dummy input of zero value
+    std::array<libvotecoin::JSInput, ZC_NUM_JS_INPUTS> inputs = {
+        libvotecoin::JSInput(witness, note, k),
+        libvotecoin::JSInput() // dummy input of zero value
     };
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> outputs = {
-        libzcash::JSOutput(addr, 50),
-        libzcash::JSOutput(addr, 50)
+    std::array<libvotecoin::JSOutput, ZC_NUM_JS_OUTPUTS> outputs = {
+        libvotecoin::JSOutput(addr, 50),
+        libvotecoin::JSOutput(addr, 50)
     };
 
     auto verifier = ProofVerifier::Strict();

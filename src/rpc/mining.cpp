@@ -494,7 +494,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_METHOD_NOT_FOUND, "Wallet disabled and -mineraddress not set");
         }
 #else
-        throw JSONRPCError(RPC_METHOD_NOT_FOUND, "zcashd compiled without wallet and -mineraddress not set");
+        throw JSONRPCError(RPC_METHOD_NOT_FOUND, "votecoind compiled without wallet and -mineraddress not set");
 #endif
     }
 
@@ -552,10 +552,10 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid mode");
 
     if (Params().NetworkIDString() != "regtest" && vNodes.empty())
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Zcash is not connected!");
+        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "VoteCoin is not connected!");
 
     if (IsInitialBlockDownload(Params().GetConsensus()))
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Zcash is downloading blocks...");
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "VoteCoin is downloading blocks...");
 
 
     MinerAddress minerAddress;
@@ -993,7 +993,7 @@ UniValue getblocksubsidy(const UniValue& params, bool fHelp)
                 addressStr = find_value(pubkey, "addresses").get_array()[0].get_str();
 
             } else {
-                libzcash::SaplingPaymentAddress* zaddr = std::get_if<libzcash::SaplingPaymentAddress>(&address);
+                libvotecoin::SaplingPaymentAddress* zaddr = std::get_if<libvotecoin::SaplingPaymentAddress>(&address);
                 if (zaddr != nullptr) {
                     // For shielded funding stream addresses
                     addressStr = keyIO.EncodePaymentAddress(*zaddr);

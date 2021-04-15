@@ -4,13 +4,13 @@ Notable changes
 Prometheus metrics
 ------------------
 
-`zcashd` can now be configured to optionally expose an HTTP server that acts as
+`votecoind` can now be configured to optionally expose an HTTP server that acts as
 a Prometheus scrape endpoint. The server will respond to `GET` requests on any
 request path.
 
-To enable the endpoint, add `-prometheusport=<port>` to your `zcashd`
-configuration (either in `zcash.conf` or on the command line). After
-restarting `zcashd` you can then test the endpoint by querying it with e.g.
+To enable the endpoint, add `-prometheusport=<port>` to your `votecoind`
+configuration (either in `votecoin.conf` or on the command line). After
+restarting `votecoind` you can then test the endpoint by querying it with e.g.
 `curl http://127.0.0.1:<port>`.
 
 By default, access is restricted to localhost. This can be expanded with
@@ -50,9 +50,9 @@ Gregory Maxwell (5):
 Jack Grigg (39):
       Squashed 'src/secp256k1/' changes from c6b6b8f1bb..3967d96bf1
       Squashed 'src/secp256k1/' changes from 3967d96bf1..a4abaab793
-      CI: Correctly build zcashd book
+      CI: Correctly build votecoind book
       cargo update
-      rust: zcash_{primitives, proofs} 0.5.0
+      rust: votecoin_{primitives, proofs} 0.5.0
       depends: Update Rust to 1.51.0
       qa: Update BerkeleyDB downloads page URL
       rust: Implement FFI interface to metrics crate
@@ -70,11 +70,11 @@ Jack Grigg (39):
       Mention in release notes that metrics names may still change
       metrics: Implement IP access control on Prometheus scrape endpoint
       rust: Pin hyper 0.14.2
-      metrics: Move documentation into zcashd book
+      metrics: Move documentation into votecoind book
       metrics: Enable gauges with fully-static labels
       metrics: Use labels for pool statistics
       metrics: Rename metrics with consistent naming scheme
-      metrics: Remove zcash.sync.* metrics
+      metrics: Remove votecoin.sync.* metrics
       metrics: Rework pool metrics in anticipation of transparent pool
       net: Clear CNode::strSendCommand if a message is aborted
       rust: Add license header to metrics_ffi::prometheus

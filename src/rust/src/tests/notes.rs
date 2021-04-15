@@ -21,7 +21,7 @@ fn notes() {
         note_nf: [u8; 32],
     }
 
-    // From https://github.com/zcash-hackworks/zcash-test-vectors/blob/master/sapling_key_components.py
+    // From https://github.com/votecoin-hackworks/votecoin-test-vectors/blob/master/sapling_key_components.py
     let test_vectors = vec![
         TestVector {
             sk: [

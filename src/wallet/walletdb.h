@@ -10,7 +10,7 @@
 #include "wallet/db.h"
 #include "key.h"
 #include "keystore.h"
-#include "zcash/Address.hpp"
+#include "votecoin/Address.hpp"
 
 #include <list>
 #include <stdint.h>
@@ -184,24 +184,24 @@ public:
     bool WriteHDChain(const CHDChain& chain);
 
     /// Write spending key to wallet database, where key is payment address and value is spending key.
-    bool WriteZKey(const libzcash::SproutPaymentAddress& addr, const libzcash::SproutSpendingKey& key, const CKeyMetadata &keyMeta);
-    bool WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
-                          const libzcash::SaplingExtendedSpendingKey &key,
+    bool WriteZKey(const libvotecoin::SproutPaymentAddress& addr, const libvotecoin::SproutSpendingKey& key, const CKeyMetadata &keyMeta);
+    bool WriteSaplingZKey(const libvotecoin::SaplingIncomingViewingKey &ivk,
+                          const libvotecoin::SaplingExtendedSpendingKey &key,
                           const CKeyMetadata  &keyMeta);
-    bool WriteSaplingPaymentAddress(const libzcash::SaplingPaymentAddress &addr,
-                                    const libzcash::SaplingIncomingViewingKey &ivk);
-    bool WriteCryptedZKey(const libzcash::SproutPaymentAddress & addr,
-                          const libzcash::ReceivingKey & rk,
+    bool WriteSaplingPaymentAddress(const libvotecoin::SaplingPaymentAddress &addr,
+                                    const libvotecoin::SaplingIncomingViewingKey &ivk);
+    bool WriteCryptedZKey(const libvotecoin::SproutPaymentAddress & addr,
+                          const libvotecoin::ReceivingKey & rk,
                           const std::vector<unsigned char>& vchCryptedSecret,
                           const CKeyMetadata &keyMeta);
-    bool WriteCryptedSaplingZKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
+    bool WriteCryptedSaplingZKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk,
                           const std::vector<unsigned char>& vchCryptedSecret,
                           const CKeyMetadata &keyMeta);
 
-    bool WriteSproutViewingKey(const libzcash::SproutViewingKey &vk);
-    bool EraseSproutViewingKey(const libzcash::SproutViewingKey &vk);
-    bool WriteSaplingExtendedFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk);
-    bool EraseSaplingExtendedFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk);
+    bool WriteSproutViewingKey(const libvotecoin::SproutViewingKey &vk);
+    bool EraseSproutViewingKey(const libvotecoin::SproutViewingKey &vk);
+    bool WriteSaplingExtendedFullViewingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk);
+    bool EraseSaplingExtendedFullViewingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk);
 
     static void IncrementUpdateCounter();
     static unsigned int GetUpdateCounter();

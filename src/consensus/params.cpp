@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -172,7 +172,7 @@ namespace Consensus {
                 // If the string is not a valid transparent or Sapling address, we will
                 // throw here.
 
-                addresses.push_back(std::get<libzcash::SaplingPaymentAddress>(zaddr));
+                addresses.push_back(std::get<libvotecoin::SaplingPaymentAddress>(zaddr));
             }
         }
 

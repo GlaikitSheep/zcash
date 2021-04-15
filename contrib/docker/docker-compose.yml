@@ -2,10 +2,10 @@
 version: '3'
 
 services:
-  zcashd:
+  votecoind:
     build: .
     env_file:
       - .env
     volumes:
-      - ./zcash-params-dir:/srv/zcashd/.zcash-params
-      - ./zcash-data-dir:/srv/zcashd/.zcash
+      - ./zcash-params-dir:/srv/votecoind/.zcash-params
+      - ./votecoin-data-dir:/srv/votecoind/.votecoin

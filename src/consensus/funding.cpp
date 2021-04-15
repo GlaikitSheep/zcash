@@ -1,4 +1,4 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -18,7 +18,7 @@ constexpr struct FSInfo FundingStreamInfo[Consensus::MAX_FUNDING_STREAMS] = {
         .valueDenominator = 100,
     },
     {
-        .recipient = "Zcash Foundation",
+        .recipient = "VoteCoin Foundation",
         .specification = "https://zips.z.cash/zip-0214",
         .valueNumerator = 5,
         .valueDenominator = 100,

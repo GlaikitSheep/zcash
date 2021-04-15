@@ -749,9 +749,9 @@ bool CNode::ReceiveMsgBytes(const char *pch, unsigned int nBytes)
         if (msg.complete()) {
             msg.nTime = GetTimeMicros();
             std::string strCommand = SanitizeString(msg.hdr.GetCommand());
-            MetricsIncrementCounter("zcash.net.in.messages", "command", strCommand.c_str());
+            MetricsIncrementCounter("votecoin.net.in.messages", "command", strCommand.c_str());
             MetricsCounter(
-                "zcash.net.in.bytes", msg.hdr.nMessageSize,
+                "votecoin.net.in.bytes", msg.hdr.nMessageSize,
                 "command", strCommand.c_str());
             messageHandlerCondition.notify_one();
         }
@@ -1164,7 +1164,7 @@ void ThreadSocketHandler()
         }
         if (vNodesSize != nPrevNodeCount) {
             nPrevNodeCount = vNodesSize;
-            MetricsGauge("zcash.net.peers", nPrevNodeCount);
+            MetricsGauge("votecoin.net.peers", nPrevNodeCount);
             uiInterface.NotifyNumConnectionsChanged(nPrevNodeCount);
         }
 
@@ -1833,7 +1833,7 @@ bool BindListenPort(const CService &addrBind, string& strError, bool fWhiteliste
     {
         int nErr = WSAGetLastError();
         if (nErr == WSAEADDRINUSE)
-            strError = strprintf(_("Unable to bind to %s on this computer. Zcash is probably already running."), addrBind.ToString());
+            strError = strprintf(_("Unable to bind to %s on this computer. VoteCoin is probably already running."), addrBind.ToString());
         else
             strError = strprintf(_("Unable to bind to %s on this computer (bind returned error %s)"), addrBind.ToString(), NetworkErrorString(nErr));
         LogPrintf("%s\n", strError);
@@ -2090,14 +2090,14 @@ void CNode::RecordBytesRecv(uint64_t bytes)
 {
     LOCK(cs_totalBytesRecv);
     nTotalBytesRecv += bytes;
-    MetricsCounter("zcash.net.in.bytes.total", bytes);
+    MetricsCounter("votecoin.net.in.bytes.total", bytes);
 }
 
 void CNode::RecordBytesSent(uint64_t bytes)
 {
     LOCK(cs_totalBytesSent);
     nTotalBytesSent += bytes;
-    MetricsCounter("zcash.net.out.bytes.total", bytes);
+    MetricsCounter("votecoin.net.out.bytes.total", bytes);
 
     uint64_t now = GetTime();
     if (nMaxOutboundCycleStartTime + nMaxOutboundTimeframe < now)
@@ -2374,7 +2374,7 @@ void CNode::AbortMessage() UNLOCK_FUNCTION(cs_vSend)
 
 void CNode::EndMessage() UNLOCK_FUNCTION(cs_vSend)
 {
-    MetricsIncrementCounter("zcash.net.out.messages", "command", strSendCommand.c_str());
+    MetricsIncrementCounter("votecoin.net.out.messages", "command", strSendCommand.c_str());
     // The -*messagestest options are intentionally not documented in the help message,
     // since they are only used during development to debug the networking code and are
     // not intended for end-users.
@@ -2409,7 +2409,7 @@ void CNode::EndMessage() UNLOCK_FUNCTION(cs_vSend)
     ssSend.GetAndClear(*it);
     nSendSize += (*it).size();
     MetricsCounter(
-        "zcash.net.out.bytes", (*it).size(),
+        "votecoin.net.out.bytes", (*it).size(),
         "command", strSendCommand.c_str());
     strSendCommand.clear();
 

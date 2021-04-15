@@ -1,5 +1,5 @@
-#ifndef ZCASH_ZCBENCHMARKS_H
-#define ZCASH_ZCBENCHMARKS_H
+#ifndef VOTECOIN_ZCBENCHMARKS_H
+#define VOTECOIN_ZCBENCHMARKS_H
 
 #include <sys/time.h>
 #include <stdlib.h>
@@ -25,4 +25,4 @@ extern double benchmark_create_sapling_output();
 extern double benchmark_verify_sapling_spend();
 extern double benchmark_verify_sapling_output();
 
-#endif // ZCASH_ZCBENCHMARKS_H
+#endif // VOTECOIN_ZCBENCHMARKS_H

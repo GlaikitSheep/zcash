@@ -16,7 +16,7 @@ fn redjubjub_signatures() {
         rsig: [u8; 64],
     }
 
-    // From https://github.com/zcash-hackworks/zcash-test-vectors/blob/master/sapling_signatures.py
+    // From https://github.com/votecoin-hackworks/votecoin-test-vectors/blob/master/sapling_signatures.py
     let test_vectors = vec![
         TestVector {
             sk: [

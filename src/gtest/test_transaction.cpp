@@ -3,8 +3,8 @@
 #include "gtest/utils.h"
 #include "primitives/transaction.h"
 #include "transaction_builder.h"
-#include "zcash/Note.hpp"
-#include "zcash/Address.hpp"
+#include "votecoin/Note.hpp"
+#include "votecoin/Address.hpp"
 
 #include <array>
 
@@ -14,10 +14,10 @@ TEST(Transaction, JSDescriptionRandomized) {
     // construct a merkle tree
     SproutMerkleTree merkleTree;
 
-    libzcash::SproutSpendingKey k = libzcash::SproutSpendingKey::random();
-    libzcash::SproutPaymentAddress addr = k.address();
+    libvotecoin::SproutSpendingKey k = libvotecoin::SproutSpendingKey::random();
+    libvotecoin::SproutPaymentAddress addr = k.address();
 
-    libzcash::SproutNote note(addr.a_pk, 100, uint256(), uint256());
+    libvotecoin::SproutNote note(addr.a_pk, 100, uint256(), uint256());
 
     // commitment from coin
     uint256 commitment = note.cm();
@@ -32,13 +32,13 @@ TEST(Transaction, JSDescriptionRandomized) {
 
     // create JSDescription
     Ed25519VerificationKey joinSplitPubKey;
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> inputs = {
-        libzcash::JSInput(witness, note, k),
-        libzcash::JSInput() // dummy input of zero value
+    std::array<libvotecoin::JSInput, ZC_NUM_JS_INPUTS> inputs = {
+        libvotecoin::JSInput(witness, note, k),
+        libvotecoin::JSInput() // dummy input of zero value
     };
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> outputs = {
-        libzcash::JSOutput(addr, 50),
-        libzcash::JSOutput(addr, 50)
+    std::array<libvotecoin::JSOutput, ZC_NUM_JS_OUTPUTS> outputs = {
+        libvotecoin::JSOutput(addr, 50),
+        libvotecoin::JSOutput(addr, 50)
     };
     std::array<size_t, ZC_NUM_JS_INPUTS> inputMap;
     std::array<size_t, ZC_NUM_JS_OUTPUTS> outputMap;

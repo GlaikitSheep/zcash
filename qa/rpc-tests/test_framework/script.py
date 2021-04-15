@@ -826,32 +826,32 @@ SIGHASH_SINGLE = 3
 SIGHASH_ANYONECANPAY = 0x80
 
 def getHashPrevouts(tx):
-    digest = blake2b(digest_size=32, person=b'ZcashPrevoutHash')
+    digest = blake2b(digest_size=32, person=b'VoteCoinPrevoutHash')
     for x in tx.vin:
         digest.update(x.prevout.serialize())
     return digest.digest()
 
 def getHashSequence(tx):
-    digest = blake2b(digest_size=32, person=b'ZcashSequencHash')
+    digest = blake2b(digest_size=32, person=b'VoteCoinSequencHash')
     for x in tx.vin:
         digest.update(struct.pack('<I', x.nSequence))
     return digest.digest()
 
 def getHashOutputs(tx):
-    digest = blake2b(digest_size=32, person=b'ZcashOutputsHash')
+    digest = blake2b(digest_size=32, person=b'VoteCoinOutputsHash')
     for x in tx.vout:
         digest.update(x.serialize())
     return digest.digest()
 
 def getHashJoinSplits(tx):
-    digest = blake2b(digest_size=32, person=b'ZcashJSplitsHash')
+    digest = blake2b(digest_size=32, person=b'VoteCoinJSplitsHash')
     for jsdesc in tx.vJoinSplit:
         digest.update(jsdesc.serialize())
     digest.update(tx.joinSplitPubKey)
     return digest.digest()
 
 def getHashShieldedSpends(tx):
-    digest = blake2b(digest_size=32, person=b'ZcashSSpendsHash')
+    digest = blake2b(digest_size=32, person=b'VoteCoinSSpendsHash')
     for desc in tx.shieldedSpends:
         # We don't pass in serialized form of desc as spendAuthSig is not part of the hash
         digest.update(ser_uint256(desc.cv))
@@ -862,7 +862,7 @@ def getHashShieldedSpends(tx):
     return digest.digest()
 
 def getHashShieldedOutputs(tx):
-    digest = blake2b(digest_size=32, person=b'ZcashSOutputHash')
+    digest = blake2b(digest_size=32, person=b'VoteCoinSOutputHash')
     for desc in tx.shieldedOutputs:
         digest.update(desc.serialize())
     return digest.digest()
@@ -895,7 +895,7 @@ def SignatureHash(script, txTo, inIdx, hashtype, amount, consensusBranchId):
             hashOutputs = getHashOutputs(txTo)
         elif (hashtype & 0x1f) == SIGHASH_SINGLE and \
             0 <= inIdx and inIdx < len(txTo.vout):
-            digest = blake2b(digest_size=32, person=b'ZcashOutputsHash')
+            digest = blake2b(digest_size=32, person=b'VoteCoinOutputsHash')
             digest.update(txTo.vout[inIdx].serialize())
             hashOutputs = digest.digest()
 

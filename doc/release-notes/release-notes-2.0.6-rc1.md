@@ -20,7 +20,7 @@ Eirik Ogilvie-Wigley (7):
 
 Jack Grigg (10):
       Move Equihash parameters into consensus params
-      Globals: Remove Zcash-specific Params() calls from main.cpp
+      Globals: Remove VoteCoin-specific Params() calls from main.cpp
       Globals: Explicitly pass const CChainParams& to IsStandardTx()
       Globals: Explicit const CChainParams& arg for main:
       Globals: Explicitly pass const CChainParams& to ContextualCheckTransaction()

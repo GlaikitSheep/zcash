@@ -5,7 +5,7 @@
 #include "main.h"
 #include "proof_verifier.h"
 #include "utiltest.h"
-#include "zcash/Proof.hpp"
+#include "votecoin/Proof.hpp"
 
 class MockCValidationState : public CValidationState {
 public:

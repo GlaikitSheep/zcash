@@ -3,7 +3,7 @@ Notable changes
 
 Switch to ed25519-zebra for consensus signature checks
 ------------------------------------------------------
-This removes the zcashd dependency upon libsodium for ed25519
+This removes the votecoind dependency upon libsodium for ed25519
 signature checks and instead uses the Rust implementation in
 ed25519-zebra, which has been active for signature verification
 since the Canopy upgrade. For more information on the conditions
@@ -11,7 +11,7 @@ that led to this change see https://hdevalence.ca/blog/2020-10-04-its-25519am
 
 Update default fees according to ZIP-313
 ----------------------------------------
-Reduce default fees to 0.00001 ZEC as specified in ZIP-313 and 
+Reduce default fees to 0.00001 VOT as specified in ZIP-313 and 
 ensure that transactions paying at least the new minimum fee meet
 the transaction relay threshold irrespective of transaction size.
 
@@ -80,7 +80,7 @@ Jack Grigg (32):
       test: Fix SignatureHash RPC test helper
       test: Set hashFinalSaplingRoot default correctly in create_block
       test: Re-enable regtest difficulty adjustment for unit tests that use it
-      test: Adjust some Zcash RPC tests to work with parallel runner
+      test: Adjust some VoteCoin RPC tests to work with parallel runner
       test: Run rpc-tests.py in full_test_suite.py
       lint: Remove boost/foreach.hpp from allowed includes
       test: Silence pyflakes unused import warning

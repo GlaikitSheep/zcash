@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
   testing::InitGoogleMock(&argc, argv);
 
   // The "threadsafe" style is necessary for correct operation of death/exit
-  // tests on macOS (https://github.com/zcash/zcash/issues/4802).
+  // tests on macOS (https://github.com/votecoin/votecoin/issues/4802).
   testing::FLAGS_gtest_death_test_style = "threadsafe";
 
   auto ret = RUN_ALL_TESTS();

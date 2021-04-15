@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Zcash developers
+# Copyright (c) 2019 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -157,7 +157,7 @@ class SproutSaplingMigration(BitcoinTestFramework):
         assert_equal(sapling_balance, Decimal(status['finalized_migrated_amount']))
 
     def send_to_sprout_zaddr(self, tAddr, sproutAddr):
-        # Send some ZEC to a Sprout address
+        # Send some VOT to a Sprout address
         opid = self.nodes[0].z_sendmany(tAddr, [{"address": sproutAddr, "amount": Decimal('10')}], 1, 0)
         wait_and_assert_operationid_status(self.nodes[0], opid)
         self.nodes[0].generate(1)

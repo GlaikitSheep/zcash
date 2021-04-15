@@ -41,7 +41,7 @@ from .equihash import (
     gbp_basic,
     gbp_validate,
     hash_nonce,
-    zcash_person,
+    votecoin_person,
 )
 
 
@@ -60,7 +60,7 @@ SAPLING_VERSION_GROUP_ID = 0x892F2085
 
 MAX_INV_SZ = 50000
 
-COIN = 100000000 # 1 zec in zatoshis
+COIN = 100000000 # 1 vot in zatoshis
 
 # Keep our own socket map for asyncore, so that we can track disconnects
 # ourselves (to workaround an issue with closing an asyncore socket when
@@ -899,7 +899,7 @@ class CBlock(CBlockHeader):
 
     def is_valid(self, n=48, k=5):
         # H(I||...
-        digest = blake2b(digest_size=(512//n)*n//8, person=zcash_person(n, k))
+        digest = blake2b(digest_size=(512//n)*n//8, person=votecoin_person(n, k))
         digest.update(super(CBlock, self).serialize()[:108])
         hash_nonce(digest, self.nNonce)
         if not gbp_validate(self.nSolution, digest, n, k):
@@ -918,7 +918,7 @@ class CBlock(CBlockHeader):
     def solve(self, n=48, k=5):
         target = uint256_from_compact(self.nBits)
         # H(I||...
-        digest = blake2b(digest_size=(512//n)*n//8, person=zcash_person(n, k))
+        digest = blake2b(digest_size=(512//n)*n//8, person=votecoin_person(n, k))
         digest.update(super(CBlock, self).serialize()[:108])
         self.nNonce = 0
         while True:

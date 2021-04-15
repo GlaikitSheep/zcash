@@ -12,7 +12,7 @@ v2.1.0 Blossom release. The End-of-Service of v2.0.7-3 will occur at block heigh
 Shrinking of debug.log files is temporarily disabled
 ----------------------------------------------------
 
-In previous versions, `zcashd` would shrink the `debug.log` file to 200 KB on
+In previous versions, `votecoind` would shrink the `debug.log` file to 200 KB on
 startup if it was larger than 10 MB. This behaviour, and the `-shrinkdebugfile`
 option that controlled it, has been disabled.
 

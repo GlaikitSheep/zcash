@@ -10,11 +10,11 @@ Frequent users of shielded transactions, payment processors, exchanges, block ex
 
 ### Experimental Feature
 
-This is an experimental feature.  Enable it by launching `zcashd` with flags:
+This is an experimental feature.  Enable it by launching `votecoind` with flags:
 
-    zcashd -experimentalfeatures -paymentdisclosure -debug=paymentdisclosure -txindex=1
+    votecoind -experimentalfeatures -paymentdisclosure -debug=paymentdisclosure -txindex=1
 
-These flags can also be set as options in `zcash.conf`.
+These flags can also be set as options in `votecoin.conf`.
 
 All nodes that generate or validate payment disclosures must run with `txindex=1` enabled.
 
@@ -24,11 +24,11 @@ Payment Disclosure is an implementation of the work-in-progress Payment Disclosu
 
 The ZIP describes a method of proving that a payment was sent to a shielded address. In the typical case, this means enabling a sender to present a proof that they transferred funds to a recipient's shielded address. 
 
-[1] https://github.com/zcash/zips/pull/119
+[1] https://github.com/votecoin/zips/pull/119
 
 ### Example Use Case
 
-Alice the customer sends 10 ZEC to Bob the merchant at the shielded address shown on their website.  However, Bob is not sure if he received the funds.
+Alice the customer sends 10 VOT to Bob the merchant at the shielded address shown on their website.  However, Bob is not sure if he received the funds.
 
 Alice's node is running with payment disclosure enabled, so Alice generates a payment disclosure and provides it to Bob, who verifies the payment was made.
 
@@ -50,7 +50,7 @@ To validate a payment disclosure, the following RPC call can be used:
 
 Generate a payment disclosure for the first joinsplit, second output (index starts from zero):
 
-    zcash-cli z_getpaymentdisclosure 79189528d611e811a1c7bb0358dd31343033d14b4c1e998d7c4799c40f8b652b 0 1 "Hello"
+    votecoin-cli z_getpaymentdisclosure 79189528d611e811a1c7bb0358dd31343033d14b4c1e998d7c4799c40f8b652b 0 1 "Hello"
     
 This returns a payment disclosure in the form of a hex string:
 
@@ -58,7 +58,7 @@ This returns a payment disclosure in the form of a hex string:
 
 To validate the payment disclosure:
 
-    zcash-cli z_validatepaymentdisclosure HEXDATA
+    votecoin-cli z_validatepaymentdisclosure HEXDATA
     
 This returns data related to the payment and the payment disclosure:
 
@@ -88,7 +88,7 @@ For nodes that only validate payment disclosures, no data is stored locally.
 
 For nodes that generate payment disclosures, a LevelDB database is created in the node's datadir.  For most users, this would be in the folder:
 
-    $HOME/.zcash/paymentdisclosure
+    $HOME/.votecoin/paymentdisclosure
     
 If you decide you don't want to use payment disclosure, it is safe to shut down your node and delete the database folder.
 

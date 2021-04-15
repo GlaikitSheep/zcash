@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
-// Copyright (c) 2015-2020 The Zcash developers
+// Copyright (c) 2015-2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -84,8 +84,8 @@
 
 using namespace std;
 
-const char * const BITCOIN_CONF_FILENAME = "zcash.conf";
-const char * const BITCOIN_PID_FILENAME = "zcashd.pid";
+const char * const BITCOIN_CONF_FILENAME = "votecoin.conf";
+const char * const BITCOIN_PID_FILENAME = "votecoind.pid";
 
 CCriticalSection cs_args;
 map<string, string> mapArgs;
@@ -210,7 +210,7 @@ static std::string FormatException(const std::exception* pex, const char* pszThr
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "Zcash";
+    const char* pszModule = "VoteCoin";
 #endif
     if (pex)
         return strprintf(
@@ -229,13 +229,13 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 
 fs::path GetDefaultDataDir()
 {
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Zcash
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Zcash
-    // Mac: ~/Library/Application Support/Zcash
-    // Unix: ~/.zcash
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\VoteCoin
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\VoteCoin
+    // Mac: ~/Library/Application Support/VoteCoin
+    // Unix: ~/.votecoin
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Zcash";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "VoteCoin";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -247,10 +247,10 @@ fs::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDirectory(pathRet);
-    return pathRet / "Zcash";
+    return pathRet / "VoteCoin";
 #else
     // Unix
-    return pathRet / ".zcash";
+    return pathRet / ".votecoin";
 #endif
 #endif
 }
@@ -262,7 +262,7 @@ static CCriticalSection csPathCached;
 
 static fs::path ZC_GetDefaultBaseParamsDir()
 {
-    // Copied from GetDefaultDataDir and adapter for zcash params.
+    // Copied from GetDefaultDataDir and adapter for votecoin params.
 
     // Windows < Vista: C:\Documents and Settings\Username\Application Data\ZcashParams
     // Windows >= Vista: C:\Users\Username\AppData\Roaming\ZcashParams
@@ -383,7 +383,7 @@ void ReadConfigFile(const std::string& confPath,
 {
     fs::ifstream streamConfig(GetConfigFile(confPath));
     if (!streamConfig.good())
-        throw missing_zcash_conf();
+        throw missing_votecoin_conf();
 
     set<string> setOptions;
     setOptions.insert("*");
@@ -424,7 +424,7 @@ void ReadConfigFile(const std::string& confPath,
             }
 
             InterpretNegativeSetting(strKey, strValue);
-            // Don't overwrite existing settings so command line settings override zcash.conf
+            // Don't overwrite existing settings so command line settings override votecoin.conf
             if (mapSettingsRet.count(strKey) == 0)
                 mapSettingsRet[strKey] = strValue;
             mapMultiSettingsRet[strKey].push_back(strValue);
@@ -662,7 +662,7 @@ void SetThreadPriority(int nPriority)
 std::string PrivacyInfo()
 {
     return "\n" +
-           FormatParagraph(strprintf(_("In order to ensure you are adequately protecting your privacy when using Zcash, please see <%s>."),
+           FormatParagraph(strprintf(_("In order to ensure you are adequately protecting your privacy when using VoteCoin, please see <%s>."),
                                      "https://z.cash/support/security/")) + "\n";
 }
 
@@ -670,7 +670,7 @@ std::string LicenseInfo()
 {
     return "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2009-%i The Bitcoin Core Developers"), COPYRIGHT_YEAR)) + "\n" +
-           FormatParagraph(strprintf(_("Copyright (C) 2015-%i The Zcash Developers"), COPYRIGHT_YEAR)) + "\n" +
+           FormatParagraph(strprintf(_("Copyright (C) 2015-%i The VoteCoin Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
            FormatParagraph(_("This is experimental software.")) + "\n" +
            "\n" +

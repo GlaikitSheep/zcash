@@ -9,7 +9,7 @@
 #include "proof_verifier.h"
 #include "test/test_bitcoin.h"
 #include "utiltime.h"
-#include "zcash/Proof.hpp"
+#include "votecoin/Proof.hpp"
 
 #include <cstdio>
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Zcash developers
+# Copyright (c) 2020 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 #
-# This test reproduces https://github.com/zcash/zcash/issues/4301
+# This test reproduces https://github.com/votecoin/votecoin/issues/4301
 # It takes an hour to run!
 
 from test_framework.test_framework import BitcoinTestFramework

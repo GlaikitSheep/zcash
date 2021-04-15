@@ -1,9 +1,9 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_PAYMENTDISCLOSUREDB_H
-#define ZCASH_WALLET_PAYMENTDISCLOSUREDB_H
+#ifndef VOTECOIN_WALLET_PAYMENTDISCLOSUREDB_H
+#define VOTECOIN_WALLET_PAYMENTDISCLOSUREDB_H
 
 #include <wallet/paymentdisclosure.h>
 
@@ -38,4 +38,4 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_PAYMENTDISCLOSUREDB_H
+#endif // VOTECOIN_WALLET_PAYMENTDISCLOSUREDB_H

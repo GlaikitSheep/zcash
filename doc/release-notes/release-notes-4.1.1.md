@@ -27,7 +27,7 @@ Alfredo Garcia (1):
 
 Daira Hopwood (3):
       Wording improvements to getrawtransaction RPC documentation
-      GetNextWorkRequired: clarify why this computation is equivalent to that in the protocol spec. refs https://github.com/zcash/zips/pull/418
+      GetNextWorkRequired: clarify why this computation is equivalent to that in the protocol spec. refs https://github.com/votecoin/zips/pull/418
       Set release CFLAGS/CXXFLAGS to use -O3.
 
 Dan Raviv (1):
@@ -40,7 +40,7 @@ Evan Klitzke (1):
       Add a lint check for trailing whitespace.
 
 Jack Grigg (14):
-      lints: Use Zcash-specific include guards for new files
+      lints: Use VoteCoin-specific include guards for new files
       lints: Update expected Boost imports
       lints: Match `export LC_ALL="C"` in lint-shell-locale
       test: Fix pyflakes warning in bitcoin-util-test.py
@@ -48,7 +48,7 @@ Jack Grigg (14):
       lint: Fix duplicate includes
       python: Explicitly set encoding to utf8 when opening text files
       lint: Use consistent shebangs
-      lint: Opt out of locale dependence in Zcash shell scripts
+      lint: Opt out of locale dependence in VoteCoin shell scripts
       lint: Re-exclude subtrees from lint-include-guards.sh
       lint: Apply include guard style to src/rust/include
       lint: s/trim/lenTrim in src/crypto/equihash.[cpp,h]
@@ -149,7 +149,7 @@ Jack Grigg (5):
       lints: Add a missing copyright header
       lint: Allow stoi in src/rpc/blockchain.cpp
       lint: Remove some subtrees from exclusion
-      doc: Adjust subtree developer notes to refer to Zcash
+      doc: Adjust subtree developer notes to refer to VoteCoin
 
 vim88 (1):
       Scripts and tools & Docs: Used #!/usr/bin/env bash instead of obsolete #!/bin/bash, added linting for .sh files shebang and updated the Developer Notes.

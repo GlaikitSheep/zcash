@@ -185,7 +185,7 @@ void static RandomTransaction(CMutableTransaction &tx, bool fSingle, uint32_t co
             GetRandBytes(jsdesc.ciphertexts[0].begin(), jsdesc.ciphertexts[0].size());
             GetRandBytes(jsdesc.ciphertexts[1].begin(), jsdesc.ciphertexts[1].size());
             {
-                libzcash::GrothProof zkproof;
+                libvotecoin::GrothProof zkproof;
                 GetRandBytes(zkproof.begin(), zkproof.size());
                 jsdesc.proof = zkproof;
             }

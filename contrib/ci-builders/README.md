@@ -1,8 +1,8 @@
-# zcashd ci Docker images
+# votecoind ci Docker images
 
-These Dockerfiles can be used to build zcashd.
+These Dockerfiles can be used to build votecoind.
 
-The current objective is to build a base image for each distribution that includes the system packages to build zcashd. From `build` images, more targeted images are created.
+The current objective is to build a base image for each distribution that includes the system packages to build votecoind. From `build` images, more targeted images are created.
 
 The process is meant to be automated, but an example `docker-build.sh` script is included.
 
@@ -13,14 +13,14 @@ The process is meant to be automated, but an example `docker-build.sh` script is
 `Dockerfile-build.apt` uses that file, and some build time arguments, to build apt based build images.
 
 Currently available images are hosted at
-https://hub.docker.com/r/electriccoinco/zcashd-build/tags
+https://hub.docker.com/r/electriccoinco/votecoind-build/tags
 
 
 ## gitian images
 
 `Dockerfile-gitian.apt` uses the build images to generate images for use with [gitian-builder](https://github.com/devrandom/gitian-builder)
 
-Currently available images are hosted at https://hub.docker.com/r/electriccoinco/zcashd-gitian/tags
+Currently available images are hosted at https://hub.docker.com/r/electriccoinco/votecoind-gitian/tags
 
 
 ## bbworker images
@@ -30,7 +30,7 @@ Currently available images are hosted at https://hub.docker.com/r/electriccoinco
 - bbworker-buildbot.tac is a required worker boot file (most is overridden at instancitation)
 - bbworker-requirements.txt is the python package requirements for the buildbot worker
 
-Currently available images are hosted at https://hub.docker.com/r/electriccoinco/zcashd-bbworker/tags
+Currently available images are hosted at https://hub.docker.com/r/electriccoinco/votecoind-bbworker/tags
 
 
 ### Stand alone, best effort images

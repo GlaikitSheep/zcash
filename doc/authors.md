@@ -1,4 +1,4 @@
-Zcash Contributors
+VoteCoin Contributors
 ==================
 
 Jack Grigg (1099)
@@ -232,5 +232,5 @@ Adam Weiss (1)
 Adam Langley (1)
 Adam Brown (1)
 Aaron Clauson (1)
-4ZEC (1)
+4VOT (1)
 21E14 (1)

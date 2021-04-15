@@ -1,4 +1,4 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -13,7 +13,7 @@
 
 // Sprout
 CMutableTransaction GetValidSproutReceiveTransaction(
-                                const libzcash::SproutSpendingKey& sk,
+                                const libvotecoin::SproutSpendingKey& sk,
                                 CAmount value,
                                 bool randomInputs,
                                 uint32_t versionGroupId, /* = SAPLING_VERSION_GROUP_ID */
@@ -40,14 +40,14 @@ CMutableTransaction GetValidSproutReceiveTransaction(
     Ed25519SigningKey joinSplitPrivKey;
     ed25519_generate_keypair(&joinSplitPrivKey, &mtx.joinSplitPubKey);
 
-    std::array<libzcash::JSInput, 2> inputs = {
-        libzcash::JSInput(), // dummy input
-        libzcash::JSInput() // dummy input
+    std::array<libvotecoin::JSInput, 2> inputs = {
+        libvotecoin::JSInput(), // dummy input
+        libvotecoin::JSInput() // dummy input
     };
 
-    std::array<libzcash::JSOutput, 2> outputs = {
-        libzcash::JSOutput(sk.address(), value),
-        libzcash::JSOutput(sk.address(), value)
+    std::array<libvotecoin::JSOutput, 2> outputs = {
+        libvotecoin::JSOutput(sk.address(), value),
+        libvotecoin::JSOutput(sk.address(), value)
     };
 
     // Prepare JoinSplits
@@ -80,7 +80,7 @@ CMutableTransaction GetValidSproutReceiveTransaction(
     return mtx;
 }
 
-CWalletTx GetValidSproutReceive(const libzcash::SproutSpendingKey& sk,
+CWalletTx GetValidSproutReceive(const libvotecoin::SproutSpendingKey& sk,
                                 CAmount value,
                                 bool randomInputs,
                                 uint32_t versionGroupId, /* = SAPLING_VERSION_GROUP_ID */
@@ -95,7 +95,7 @@ CWalletTx GetValidSproutReceive(const libzcash::SproutSpendingKey& sk,
 }
 
 CWalletTx GetInvalidCommitmentSproutReceive(
-                                const libzcash::SproutSpendingKey& sk,
+                                const libvotecoin::SproutSpendingKey& sk,
                                 CAmount value,
                                 bool randomInputs,
                                 uint32_t versionGroupId, /* = SAPLING_VERSION_GROUP_ID */
@@ -111,14 +111,14 @@ CWalletTx GetInvalidCommitmentSproutReceive(
     return wtx;
 }
 
-libzcash::SproutNote GetSproutNote(const libzcash::SproutSpendingKey& sk,
+libvotecoin::SproutNote GetSproutNote(const libvotecoin::SproutSpendingKey& sk,
                                    const CTransaction& tx, size_t js, size_t n) {
     ZCNoteDecryption decryptor {sk.receiving_key()};
     auto hSig = ZCJoinSplit::h_sig(
         tx.vJoinSplit[js].randomSeed,
         tx.vJoinSplit[js].nullifiers,
         tx.joinSplitPubKey);
-    auto note_pt = libzcash::SproutNotePlaintext::decrypt(
+    auto note_pt = libvotecoin::SproutNotePlaintext::decrypt(
         decryptor,
         tx.vJoinSplit[js].ciphertexts[n],
         tx.vJoinSplit[js].ephemeralKey,
@@ -127,8 +127,8 @@ libzcash::SproutNote GetSproutNote(const libzcash::SproutSpendingKey& sk,
     return note_pt.note(sk.address());
 }
 
-CWalletTx GetValidSproutSpend(const libzcash::SproutSpendingKey& sk,
-                              const libzcash::SproutNote& note,
+CWalletTx GetValidSproutSpend(const libvotecoin::SproutSpendingKey& sk,
+                              const libvotecoin::SproutNote& note,
                               CAmount value) {
     CMutableTransaction mtx;
     mtx.fOverwintered = true;
@@ -145,33 +145,33 @@ CWalletTx GetValidSproutSpend(const libzcash::SproutSpendingKey& sk,
     // Fake tree for the unused witness
     SproutMerkleTree tree;
 
-    libzcash::JSOutput dummyout;
-    libzcash::JSInput dummyin;
+    libvotecoin::JSOutput dummyout;
+    libvotecoin::JSInput dummyin;
 
     {
         if (note.value() > value) {
-            libzcash::SproutSpendingKey dummykey = libzcash::SproutSpendingKey::random();
-            libzcash::SproutPaymentAddress dummyaddr = dummykey.address();
-            dummyout = libzcash::JSOutput(dummyaddr, note.value() - value);
+            libvotecoin::SproutSpendingKey dummykey = libvotecoin::SproutSpendingKey::random();
+            libvotecoin::SproutPaymentAddress dummyaddr = dummykey.address();
+            dummyout = libvotecoin::JSOutput(dummyaddr, note.value() - value);
         } else if (note.value() < value) {
-            libzcash::SproutSpendingKey dummykey = libzcash::SproutSpendingKey::random();
-            libzcash::SproutPaymentAddress dummyaddr = dummykey.address();
-            libzcash::SproutNote dummynote(dummyaddr.a_pk, (value - note.value()), uint256(), uint256());
+            libvotecoin::SproutSpendingKey dummykey = libvotecoin::SproutSpendingKey::random();
+            libvotecoin::SproutPaymentAddress dummyaddr = dummykey.address();
+            libvotecoin::SproutNote dummynote(dummyaddr.a_pk, (value - note.value()), uint256(), uint256());
             tree.append(dummynote.cm());
-            dummyin = libzcash::JSInput(tree.witness(), dummynote, dummykey);
+            dummyin = libvotecoin::JSInput(tree.witness(), dummynote, dummykey);
         }
     }
 
     tree.append(note.cm());
 
-    std::array<libzcash::JSInput, 2> inputs = {
-        libzcash::JSInput(tree.witness(), note, sk),
+    std::array<libvotecoin::JSInput, 2> inputs = {
+        libvotecoin::JSInput(tree.witness(), note, sk),
         dummyin
     };
 
-    std::array<libzcash::JSOutput, 2> outputs = {
+    std::array<libvotecoin::JSOutput, 2> outputs = {
         dummyout, // dummy output
-        libzcash::JSOutput() // dummy output
+        libvotecoin::JSOutput() // dummy output
     };
 
     // Prepare JoinSplits
@@ -305,10 +305,10 @@ void RegtestDeactivateNU5() {
     SelectParams(CBaseChainParams::MAIN);
 }
 
-libzcash::SaplingExtendedSpendingKey GetTestMasterSaplingSpendingKey() {
+libvotecoin::SaplingExtendedSpendingKey GetTestMasterSaplingSpendingKey() {
     std::vector<unsigned char, secure_allocator<unsigned char>> rawSeed(32);
     HDSeed seed(rawSeed);
-    return libzcash::SaplingExtendedSpendingKey::Master(seed);
+    return libvotecoin::SaplingExtendedSpendingKey::Master(seed);
 }
 
 CKey AddTestCKeyToKeyStore(CBasicKeyStore& keyStore) {
@@ -318,9 +318,9 @@ CKey AddTestCKeyToKeyStore(CBasicKeyStore& keyStore) {
     return tsk;
 }
 
-TestSaplingNote GetTestSaplingNote(const libzcash::SaplingPaymentAddress& pa, CAmount value) {
+TestSaplingNote GetTestSaplingNote(const libvotecoin::SaplingPaymentAddress& pa, CAmount value) {
     // Generate dummy Sapling note
-    libzcash::SaplingNote note(pa, value, libzcash::Zip212Enabled::BeforeZip212);
+    libvotecoin::SaplingNote note(pa, value, libvotecoin::Zip212Enabled::BeforeZip212);
     uint256 cm = note.cmu().value();
     SaplingMerkleTree tree;
     tree.append(cm);
@@ -329,7 +329,7 @@ TestSaplingNote GetTestSaplingNote(const libzcash::SaplingPaymentAddress& pa, CA
 
 CWalletTx GetValidSaplingReceive(const Consensus::Params& consensusParams,
                                  CBasicKeyStore& keyStore,
-                                 const libzcash::SaplingExtendedSpendingKey &sk,
+                                 const libvotecoin::SaplingExtendedSpendingKey &sk,
                                  CAmount value) {
     // From taddr
     CKey tsk = AddTestCKeyToKeyStore(keyStore);

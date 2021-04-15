@@ -25,12 +25,12 @@ uint256 GetRandHash();
 /**
  * Implementation of a C++ Uniform Random Number Generator, backed by GetRandBytes.
  */
-class ZcashRandomEngine
+class VoteCoinRandomEngine
 {
 public:
     typedef uint64_t result_type;
 
-    explicit ZcashRandomEngine() {}
+    explicit VoteCoinRandomEngine() {}
 
     static constexpr result_type min() {
         return std::numeric_limits<result_type>::min();

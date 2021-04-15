@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
-// Copyright (c) 2015-2020 The Zcash developers
+// Copyright (c) 2015-2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -51,7 +51,7 @@
 using namespace std;
 
 #if defined(NDEBUG)
-# error "Zcash cannot be compiled without assertions."
+# error "VoteCoin cannot be compiled without assertions."
 #endif
 
 #include "librustzcash.h"
@@ -112,7 +112,7 @@ static void CheckBlockIndex(const Consensus::Params& consensusParams);
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Zcash Signed Message:\n";
+const string strMessageMagic = "VoteCoin Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -857,7 +857,7 @@ bool ContextualCheckTransaction(
             int expiredDosLevel = IsExpiredTx(tx, nHeight - 1) ? dosLevelConstricting : 0;
             return state.DoS(
                     expiredDosLevel,
-                    error("ContextualCheckTransaction(): transaction is expired. Resending when caught up with the blockchain, or manually setting the zcashd txexpirydelta parameter may help."),
+                    error("ContextualCheckTransaction(): transaction is expired. Resending when caught up with the blockchain, or manually setting the votecoind txexpirydelta parameter may help."),
                     REJECT_INVALID, "tx-overwinter-expired");
         }
 
@@ -969,9 +969,9 @@ bool ContextualCheckTransaction(
 
                 // ZIP 207: detect shielded funding stream elements
                 if (canopyActive) {
-                    libzcash::SaplingPaymentAddress zaddr(encPlaintext->d, outPlaintext->pk_d);
+                    libvotecoin::SaplingPaymentAddress zaddr(encPlaintext->d, outPlaintext->pk_d);
                     for (auto it = fundingStreamElements.begin(); it != fundingStreamElements.end(); ++it) {
-                        const libzcash::SaplingPaymentAddress* streamAddr = std::get_if<libzcash::SaplingPaymentAddress>(&(it->first));
+                        const libvotecoin::SaplingPaymentAddress* streamAddr = std::get_if<libvotecoin::SaplingPaymentAddress>(&(it->first));
                         if (streamAddr && zaddr == *streamAddr && encPlaintext->value() == it->second) {
                             fundingStreamElements.erase(it);
                             break;
@@ -1651,7 +1651,7 @@ bool AcceptToMemoryPool(
         CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainActive.Height(), mempool.HasNoInputsOf(tx), fSpendsCoinbase, consensusBranchId);
         unsigned int nSize = entry.GetTxSize();
 
-        // Before zcashd 4.2.0, we had a condition here to always accept a tx if it contained
+        // Before votecoind 4.2.0, we had a condition here to always accept a tx if it contained
         // JoinSplits and had at least the default fee. It is no longer necessary to treat
         // that as a special case, because the fee returned by GetMinRelayFee is always at
         // most DEFAULT_FEE.
@@ -1741,9 +1741,9 @@ bool AcceptToMemoryPool(
 
             pool.EnsureSizeLimit();
 
-            MetricsGauge("zcash.mempool.size.transactions", mempool.size());
-            MetricsGauge("zcash.mempool.size.bytes", mempool.GetTotalTxSize());
-            MetricsGauge("zcash.mempool.usage.bytes", mempool.DynamicMemoryUsage());
+            MetricsGauge("votecoin.mempool.size.transactions", mempool.size());
+            MetricsGauge("votecoin.mempool.size.bytes", mempool.GetTotalTxSize());
+            MetricsGauge("votecoin.mempool.usage.bytes", mempool.DynamicMemoryUsage());
         }
     }
 
@@ -1941,22 +1941,8 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
-    CAmount nSubsidy = 12.5 * COIN;
-
-    // Mining slow start
-    // The subsidy is ramped up linearly, skipping the middle payout of
-    // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
-    if (nHeight < consensusParams.SubsidySlowStartShift()) {
-        nSubsidy /= consensusParams.nSubsidySlowStartInterval;
-        nSubsidy *= nHeight;
-        return nSubsidy;
-    } else if (nHeight < consensusParams.nSubsidySlowStartInterval) {
-        nSubsidy /= consensusParams.nSubsidySlowStartInterval;
-        nSubsidy *= (nHeight+1);
-        return nSubsidy;
-    }
-
-    assert(nHeight >= consensusParams.SubsidySlowStartShift());
+    CAmount nSubsidy = 125 * COIN;
+    if (nHeight==1) return COIN * 10000000;
 
     int halvings = consensusParams.Halving(nHeight);
 
@@ -2694,7 +2680,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck() {
-    RenameThread("zcash-scriptch");
+    RenameThread("votecoin-scriptch");
     scriptcheckqueue.Thread();
 }
 
@@ -3030,7 +3016,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     // History read/write is started with Heartwood update.
     if (chainparams.GetConsensus().NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_HEARTWOOD)) {
-        auto historyNode = libzcash::NewLeaf(
+        auto historyNode = libvotecoin::NewLeaf(
             block.GetHash(),
             block.nTime,
             block.nBits,
@@ -3318,25 +3304,25 @@ struct PoolMetrics {
     do {                                         \
         if (poolMetrics.created) {               \
             MetricsStaticGauge(                  \
-                "zcash.pool.notes.created",      \
+                "votecoin.pool.notes.created",      \
                 poolMetrics.created.value(),     \
                 "name", poolName);               \
         }                                        \
         if (poolMetrics.spent) {                 \
             MetricsStaticGauge(                  \
-                "zcash.pool.notes.spent",        \
+                "votecoin.pool.notes.spent",        \
                 poolMetrics.spent.value(),       \
                 "name", poolName);               \
         }                                        \
         if (poolMetrics.unspent) {               \
             MetricsStaticGauge(                  \
-                "zcash.pool.notes.unspent",      \
+                "votecoin.pool.notes.unspent",      \
                 poolMetrics.unspent.value(),     \
                 "name", poolName);               \
         }                                        \
         if (poolMetrics.value) {                 \
             MetricsStaticGauge(                  \
-                "zcash.pool.value.zatoshis",     \
+                "votecoin.pool.value.zatoshis",     \
                 poolMetrics.value.value(),       \
                 "name", poolName);               \
         }                                        \
@@ -3373,7 +3359,7 @@ void static UpdateTip(CBlockIndex *pindexNew, const CChainParams& chainParams) {
     auto saplingPool = PoolMetrics::Sapling(pindexNew, pcoinsTip);
     auto transparentPool = PoolMetrics::Transparent(pindexNew, pcoinsTip);
 
-    MetricsGauge("zcash.chain.verified.block.height", pindexNew->nHeight);
+    MetricsGauge("votecoin.chain.verified.block.height", pindexNew->nHeight);
     RenderPoolMetrics("sprout", sproutPool);
     RenderPoolMetrics("sapling", saplingPool);
     RenderPoolMetrics("transparent", transparentPool);
@@ -3509,8 +3495,8 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
     int64_t nTime6 = GetTimeMicros(); nTimePostConnect += nTime6 - nTime5; nTimeTotal += nTime6 - nTime1;
     LogPrint("bench", "  - Connect postprocess: %.2fms [%.2fs]\n", (nTime6 - nTime5) * 0.001, nTimePostConnect * 0.000001);
     LogPrint("bench", "- Connect block: %.2fms [%.2fs]\n", (nTime6 - nTime1) * 0.001, nTimeTotal * 0.000001);
-    MetricsIncrementCounter("zcash.chain.verified.block.total");
-    MetricsHistogram("zcash.chain.verified.block.seconds", (nTime6 - nTime1) * 0.000001);
+    MetricsIncrementCounter("votecoin.chain.verified.block.total");
+    MetricsHistogram("votecoin.chain.verified.block.seconds", (nTime6 - nTime1) * 0.000001);
     return true;
 }
 
@@ -4304,8 +4290,8 @@ bool ContextualCheckBlock(
     }
 
     // Enforce BIP 34 rule that the coinbase starts with serialized block height.
-    // In Zcash this has been enforced since launch, except that the genesis
-    // block didn't include the height in the coinbase (see Zcash protocol spec
+    // In VoteCoin this has been enforced since launch, except that the genesis
+    // block didn't include the height in the coinbase (see VoteCoin protocol spec
     // section '6.8 Bitcoin Improvement Proposals').
     if (nHeight > 0)
     {
@@ -4314,35 +4300,6 @@ bool ContextualCheckBlock(
             !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) {
             return state.DoS(100, error("%s: block height mismatch in coinbase", __func__),
                              REJECT_INVALID, "bad-cb-height");
-        }
-    }
-
-    if (consensusParams.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_CANOPY)) {
-        // Funding streams are checked inside ContextualCheckTransaction.
-        // This empty conditional branch exists to enforce this ZIP 207 consensus rule:
-        //
-        //     Once the Canopy network upgrade activates, the existing consensus rule for
-        //     payment of the Founders' Reward is no longer active.
-    } else if ((nHeight > 0) && (nHeight <= consensusParams.GetLastFoundersRewardBlockHeight(nHeight))) {
-        // Coinbase transaction must include an output sending 20% of
-        // the block subsidy to a Founders' Reward script, until the last Founders'
-        // Reward block is reached, with exception of the genesis block.
-        // The last Founders' Reward block is defined as the block just before the
-        // first subsidy halving block, which occurs at halving_interval + slow_start_shift.
-        bool found = false;
-
-        for (const CTxOut& output : block.vtx[0].vout) {
-            if (output.scriptPubKey == chainparams.GetFoundersRewardScriptAtHeight(nHeight)) {
-                if (output.nValue == (GetBlockSubsidy(nHeight, consensusParams) / 5)) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found) {
-            return state.DoS(100, error("%s: founders reward missing", __func__),
-                             REJECT_INVALID, "cb-no-founders-reward");
         }
     }
 

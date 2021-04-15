@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_BLAKE2B_H
-#define ZCASH_RUST_INCLUDE_RUST_BLAKE2B_H
+#ifndef VOTECOIN_RUST_INCLUDE_RUST_BLAKE2B_H
+#define VOTECOIN_RUST_INCLUDE_RUST_BLAKE2B_H
 
 #include <stddef.h>
 
@@ -56,4 +56,4 @@ void blake2b_finalize(
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_BLAKE2B_H
+#endif // VOTECOIN_RUST_INCLUDE_RUST_BLAKE2B_H

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Zcash developers
+# Copyright (c) 2018 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -32,7 +32,7 @@ class ListReceivedTest (BitcoinTestFramework):
         self.nodes[0].sendtoaddress(taddr, 4.0)
         self.generate_and_sync(height+2)
 
-        # Send 1 ZEC to zaddr1
+        # Send 1 VOT to zaddr1
         opid = self.nodes[1].z_sendmany(taddr, [
             {'address': zaddr1, 'amount': 1, 'memo': my_memo},
             {'address': zaddrExt, 'amount': 2},
@@ -114,7 +114,7 @@ class ListReceivedTest (BitcoinTestFramework):
         c = self.nodes[1].z_getnotescount(0)
         assert_equal(1, c[release], "Count of unconfirmed notes should be 1")
 
-        # Confirm transaction (1 ZEC from taddr to zaddr1)
+        # Confirm transaction (1 VOT from taddr to zaddr1)
         self.generate_and_sync(height+3)
 
         # adjust confirmations

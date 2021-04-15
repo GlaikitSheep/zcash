@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Zcash developers
+# Copyright (c) 2020 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 
-from test_framework.flyclient import (ZcashMMRNode, append, delete, make_root_commitment)
+from test_framework.flyclient import (VoteCoinMMRNode, append, delete, make_root_commitment)
 from test_framework.mininode import (CBlockHeader)
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import (
@@ -41,7 +41,7 @@ class Zip221Test(BitcoinTestFramework):
             self.nodes[0].getblock(str(height), 0))))
         sapling_root = hex_str_to_bytes(
             self.nodes[0].getblock(str(height))["finalsaplingroot"])[::-1]
-        return ZcashMMRNode.from_block(
+        return VoteCoinMMRNode.from_block(
             block_header, height, sapling_root, 0, HEARTWOOD_BRANCH_ID)
 
     def run_test(self):

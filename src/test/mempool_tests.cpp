@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(RemoveWithoutBranchId) {
 }
 
 // Test that nCheckFrequency is set correctly when calling setSanityCheck().
-// https://github.com/zcash/zcash/issues/3134
+// https://github.com/votecoin/votecoin/issues/3134
 BOOST_AUTO_TEST_CASE(SetSanityCheck) {
     CTxMemPool pool(CFeeRate(0));
     pool.setSanityCheck(1.0);

@@ -5,7 +5,7 @@ The package "mylib" will be used here as an example
 
 General tips:
 - mylib_foo is written as $(package)_foo in order to make recipes more similar.
-- Secondary dependency packages relative to the Zcash binaries/libraries (i.e.
+- Secondary dependency packages relative to the VoteCoin binaries/libraries (i.e.
   those not in `ALLOWED_LIBRARIES` in `contrib/devtools/symbol-check.py`) should
   be built statically. See [below](#secondary-dependencies) for more details.
 
@@ -164,7 +164,7 @@ From the [Gentoo Wiki entry](https://wiki.gentoo.org/wiki/Project:Quality_Assura
 
 ## Secondary dependencies:
 
-Secondary dependency packages relative to the Zcash binaries/libraries (i.e.
+Secondary dependency packages relative to the VoteCoin binaries/libraries (i.e.
 those not in `ALLOWED_LIBRARIES` in `contrib/devtools/symbol-check.py`)
 should be built statically. The arguments for statically linking secondary
 dependencies are similar to those for primary dependencies: it is preferable

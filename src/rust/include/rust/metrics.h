@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_METRICS_H
-#define ZCASH_RUST_INCLUDE_RUST_METRICS_H
+#ifndef VOTECOIN_RUST_INCLUDE_RUST_METRICS_H
+#define VOTECOIN_RUST_INCLUDE_RUST_METRICS_H
 
 #include "rust/helpers.h"
 
@@ -311,4 +311,4 @@ void metrics_record_histogram(MetricsKey* callsite, double value);
                              metrics_record_histogram(KEY, value);) \
     } while (0)
 
-#endif // ZCASH_RUST_INCLUDE_RUST_METRICS_H
+#endif // VOTECOIN_RUST_INCLUDE_RUST_METRICS_H

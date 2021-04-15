@@ -8,7 +8,7 @@
 #include "wallet/crypter.h"
 #endif
 #include "utiltest.h"
-#include "zcash/Address.hpp"
+#include "votecoin/Address.hpp"
 
 #include "json_test_vectors.h"
 
@@ -56,16 +56,16 @@ TEST(KeystoreTests, SaplingKeys) {
         nk.SetHex(sapling_keys[i][5].getValStr());
         ivk.SetHex(sapling_keys[i][6].getValStr());
         
-        libzcash::diversifier_t default_d;
+        libvotecoin::diversifier_t default_d;
         std::copy_n(ParseHex(sapling_keys[i][7].getValStr()).begin(), 11, default_d.begin());
         
         uint256 default_pk_d;
         default_pk_d.SetHex(sapling_keys[i][8].getValStr());
         
-        auto sk = libzcash::SaplingSpendingKey(skSeed);
+        auto sk = libvotecoin::SaplingSpendingKey(skSeed);
         
         // Check that expanded spending key from primitives and from sk are the same
-        auto exp_sk_2 = libzcash::SaplingExpandedSpendingKey(ask, nsk, ovk);
+        auto exp_sk_2 = libvotecoin::SaplingExpandedSpendingKey(ask, nsk, ovk);
         auto exp_sk = sk.expanded_spending_key();
         EXPECT_EQ(exp_sk, exp_sk_2);
             
@@ -74,12 +74,12 @@ TEST(KeystoreTests, SaplingKeys) {
         EXPECT_EQ(full_viewing_key, exp_sk.full_viewing_key());
         
         // Check that full viewing key from primitives and from sk are the same
-        auto full_viewing_key_2 = libzcash::SaplingFullViewingKey(ak, nk, ovk);
+        auto full_viewing_key_2 = libvotecoin::SaplingFullViewingKey(ak, nk, ovk);
         EXPECT_EQ(full_viewing_key, full_viewing_key_2);
             
         // Check that incoming viewing key from primitives and from sk are the same
         auto in_viewing_key = full_viewing_key.in_viewing_key();
-        auto in_viewing_key_2 = libzcash::SaplingIncomingViewingKey(ivk);
+        auto in_viewing_key_2 = libvotecoin::SaplingIncomingViewingKey(ivk);
         EXPECT_EQ(in_viewing_key, in_viewing_key_2);
         
         // Check that the default address from primitives and from sk method are the same
@@ -89,7 +89,7 @@ TEST(KeystoreTests, SaplingKeys) {
         auto default_addr_2 = addrOpt2.value();
         EXPECT_EQ(default_addr, default_addr_2);
         
-        auto default_addr_3 = libzcash::SaplingPaymentAddress(default_d, default_pk_d);
+        auto default_addr_3 = libvotecoin::SaplingPaymentAddress(default_d, default_pk_d);
         EXPECT_EQ(default_addr_2, default_addr_3);
         EXPECT_EQ(default_addr, default_addr_3);
     }
@@ -97,13 +97,13 @@ TEST(KeystoreTests, SaplingKeys) {
 
 TEST(KeystoreTests, StoreAndRetrieveSpendingKey) {
     CBasicKeyStore keyStore;
-    libzcash::SproutSpendingKey skOut;
+    libvotecoin::SproutSpendingKey skOut;
 
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libvotecoin::SproutPaymentAddress> addrs;
     keyStore.GetSproutPaymentAddresses(addrs);
     EXPECT_EQ(0, addrs.size());
 
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto addr = sk.address();
 
     // Sanity-check: we can't get a key we haven't added
@@ -124,7 +124,7 @@ TEST(KeystoreTests, StoreAndRetrieveNoteDecryptor) {
     CBasicKeyStore keyStore;
     ZCNoteDecryption decOut;
 
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto addr = sk.address();
 
     EXPECT_FALSE(keyStore.GetNoteDecryptor(addr, decOut));
@@ -136,11 +136,11 @@ TEST(KeystoreTests, StoreAndRetrieveNoteDecryptor) {
 
 TEST(KeystoreTests, StoreAndRetrieveViewingKey) {
     CBasicKeyStore keyStore;
-    libzcash::SproutViewingKey vkOut;
-    libzcash::SproutSpendingKey skOut;
+    libvotecoin::SproutViewingKey vkOut;
+    libvotecoin::SproutSpendingKey skOut;
     ZCNoteDecryption decOut;
 
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto vk = sk.viewing_key();
     auto addr = sk.address();
 
@@ -154,7 +154,7 @@ TEST(KeystoreTests, StoreAndRetrieveViewingKey) {
     EXPECT_FALSE(keyStore.GetNoteDecryptor(addr, decOut));
 
     // and we can't find it in our list of addresses
-    std::set<libzcash::SproutPaymentAddress> addresses;
+    std::set<libvotecoin::SproutPaymentAddress> addresses;
     keyStore.GetSproutPaymentAddresses(addresses);
     EXPECT_FALSE(addresses.count(addr));
 
@@ -194,9 +194,9 @@ TEST(KeystoreTests, StoreAndRetrieveViewingKey) {
 // Sapling
 TEST(KeystoreTests, StoreAndRetrieveSaplingSpendingKey) {
     CBasicKeyStore keyStore;
-    libzcash::SaplingExtendedSpendingKey skOut;
-    libzcash::SaplingExtendedFullViewingKey extfvkOut;
-    libzcash::SaplingIncomingViewingKey ivkOut;
+    libvotecoin::SaplingExtendedSpendingKey skOut;
+    libvotecoin::SaplingExtendedFullViewingKey extfvkOut;
+    libvotecoin::SaplingIncomingViewingKey ivkOut;
 
     auto sk = GetTestMasterSaplingSpendingKey();
     auto extfvk = sk.ToXFVK();
@@ -228,9 +228,9 @@ TEST(KeystoreTests, StoreAndRetrieveSaplingSpendingKey) {
 
 TEST(KeystoreTests, StoreAndRetrieveSaplingFullViewingKey) {
     CBasicKeyStore keyStore;
-    libzcash::SaplingExtendedSpendingKey skOut;
-    libzcash::SaplingExtendedFullViewingKey extfvkOut;
-    libzcash::SaplingIncomingViewingKey ivkOut;
+    libvotecoin::SaplingExtendedSpendingKey skOut;
+    libvotecoin::SaplingExtendedFullViewingKey extfvkOut;
+    libvotecoin::SaplingIncomingViewingKey ivkOut;
 
     auto sk = GetTestMasterSaplingSpendingKey();
     auto extfvk = sk.ToXFVK();
@@ -248,7 +248,7 @@ TEST(KeystoreTests, StoreAndRetrieveSaplingFullViewingKey) {
     EXPECT_FALSE(keyStore.GetSaplingIncomingViewingKey(addr, ivkOut));
 
     // and we can't find the default address in our list of addresses
-    std::set<libzcash::SaplingPaymentAddress> addresses;
+    std::set<libvotecoin::SaplingPaymentAddress> addresses;
     keyStore.GetSaplingPaymentAddresses(addresses);
     EXPECT_FALSE(addresses.count(addr));
 
@@ -326,7 +326,7 @@ TEST(KeystoreTests, StoreAndRetrieveHDSeedInEncryptedStore) {
     TestCCryptoKeyStore keyStore2;
 
     // Add a Sprout address so the wallet has something to test when decrypting
-    ASSERT_TRUE(keyStore2.AddSproutSpendingKey(libzcash::SproutSpendingKey::random()));
+    ASSERT_TRUE(keyStore2.AddSproutSpendingKey(libvotecoin::SproutSpendingKey::random()));
 
     ASSERT_TRUE(keyStore2.EncryptKeys(vMasterKey));
     ASSERT_TRUE(keyStore2.Unlock(vMasterKey));
@@ -345,12 +345,12 @@ TEST(KeystoreTests, StoreAndRetrieveSpendingKeyInEncryptedStore) {
     TestCCryptoKeyStore keyStore;
     uint256 r {GetRandHash()};
     CKeyingMaterial vMasterKey (r.begin(), r.end());
-    libzcash::SproutSpendingKey keyOut;
+    libvotecoin::SproutSpendingKey keyOut;
     ZCNoteDecryption decOut;
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libvotecoin::SproutPaymentAddress> addrs;
 
     // 1) Test adding a key to an unencrypted key store, then encrypting it
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto addr = sk.address();
     EXPECT_FALSE(keyStore.GetNoteDecryptor(addr, decOut));
 
@@ -387,7 +387,7 @@ TEST(KeystoreTests, StoreAndRetrieveSpendingKeyInEncryptedStore) {
     ASSERT_EQ(1, addrs.count(addr));
 
     // 2) Test adding a spending key to an already-encrypted key store
-    auto sk2 = libzcash::SproutSpendingKey::random();
+    auto sk2 = libvotecoin::SproutSpendingKey::random();
     auto addr2 = sk2.address();
     EXPECT_FALSE(keyStore.GetNoteDecryptor(addr2, decOut));
 

@@ -1,9 +1,9 @@
-// Copyright (c) 2018 The Zcash developers
+// Copyright (c) 2018 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_CONSENSUS_UPGRADES_H
-#define ZCASH_CONSENSUS_UPGRADES_H
+#ifndef VOTECOIN_CONSENSUS_UPGRADES_H
+#define VOTECOIN_CONSENSUS_UPGRADES_H
 
 #include "consensus/params.h"
 
@@ -95,4 +95,4 @@ std::optional<int> NextActivationHeight(
     int nHeight,
     const Consensus::Params& params);
 
-#endif // ZCASH_CONSENSUS_UPGRADES_H
+#endif // VOTECOIN_CONSENSUS_UPGRADES_H

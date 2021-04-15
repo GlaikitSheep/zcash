@@ -22,7 +22,7 @@ fn sapling_generators() {
         vcrb: [u8; 32],
     }
 
-    // From https://github.com/zcash-hackworks/zcash-test-vectors/blob/master/sapling_generators.py
+    // From https://github.com/votecoin-hackworks/votecoin-test-vectors/blob/master/sapling_generators.py
     let sapling_generators = SaplingGenerators {
         skb: [
             0x30, 0xb5, 0xf2, 0xaa, 0xad, 0x32, 0x56, 0x30, 0xbc, 0xdd, 0xdb, 0xce, 0x4d, 0x67,

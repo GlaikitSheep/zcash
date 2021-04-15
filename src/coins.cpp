@@ -308,10 +308,10 @@ void draftMMRNode(std::vector<uint32_t> &indices,
                   uint32_t peak_pos)
 {
     HistoryEntry newEntry = alt == 0
-        ? libzcash::LeafToEntry(nodeData)
+        ? libvotecoin::LeafToEntry(nodeData)
         // peak_pos - (1 << alt) is the array position of left child.
         // peak_pos - 1 is the array position of right child.
-        : libzcash::NodeToEntry(nodeData, peak_pos - (1 << alt), peak_pos - 1);
+        : libvotecoin::NodeToEntry(nodeData, peak_pos - (1 << alt), peak_pos - 1);
 
     indices.push_back(peak_pos);
     entries.push_back(newEntry);
@@ -337,7 +337,7 @@ uint32_t CCoinsViewCache::PreloadHistoryTree(uint32_t epochId, bool extra, std::
     if (treeLength <= 0) {
         throw std::runtime_error("Invalid PreloadHistoryTree state called - tree should exist");
     } else if (treeLength == 1) {
-        entries.push_back(libzcash::LeafToEntry(GetHistoryAt(epochId, 0)));
+        entries.push_back(libvotecoin::LeafToEntry(GetHistoryAt(epochId, 0)));
         entry_indices.push_back(0);
         return 1;
     }

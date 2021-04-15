@@ -8,7 +8,7 @@
 #include "rpc/protocol.h"
 #include "transaction_builder.h"
 #include "utiltest.h"
-#include "zcash/Address.hpp"
+#include "votecoin/Address.hpp"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -80,18 +80,18 @@ TEST(TransactionBuilder, TransparentToSapling)
     CKey tsk = AddTestCKeyToKeyStore(keystore);
     auto scriptPubKey = GetScriptForDestination(tsk.GetPubKey().GetID());
 
-    auto sk_from = libzcash::SaplingSpendingKey::random();
+    auto sk_from = libvotecoin::SaplingSpendingKey::random();
     auto fvk_from = sk_from.full_viewing_key();
 
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto fvk = sk.full_viewing_key();
     auto ivk = fvk.in_viewing_key();
-    libzcash::diversifier_t d = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    libvotecoin::diversifier_t d = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     auto pk = *ivk.address(d);
 
     // Create a shielding transaction from transparent to Sapling
-    // 0.0005 t-ZEC in, 0.0004 z-ZEC out, default fee
+    // 0.0005 t-VOT in, 0.0004 z-VOT out, default fee
     auto builder = TransactionBuilder(consensusParams, 1, &keystore);
     builder.AddTransparentInput(COutPoint(uint256S("1234"), 0), scriptPubKey, 50000);
     builder.AddSaplingOutput(fvk_from.ovk, pk, 40000, {});
@@ -115,7 +115,7 @@ TEST(TransactionBuilder, TransparentToSapling)
 TEST(TransactionBuilder, SaplingToSapling) {
     auto consensusParams = RegtestActivateSapling();
 
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto fvk = sk.full_viewing_key();
     auto pa = sk.default_address();
@@ -123,7 +123,7 @@ TEST(TransactionBuilder, SaplingToSapling) {
     auto testNote = GetTestSaplingNote(pa, 40000);
 
     // Create a Sapling-only transaction
-    // 0.0004 z-ZEC in, 0.00025 z-ZEC out, default fee, 0.00005 z-ZEC change
+    // 0.0004 z-VOT in, 0.00025 z-VOT out, default fee, 0.00005 z-VOT change
     auto builder = TransactionBuilder(consensusParams, 2);
     builder.AddSaplingSpend(expsk, testNote.note, testNote.tree.root(), testNote.tree.witness());
 
@@ -152,19 +152,19 @@ TEST(TransactionBuilder, SaplingToSapling) {
 TEST(TransactionBuilder, SaplingToSprout) {
     auto consensusParams = RegtestActivateSapling();
 
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto pa = sk.default_address();
 
     auto testNote = GetTestSaplingNote(pa, 40000);
 
-    auto sproutSk = libzcash::SproutSpendingKey::random();
+    auto sproutSk = libvotecoin::SproutSpendingKey::random();
     auto sproutAddr = sproutSk.address();
 
     // Create a Sapling-to-Sprout transaction (reusing the note from above)
-    // - 0.0004 Sapling-ZEC in      - 0.00025 Sprout-ZEC out
-    //                              - 0.00005 Sapling-ZEC change
-    //                              - default t-ZEC fee
+    // - 0.0004 Sapling-VOT in      - 0.00025 Sprout-VOT out
+    //                              - 0.00005 Sapling-VOT change
+    //                              - default t-VOT fee
     auto builder = TransactionBuilder(consensusParams, 2, nullptr);
     builder.AddSaplingSpend(expsk, testNote.note, testNote.tree.root(), testNote.tree.witness());
     builder.AddSproutOutput(sproutAddr, 25000);
@@ -190,11 +190,11 @@ TEST(TransactionBuilder, SaplingToSprout) {
 TEST(TransactionBuilder, SproutToSproutAndSapling) {
     auto consensusParams = RegtestActivateSapling();
 
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto fvk = sk.full_viewing_key();
     auto pa = sk.default_address();
 
-    auto sproutSk = libzcash::SproutSpendingKey::random();
+    auto sproutSk = libvotecoin::SproutSpendingKey::random();
     auto sproutAddr = sproutSk.address();
 
     auto wtx = GetValidSproutReceive(sproutSk, 25000, true);
@@ -212,11 +212,11 @@ TEST(TransactionBuilder, SproutToSproutAndSapling) {
     CCoinsViewCache view(&fakeDB);
 
     // Create a Sprout-to-[Sprout-and-Sapling] transaction
-    // - 0.00025 Sprout-ZEC in      - 0.00006 Sprout-ZEC out
-    //                              - 0.00004 Sprout-ZEC out
-    //                              - 0.00005 Sprout-ZEC change
-    //                              - 0.00005 Sapling-ZEC out
-    //                              - 0.00005 t-ZEC fee
+    // - 0.00025 Sprout-VOT in      - 0.00006 Sprout-VOT out
+    //                              - 0.00004 Sprout-VOT out
+    //                              - 0.00005 Sprout-VOT change
+    //                              - 0.00005 Sapling-VOT out
+    //                              - 0.00005 t-VOT fee
     auto builder = TransactionBuilder(consensusParams, 2, nullptr, &view);
     builder.SetFee(5000);
     builder.AddSproutInput(sproutSk, sproutNote, sproutWitness);
@@ -284,7 +284,7 @@ TEST(TransactionBuilder, FailsWithNegativeChange)
     auto consensusParams = RegtestActivateSapling();
 
     // Generate dummy Sapling address
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto fvk = sk.full_viewing_key();
     auto pa = sk.default_address();
@@ -299,19 +299,19 @@ TEST(TransactionBuilder, FailsWithNegativeChange)
     auto testNote = GetTestSaplingNote(pa, 59999);
 
     // Fail if there is only a Sapling output
-    // 0.0005 z-ZEC out, default fee
+    // 0.0005 z-VOT out, default fee
     auto builder = TransactionBuilder(consensusParams, 1);
     builder.AddSaplingOutput(fvk.ovk, pa, 50000, {});
     EXPECT_EQ("Change cannot be negative", builder.Build().GetError());
 
     // Fail if there is only a transparent output
-    // 0.0005 t-ZEC out, default fee
+    // 0.0005 t-VOT out, default fee
     builder = TransactionBuilder(consensusParams, 1, &keystore);
     builder.AddTransparentOutput(taddr, 50000);
     EXPECT_EQ("Change cannot be negative", builder.Build().GetError());
 
     // Fails if there is insufficient input
-    // 0.0005 t-ZEC out, default fee, 0.00059999 z-ZEC in
+    // 0.0005 t-VOT out, default fee, 0.00059999 z-VOT in
     builder.AddSaplingSpend(expsk, testNote.note, testNote.tree.root(), testNote.tree.witness());
     EXPECT_EQ("Change cannot be negative", builder.Build().GetError());
 
@@ -328,14 +328,14 @@ TEST(TransactionBuilder, ChangeOutput)
     auto consensusParams = RegtestActivateSapling();
 
     // Generate dummy Sapling address
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto pa = sk.default_address();
 
     auto testNote = GetTestSaplingNote(pa, 25000);
 
     // Generate change Sapling address
-    auto sk2 = libzcash::SaplingSpendingKey::random();
+    auto sk2 = libvotecoin::SaplingSpendingKey::random();
     auto fvkOut = sk2.full_viewing_key();
     auto zChangeAddr = sk2.default_address();
 
@@ -408,7 +408,7 @@ TEST(TransactionBuilder, SetFee)
     auto consensusParams = RegtestActivateSapling();
 
     // Generate dummy Sapling address
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto fvk = sk.full_viewing_key();
     auto pa = sk.default_address();
@@ -456,7 +456,7 @@ TEST(TransactionBuilder, CheckSaplingTxVersion)
     UpdateNetworkUpgradeParameters(Consensus::UPGRADE_OVERWINTER, Consensus::NetworkUpgrade::ALWAYS_ACTIVE);
     const Consensus::Params& consensusParams = Params().GetConsensus();
 
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto pk = sk.default_address();
 
@@ -471,7 +471,7 @@ TEST(TransactionBuilder, CheckSaplingTxVersion)
     }
 
     // Cannot add Sapling spends to a non-Sapling transaction
-    libzcash::SaplingNote note(pk, 50000, libzcash::Zip212Enabled::BeforeZip212);
+    libvotecoin::SaplingNote note(pk, 50000, libvotecoin::Zip212Enabled::BeforeZip212);
     SaplingMerkleTree tree;
     try {
         builder.AddSaplingSpend(expsk, note, uint256(), tree.witness());

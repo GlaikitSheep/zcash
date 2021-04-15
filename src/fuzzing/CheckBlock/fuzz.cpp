@@ -6,14 +6,14 @@ extern bool CheckBlock(
     const CBlock& block,
     CValidationState& state,
     const CChainParams& chainparams,
-    libzcash::ProofVerifier& verifier,
+    libvotecoin::ProofVerifier& verifier,
     bool fCheckPOW = true,
     bool fCheckMerkleRoot = true);
 
 bool init_done = false;
 
 const CChainParams& chainparams = NULL;
-auto verifier = libzcash::ProofVerifier::Strict();
+auto verifier = libvotecoin::ProofVerifier::Strict();
 
 
 int fuzz_CheckBlock(CBlock block) {

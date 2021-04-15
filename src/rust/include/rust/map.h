@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012 William Swanson
- * Copyright (C) 2020 The Zcash developers
+ * Copyright (C) 2020 The VoteCoin developers
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,8 +27,8 @@
  * prior written authorization from the authors.
  */
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_MAP_H
-#define ZCASH_RUST_INCLUDE_RUST_MAP_H
+#ifndef VOTECOIN_RUST_INCLUDE_RUST_MAP_H
+#define VOTECOIN_RUST_INCLUDE_RUST_MAP_H
 
 #define EVAL0(...) __VA_ARGS__
 #define EVAL1(...) EVAL0(EVAL0(EVAL0(__VA_ARGS__)))
@@ -68,4 +68,4 @@
  */
 #define MAP_LIST(f, ...) EVAL(MAP_LIST1(f, __VA_ARGS__, ()()(), ()()(), ()()(), 0))
 
-#endif // ZCASH_RUST_INCLUDE_RUST_MAP_H
+#endif // VOTECOIN_RUST_INCLUDE_RUST_MAP_H

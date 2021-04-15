@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_KEY_CONSTANTS_H
-#define ZCASH_KEY_CONSTANTS_H
+#ifndef VOTECOIN_KEY_CONSTANTS_H
+#define VOTECOIN_KEY_CONSTANTS_H
 
 class KeyConstants 
 {
@@ -36,4 +36,4 @@ public:
     virtual const std::string& Bech32HRP(Bech32Type type) const =0;
 };
 
-#endif // ZCASH_KEY_CONSTANTS_H
+#endif // VOTECOIN_KEY_CONSTANTS_H

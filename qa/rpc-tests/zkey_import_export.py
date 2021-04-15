@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017 The Zcash developers
+# Copyright (c) 2017 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -139,7 +139,7 @@ class ZkeyImportExportTest (BitcoinTestFramework):
         bob_fee = Decimal("0")
 
         # Try to reproduce zombie balance reported in #1936
-        # At generated zaddr, receive ZEC, and send ZEC back out. bob -> alice
+        # At generated zaddr, receive VOT, and send VOT back out. bob -> alice
         for amount in amounts[:2]:
             print("Sending amount from bob to alice: ", amount)
             z_send(bob, bob_zaddr, alice_zaddr, amount)

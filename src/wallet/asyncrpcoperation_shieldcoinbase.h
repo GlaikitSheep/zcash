@@ -1,16 +1,16 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
+#ifndef VOTECOIN_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
+#define VOTECOIN_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
 
 #include "asyncrpcoperation.h"
 #include "amount.h"
 #include "primitives/transaction.h"
 #include "transaction_builder.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Address.hpp"
+#include "votecoin/JoinSplit.hpp"
+#include "votecoin/Address.hpp"
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
 
@@ -21,7 +21,7 @@
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libvotecoin;
 
 struct ShieldCoinbaseUTXO {
     uint256 txid;
@@ -103,9 +103,9 @@ public:
     ShieldToAddress(AsyncRPCOperation_shieldcoinbase *op, CAmount sendAmount) :
         m_op(op), sendAmount(sendAmount) {}
 
-    bool operator()(const libzcash::SproutPaymentAddress &zaddr) const;
-    bool operator()(const libzcash::SaplingPaymentAddress &zaddr) const;
-    bool operator()(const libzcash::InvalidEncoding& no) const;
+    bool operator()(const libvotecoin::SproutPaymentAddress &zaddr) const;
+    bool operator()(const libvotecoin::SaplingPaymentAddress &zaddr) const;
+    bool operator()(const libvotecoin::InvalidEncoding& no) const;
 };
 
 
@@ -140,5 +140,5 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
+#endif // VOTECOIN_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
 

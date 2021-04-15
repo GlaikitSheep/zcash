@@ -1,4 +1,4 @@
-dnl Copyright (c) 2016-2019 The Zcash developers
+dnl Copyright (c) 2016-2019 The VoteCoin developers
 dnl Copyright (c) 2013-2019 The Bitcoin Core developers
 dnl Copyright (c) 2013-2019 Bitcoin Developers
 dnl Distributed under the MIT software license, see the accompanying

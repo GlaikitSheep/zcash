@@ -16,14 +16,14 @@ done
 FUZZ_OPTIONS_STRING="Options are: ${fuzz_cases::-2}"
 
 required_options_count=0
-DEFAULT_BUILD_CC="CC=$ZCUTIL/afl/zcash-wrapper-gcc"
-DEFAULT_BUILD_CXX="CXX=$ZCUTIL/afl/zcash-wrapper-g++"
+DEFAULT_BUILD_CC="CC=$ZCUTIL/afl/votecoin-wrapper-gcc"
+DEFAULT_BUILD_CXX="CXX=$ZCUTIL/afl/votecoin-wrapper-g++"
 
 function help {
     cat <<EOF
 A wrapper around ./zcutil/build.sh for instrumenting the build with AFL.
 You may obtain a copy of AFL using ./zcutil/afl/afl-get.sh.
-This script must be run from within the top level directory of a zcash clone.
+This script must be run from within the top level directory of a votecoin clone.
 Additional arguments are passed-through to build.sh.
 
 Usage:

@@ -4,18 +4,18 @@ Notable changes
 Reduce download traffic
 -----------------------
 
-We have made several changes to reduce the amount of data downloaded by `zcashd`
+We have made several changes to reduce the amount of data downloaded by `votecoind`
 during initial block download (IBD):
 
 - Significant time and bandwidth is spent in issuing `getheaders` P2P requests.
-  This results in noticeable bandwidth usage due to the large size of Zcash
+  This results in noticeable bandwidth usage due to the large size of VoteCoin
   block headers.
 
   We now eliminate redundant requests in cases where we already know the last
   header in the message. This optimization is enabled by default, but can be
   disabled by setting the config option `-no-optimize-getheaders`.
 
-- Transactions in the mempool are no longer downloaded during IBD (`zcashd` will
+- Transactions in the mempool are no longer downloaded during IBD (`votecoind` will
   only request block data).
 
 Reduce upload traffic
@@ -40,20 +40,20 @@ calculating the target.
 A more detailed documentation about keeping traffic low can be found in
 [/doc/reduce-traffic.md](/doc/reduce-traffic.md).
 
-`libzcashconsensus` replaced by `libzcash_script`
+`libvotecoinconsensus` replaced by `libvotecoin_script`
 -------------------------------------------------
 
-The `libzcashconsensus` library inherited from upstream has been unusable since
+The `libvotecoinconsensus` library inherited from upstream has been unusable since
 the Overwinter network upgrade in 2018. We made changes to signature digests
 similar to those made in Bitcoin's SegWit, which required additional per-input
 data that could not be added to the existing APIs without breaking backwards
 compatibility.
 
 Additionally, it has become increasingly inaccurately named; it only covers
-(Zcash's subset of) the Bitcoin scripting system, and not the myriad of other
-consensus changes: in particular, Zcash's shielded pools.
+(VoteCoin's subset of) the Bitcoin scripting system, and not the myriad of other
+consensus changes: in particular, VoteCoin's shielded pools.
 
-We have now renamed the library to `libzcash_script`, and reworked it to instead
+We have now renamed the library to `libvotecoin_script`, and reworked it to instead
 focus on transparent script verification:
 
 - The script verification APIs are altered to take `consensusBranchId` and
@@ -64,16 +64,16 @@ focus on transparent script verification:
   validator is the [`equihash` Rust crate](https://crates.io/crates/equihash)
   since v3.1.0.
 
-The C++ library can be built by compiling `zcashd` with the environment variable
+The C++ library can be built by compiling `votecoind` with the environment variable
 `CONFIGURE_FLAGS=--with-libs`. It is also wrapped as the
-[`zcash_script` Rust crate](https://crates.io/crates/zcash_script)
-(maintained by the Zcash Foundation for use in `zebrad`).
+[`votecoin_script` Rust crate](https://crates.io/crates/votecoin_script)
+(maintained by the VoteCoin Foundation for use in `zebrad`).
 
 Other P2P Changes
 -----------------
 
 The list of banned peers is now stored on disk rather than in memory. Restarting
-`zcashd` will no longer clear out the list of banned peers; instead the
+`votecoind` will no longer clear out the list of banned peers; instead the
 `clearbanned` RPC call can be used to manually clear the list. The `setban` RPC
 call can also be used to manually ban or unban a peer.
 
@@ -132,7 +132,7 @@ Cory Fields (6):
       net: Drop CNodeRef for AttemptToEvictConnection
 
 Daira Hopwood (2):
-      qa/zcash/updatecheck.py: remove dead code; print instructions to run `cargo outdated` and `cargo update`.
+      qa/votecoin/updatecheck.py: remove dead code; print instructions to run `cargo outdated` and `cargo update`.
       Ensure that `CONFIGURE_FLAGS=--enable-debug` correctly uses -O0 for dependencies and main build.
 
 Daniel Kraft (1):
@@ -172,22 +172,22 @@ Jack Grigg (41):
       depends: Postpone updates that require adding CMake
       cargo update
       Squashed 'src/univalue/' changes from 9ef5b78c1..98fadc090
-      Remove crypto/equihash from libzcashconsensus
-      Add amount and consensus branch ID to zcashconsensus_verify_script
-      Rename src/script/zcashconsensus.* -> src/script/zcash_script.*
-      Rename zcashconsensus_* -> zcash_script_* in APIs
-      Rename libzcashconsensus.la -> libzcash_script.la
-      Set up an mdbook in which we can document zcashd's architecture design
-      Actions: Add a workflow to deploy the zcashd book
-      Show README as root of zcashd book
+      Remove crypto/equihash from libvotecoinconsensus
+      Add amount and consensus branch ID to votecoinconsensus_verify_script
+      Rename src/script/votecoinconsensus.* -> src/script/votecoin_script.*
+      Rename votecoinconsensus_* -> votecoin_script_* in APIs
+      Rename libvotecoinconsensus.la -> libvotecoin_script.la
+      Set up an mdbook in which we can document votecoind's architecture design
+      Actions: Add a workflow to deploy the votecoind book
+      Show README as root of votecoind book
       Link to zips.z.cash for protocol spec
       test: Convert Bech32 test vectors into known-answer test vectors
-      zcash_script: Add API to verify scripts with precomputed tx data
+      votecoin_script: Add API to verify scripts with precomputed tx data
       test: Migrate maxuploadtarget.py to Python 3
       Pass current PoWTargetSpacing() into CNode::OutboundTargetReached()
       init: Pass post-Blossom spacing into CNode::SetMaxOutboundTarget()
       Fix some typos
-      zcash_script: Clarify return values in docs
+      votecoin_script: Clarify return values in docs
       Rename responsible_disclosure.md to SECURITY.md
       Add IBD download traffic reduction to release notes
       Fill out the rest of the 4.3.0 release notes
@@ -229,7 +229,7 @@ Kris Nuttycombe (4):
       Skip "tx" messages during initial block download.
       Fix pyflakes complaints
       Whitespace-only fix in chainparams.cpp
-      Update the maxuploadtarget.py tests to accommodate zcash.
+      Update the maxuploadtarget.py tests to accommodate votecoin.
 
 Larry Ruane (1):
       #4624 improve IBD sync by eliminating getheaders requests
@@ -306,7 +306,7 @@ randy-waterhouse (1):
       Re-instate TARGET_OS=linux in configure.ac. Removed by 351abf9e035.
 
 Jack Grigg (1):
-      Update URL for Zcash Foundation security policy
+      Update URL for VoteCoin Foundation security policy
 
 Ying Tong Lai (2):
       Cargo update

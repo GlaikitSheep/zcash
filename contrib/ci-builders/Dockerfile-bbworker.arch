@@ -1,4 +1,4 @@
-FROM electriccoinco/zcashd-build-arch
+FROM electriccoinco/votecoind-build-arch
 
 # Buildbot user
 ARG BUILDBOT_USER=zcbbworker

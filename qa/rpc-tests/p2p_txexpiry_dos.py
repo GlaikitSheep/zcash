@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Zcash developers
+# Copyright (c) 2018 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -35,7 +35,7 @@ class TxExpiryDoSTest(BitcoinTestFramework):
 
         test_node.wait_for_verack()
 
-        # Verify mininodes are connected to zcashd nodes
+        # Verify mininodes are connected to votecoind nodes
         peerinfo = self.nodes[0].getpeerinfo()
         versions = [x["version"] for x in peerinfo]
         assert_equal(1, versions.count(SAPLING_PROTO_VERSION))
@@ -45,7 +45,7 @@ class TxExpiryDoSTest(BitcoinTestFramework):
         self.nodes[0].generate(100)
         node_address = self.nodes[0].getnewaddress()
 
-        # Mininodes send transaction to zcashd node.
+        # Mininodes send transaction to votecoind node.
         spendtx = create_transaction(self.nodes[0],
                                      coinbase_blocks[0],
                                      node_address,

@@ -1,10 +1,10 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 
-#ifndef ZCASH_ASYNCRPCOPERATION_H
-#define ZCASH_ASYNCRPCOPERATION_H
+#ifndef VOTECOIN_ASYNCRPCOPERATION_H
+#define VOTECOIN_ASYNCRPCOPERATION_H
 
 #include <string>
 #include <atomic>
@@ -149,5 +149,5 @@ private:
     int64_t creation_time_;
 };
 
-#endif // ZCASH_ASYNCRPCOPERATION_H
+#endif // VOTECOIN_ASYNCRPCOPERATION_H
 

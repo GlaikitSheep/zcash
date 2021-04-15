@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_ED25519_H
-#define ZCASH_RUST_INCLUDE_RUST_ED25519_H
+#ifndef VOTECOIN_RUST_INCLUDE_RUST_ED25519_H
+#define VOTECOIN_RUST_INCLUDE_RUST_ED25519_H
 
 #include "ed25519/types.h"
 
@@ -32,9 +32,9 @@ bool ed25519_sign(
 
 /// Verifies a purported `signature` on the given `msg`.
 ///
-/// # Zcash-specific consensus properties
+/// # VoteCoin-specific consensus properties
 ///
-/// Ed25519 checks are described in §5.4.5 of the Zcash protocol specification
+/// Ed25519 checks are described in §5.4.5 of the VoteCoin protocol specification
 /// and in ZIP 215. The verification criteria for an (encoded) `signature`
 /// (`R_bytes`, `s_bytes`) with (encoded) verification key `A_bytes` are:
 ///
@@ -56,4 +56,4 @@ bool ed25519_verify(
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_ED25519_H
+#endif // VOTECOIN_RUST_INCLUDE_RUST_ED25519_H

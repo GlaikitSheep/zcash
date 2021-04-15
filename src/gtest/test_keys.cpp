@@ -1,6 +1,6 @@
 #include <chainparams.h>
 #include <key_io.h>
-#include <zcash/Address.hpp>
+#include <votecoin/Address.hpp>
 
 #include "utiltest.h"
 
@@ -26,8 +26,8 @@ TEST(Keys, EncodeAndDecodeSapling)
             auto spendingkey2 = keyIO.DecodeSpendingKey(sk_string);
             EXPECT_TRUE(IsValidSpendingKey(spendingkey2));
 
-            ASSERT_TRUE(std::get_if<libzcash::SaplingExtendedSpendingKey>(&spendingkey2) != nullptr);
-            auto sk2 = std::get<libzcash::SaplingExtendedSpendingKey>(spendingkey2);
+            ASSERT_TRUE(std::get_if<libvotecoin::SaplingExtendedSpendingKey>(&spendingkey2) != nullptr);
+            auto sk2 = std::get<libvotecoin::SaplingExtendedSpendingKey>(spendingkey2);
             EXPECT_EQ(sk, sk2);
         }
         {
@@ -40,8 +40,8 @@ TEST(Keys, EncodeAndDecodeSapling)
             auto viewingkey2 = keyIO.DecodeViewingKey(vk_string);
             EXPECT_TRUE(IsValidViewingKey(viewingkey2));
 
-            ASSERT_TRUE(std::get_if<libzcash::SaplingExtendedFullViewingKey>(&viewingkey2) != nullptr);
-            auto extfvk2 = std::get<libzcash::SaplingExtendedFullViewingKey>(viewingkey2);
+            ASSERT_TRUE(std::get_if<libvotecoin::SaplingExtendedFullViewingKey>(&viewingkey2) != nullptr);
+            auto extfvk2 = std::get<libvotecoin::SaplingExtendedFullViewingKey>(viewingkey2);
             EXPECT_EQ(extfvk, extfvk2);
         }
         {
@@ -55,8 +55,8 @@ TEST(Keys, EncodeAndDecodeSapling)
             auto paymentaddr2 = keyIO.DecodePaymentAddress(addr_string);
             EXPECT_TRUE(IsValidPaymentAddress(paymentaddr2));
 
-            ASSERT_TRUE(std::get_if<libzcash::SaplingPaymentAddress>(&paymentaddr2) != nullptr);
-            auto addr2 = std::get<libzcash::SaplingPaymentAddress>(paymentaddr2);
+            ASSERT_TRUE(std::get_if<libvotecoin::SaplingPaymentAddress>(&paymentaddr2) != nullptr);
+            auto addr2 = std::get<libvotecoin::SaplingPaymentAddress>(paymentaddr2);
             EXPECT_EQ(addr, addr2);
         }
     }

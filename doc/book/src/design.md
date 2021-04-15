@@ -1,6 +1,6 @@
 # Design
 
-Zcash was originally a fork of Bitcoin 0.11.2, and as such the `zcashd` node architecture
+VoteCoin was originally a fork of Bitcoin 0.11.2, and as such the `votecoind` node architecture
 is very similar to `bitcoind`. There are however several differences, most notably the
 addition of shielded pools to the consensus logic and full node state.
 

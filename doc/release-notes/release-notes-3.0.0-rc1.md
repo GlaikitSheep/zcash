@@ -13,7 +13,7 @@ The following two ZIPs are being deployed as part of this upgrade:
 - [ZIP 221: FlyClient - Consensus-Layer Changes](https://zips.z.cash/zip-0221)
 
 In order to help the ecosystem prepare for the mainnet activiation, Heartwood
-has already been activated on the Zcash testnet. Any node version 2.1.2 or
+has already been activated on the VoteCoin testnet. Any node version 2.1.2 or
 higher, including this release, supports the Heartwood activation on testnet.
 
 ## Mining to Sapling addresses
@@ -22,7 +22,7 @@ After the mainnet activation of Heartwood, miners can mine directly into a
 Sapling shielded address. Miners should wait until after Heartwood activation
 before they make changes to their configuration to leverage this new feature.
 After activation of Heartwood, miners can add `mineraddress=SAPLING_ADDRESS` to
-their `zcash.conf` file, where `SAPLING_ADDRESS` represents a Sapling address
+their `votecoin.conf` file, where `SAPLING_ADDRESS` represents a Sapling address
 that can be generated locally with the `z_getnewaddress` RPC command. Restart
 your node, and block templates produced by the `getblocktemplate` RPC command
 will now have coinbase transactions that mine directly into this shielded
@@ -54,7 +54,7 @@ Ben Wilson (4):
       Added Dockerfile to contrib with README
       Fixed README grammar, reuse Dockerfile vars
       Fixed Docker README grammar
-      Dockerfiles for zcashd CI builds
+      Dockerfiles for votecoind CI builds
 
 Daira Hopwood (2):
       Fix a null pointer dereference that occurs when formatting an error message, if we haven't activated an upgrade as expected.
@@ -91,7 +91,7 @@ Kris Nuttycombe (21):
       Use `%x` formatter for branch id hex string in test_framework/util.py
       Update qa/rpc-tests/test_framework/mininode.py
       Update qa/rpc-tests/sapling_rewind_check.py
-      Add Zcash copyright to sapling_rewind_check.py
+      Add VoteCoin copyright to sapling_rewind_check.py
       Update test description and clarify internal comments.
       Revert "Update qa/rpc-tests/sapling_rewind_check.py"
       Remove unused imports.

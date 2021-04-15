@@ -11,8 +11,8 @@
 #include "script/script.h"
 #include "script/standard.h"
 #include "sync.h"
-#include "zcash/Address.hpp"
-#include "zcash/NoteEncryption.hpp"
+#include "votecoin/Address.hpp"
+#include "votecoin/NoteEncryption.hpp"
 
 #include <boost/signals2/signal.hpp>
 
@@ -53,67 +53,67 @@ public:
     virtual bool HaveWatchOnly() const =0;
 
     //! Add a spending key to the store.
-    virtual bool AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk) =0;
+    virtual bool AddSproutSpendingKey(const libvotecoin::SproutSpendingKey &sk) =0;
 
     //! Check whether a spending key corresponding to a given payment address is present in the store.
-    virtual bool HaveSproutSpendingKey(const libzcash::SproutPaymentAddress &address) const =0;
-    virtual bool GetSproutSpendingKey(const libzcash::SproutPaymentAddress &address, libzcash::SproutSpendingKey& skOut) const =0;
-    virtual void GetSproutPaymentAddresses(std::set<libzcash::SproutPaymentAddress> &setAddress) const =0;
+    virtual bool HaveSproutSpendingKey(const libvotecoin::SproutPaymentAddress &address) const =0;
+    virtual bool GetSproutSpendingKey(const libvotecoin::SproutPaymentAddress &address, libvotecoin::SproutSpendingKey& skOut) const =0;
+    virtual void GetSproutPaymentAddresses(std::set<libvotecoin::SproutPaymentAddress> &setAddress) const =0;
     
     //! Add a Sapling spending key to the store.
-    virtual bool AddSaplingSpendingKey(const libzcash::SaplingExtendedSpendingKey &sk) =0;
+    virtual bool AddSaplingSpendingKey(const libvotecoin::SaplingExtendedSpendingKey &sk) =0;
     
     //! Check whether a Sapling spending key corresponding to a given Sapling viewing key is present in the store.
     virtual bool HaveSaplingSpendingKey(
-        const libzcash::SaplingExtendedFullViewingKey &extfvk) const =0;
+        const libvotecoin::SaplingExtendedFullViewingKey &extfvk) const =0;
     virtual bool GetSaplingSpendingKey(
-        const libzcash::SaplingExtendedFullViewingKey &extfvk,
-        libzcash::SaplingExtendedSpendingKey& skOut) const =0;
+        const libvotecoin::SaplingExtendedFullViewingKey &extfvk,
+        libvotecoin::SaplingExtendedSpendingKey& skOut) const =0;
 
     //! Support for Sapling full viewing keys
-    virtual bool AddSaplingFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk) =0;
-    virtual bool HaveSaplingFullViewingKey(const libzcash::SaplingIncomingViewingKey &ivk) const =0;
+    virtual bool AddSaplingFullViewingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk) =0;
+    virtual bool HaveSaplingFullViewingKey(const libvotecoin::SaplingIncomingViewingKey &ivk) const =0;
     virtual bool GetSaplingFullViewingKey(
-        const libzcash::SaplingIncomingViewingKey &ivk, 
-        libzcash::SaplingExtendedFullViewingKey& extfvkOut) const =0;
+        const libvotecoin::SaplingIncomingViewingKey &ivk, 
+        libvotecoin::SaplingExtendedFullViewingKey& extfvkOut) const =0;
 
     //! Sapling incoming viewing keys 
     virtual bool AddSaplingIncomingViewingKey(
-        const libzcash::SaplingIncomingViewingKey &ivk,
-        const libzcash::SaplingPaymentAddress &addr) =0;
-    virtual bool HaveSaplingIncomingViewingKey(const libzcash::SaplingPaymentAddress &addr) const =0;
+        const libvotecoin::SaplingIncomingViewingKey &ivk,
+        const libvotecoin::SaplingPaymentAddress &addr) =0;
+    virtual bool HaveSaplingIncomingViewingKey(const libvotecoin::SaplingPaymentAddress &addr) const =0;
     virtual bool GetSaplingIncomingViewingKey(
-        const libzcash::SaplingPaymentAddress &addr, 
-        libzcash::SaplingIncomingViewingKey& ivkOut) const =0;
-    virtual void GetSaplingPaymentAddresses(std::set<libzcash::SaplingPaymentAddress> &setAddress) const =0;
+        const libvotecoin::SaplingPaymentAddress &addr, 
+        libvotecoin::SaplingIncomingViewingKey& ivkOut) const =0;
+    virtual void GetSaplingPaymentAddresses(std::set<libvotecoin::SaplingPaymentAddress> &setAddress) const =0;
 
     //! Support for Sprout viewing keys
-    virtual bool AddSproutViewingKey(const libzcash::SproutViewingKey &vk) =0;
-    virtual bool RemoveSproutViewingKey(const libzcash::SproutViewingKey &vk) =0;
-    virtual bool HaveSproutViewingKey(const libzcash::SproutPaymentAddress &address) const =0;
+    virtual bool AddSproutViewingKey(const libvotecoin::SproutViewingKey &vk) =0;
+    virtual bool RemoveSproutViewingKey(const libvotecoin::SproutViewingKey &vk) =0;
+    virtual bool HaveSproutViewingKey(const libvotecoin::SproutPaymentAddress &address) const =0;
     virtual bool GetSproutViewingKey(
-        const libzcash::SproutPaymentAddress &address,
-        libzcash::SproutViewingKey& vkOut) const =0;
+        const libvotecoin::SproutPaymentAddress &address,
+        libvotecoin::SproutViewingKey& vkOut) const =0;
 };
 
 typedef std::map<CKeyID, CKey> KeyMap;
 typedef std::map<CKeyID, CPubKey> WatchKeyMap;
 typedef std::map<CScriptID, CScript > ScriptMap;
 typedef std::set<CScript> WatchOnlySet;
-typedef std::map<libzcash::SproutPaymentAddress, libzcash::SproutSpendingKey> SproutSpendingKeyMap;
-typedef std::map<libzcash::SproutPaymentAddress, libzcash::SproutViewingKey> SproutViewingKeyMap;
-typedef std::map<libzcash::SproutPaymentAddress, ZCNoteDecryption> NoteDecryptorMap;
+typedef std::map<libvotecoin::SproutPaymentAddress, libvotecoin::SproutSpendingKey> SproutSpendingKeyMap;
+typedef std::map<libvotecoin::SproutPaymentAddress, libvotecoin::SproutViewingKey> SproutViewingKeyMap;
+typedef std::map<libvotecoin::SproutPaymentAddress, ZCNoteDecryption> NoteDecryptorMap;
 
 // Full viewing key has equivalent functionality to a transparent address
 // When encrypting wallet, encrypt SaplingSpendingKeyMap, while leaving SaplingFullViewingKeyMap unencrypted
 typedef std::map<
-    libzcash::SaplingExtendedFullViewingKey,
-    libzcash::SaplingExtendedSpendingKey> SaplingSpendingKeyMap;
+    libvotecoin::SaplingExtendedFullViewingKey,
+    libvotecoin::SaplingExtendedSpendingKey> SaplingSpendingKeyMap;
 typedef std::map<
-    libzcash::SaplingIncomingViewingKey,
-    libzcash::SaplingExtendedFullViewingKey> SaplingFullViewingKeyMap;
+    libvotecoin::SaplingIncomingViewingKey,
+    libvotecoin::SaplingExtendedFullViewingKey> SaplingFullViewingKeyMap;
 // Only maps from default addresses to ivk, may need to be reworked when adding diversified addresses. 
-typedef std::map<libzcash::SaplingPaymentAddress, libzcash::SaplingIncomingViewingKey> SaplingIncomingViewingKeyMap;
+typedef std::map<libvotecoin::SaplingPaymentAddress, libvotecoin::SaplingIncomingViewingKey> SaplingIncomingViewingKeyMap;
 
 /** Basic key store, that keeps keys in an address->secret map */
 class CBasicKeyStore : public CKeyStore
@@ -183,8 +183,8 @@ public:
     virtual bool HaveWatchOnly(const CScript &dest) const;
     virtual bool HaveWatchOnly() const;
 
-    bool AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk);
-    bool HaveSproutSpendingKey(const libzcash::SproutPaymentAddress &address) const
+    bool AddSproutSpendingKey(const libvotecoin::SproutSpendingKey &sk);
+    bool HaveSproutSpendingKey(const libvotecoin::SproutPaymentAddress &address) const
     {
         bool result;
         {
@@ -193,7 +193,7 @@ public:
         }
         return result;
     }
-    bool GetSproutSpendingKey(const libzcash::SproutPaymentAddress &address, libzcash::SproutSpendingKey &skOut) const
+    bool GetSproutSpendingKey(const libvotecoin::SproutPaymentAddress &address, libvotecoin::SproutSpendingKey &skOut) const
     {
         {
             LOCK(cs_KeyStore);
@@ -206,7 +206,7 @@ public:
         }
         return false;
     }
-    bool GetNoteDecryptor(const libzcash::SproutPaymentAddress &address, ZCNoteDecryption &decOut) const
+    bool GetNoteDecryptor(const libvotecoin::SproutPaymentAddress &address, ZCNoteDecryption &decOut) const
     {
         {
             LOCK(cs_KeyStore);
@@ -219,7 +219,7 @@ public:
         }
         return false;
     }
-    void GetSproutPaymentAddresses(std::set<libzcash::SproutPaymentAddress> &setAddress) const
+    void GetSproutPaymentAddresses(std::set<libvotecoin::SproutPaymentAddress> &setAddress) const
     {
         setAddress.clear();
         {
@@ -240,8 +240,8 @@ public:
     }
 
     //! Sapling 
-    bool AddSaplingSpendingKey(const libzcash::SaplingExtendedSpendingKey &sk);
-    bool HaveSaplingSpendingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk) const
+    bool AddSaplingSpendingKey(const libvotecoin::SaplingExtendedSpendingKey &sk);
+    bool HaveSaplingSpendingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk) const
     {
         bool result;
         {
@@ -251,8 +251,8 @@ public:
         return result;
     }
     bool GetSaplingSpendingKey(
-        const libzcash::SaplingExtendedFullViewingKey &extfvk,
-        libzcash::SaplingExtendedSpendingKey &skOut) const
+        const libvotecoin::SaplingExtendedFullViewingKey &extfvk,
+        libvotecoin::SaplingExtendedSpendingKey &skOut) const
     {
         {
             LOCK(cs_KeyStore);
@@ -267,25 +267,25 @@ public:
         return false;
     }
 
-    virtual bool AddSaplingFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk);
-    virtual bool HaveSaplingFullViewingKey(const libzcash::SaplingIncomingViewingKey &ivk) const;
+    virtual bool AddSaplingFullViewingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk);
+    virtual bool HaveSaplingFullViewingKey(const libvotecoin::SaplingIncomingViewingKey &ivk) const;
     virtual bool GetSaplingFullViewingKey(
-        const libzcash::SaplingIncomingViewingKey &ivk,
-        libzcash::SaplingExtendedFullViewingKey& extfvkOut) const;
+        const libvotecoin::SaplingIncomingViewingKey &ivk,
+        libvotecoin::SaplingExtendedFullViewingKey& extfvkOut) const;
 
     virtual bool AddSaplingIncomingViewingKey(
-        const libzcash::SaplingIncomingViewingKey &ivk,
-        const libzcash::SaplingPaymentAddress &addr);
-    virtual bool HaveSaplingIncomingViewingKey(const libzcash::SaplingPaymentAddress &addr) const;
+        const libvotecoin::SaplingIncomingViewingKey &ivk,
+        const libvotecoin::SaplingPaymentAddress &addr);
+    virtual bool HaveSaplingIncomingViewingKey(const libvotecoin::SaplingPaymentAddress &addr) const;
     virtual bool GetSaplingIncomingViewingKey(
-        const libzcash::SaplingPaymentAddress &addr, 
-        libzcash::SaplingIncomingViewingKey& ivkOut) const;
+        const libvotecoin::SaplingPaymentAddress &addr, 
+        libvotecoin::SaplingIncomingViewingKey& ivkOut) const;
 
     bool GetSaplingExtendedSpendingKey(
-        const libzcash::SaplingPaymentAddress &addr, 
-        libzcash::SaplingExtendedSpendingKey &extskOut) const;
+        const libvotecoin::SaplingPaymentAddress &addr, 
+        libvotecoin::SaplingExtendedSpendingKey &extskOut) const;
     
-    void GetSaplingPaymentAddresses(std::set<libzcash::SaplingPaymentAddress> &setAddress) const
+    void GetSaplingPaymentAddresses(std::set<libvotecoin::SaplingPaymentAddress> &setAddress) const
     {
         setAddress.clear();
         {
@@ -299,19 +299,19 @@ public:
         }
     }
 
-    virtual bool AddSproutViewingKey(const libzcash::SproutViewingKey &vk);
-    virtual bool RemoveSproutViewingKey(const libzcash::SproutViewingKey &vk);
-    virtual bool HaveSproutViewingKey(const libzcash::SproutPaymentAddress &address) const;
+    virtual bool AddSproutViewingKey(const libvotecoin::SproutViewingKey &vk);
+    virtual bool RemoveSproutViewingKey(const libvotecoin::SproutViewingKey &vk);
+    virtual bool HaveSproutViewingKey(const libvotecoin::SproutPaymentAddress &address) const;
     virtual bool GetSproutViewingKey(
-        const libzcash::SproutPaymentAddress &address,
-        libzcash::SproutViewingKey& vkOut) const;
+        const libvotecoin::SproutPaymentAddress &address,
+        libvotecoin::SproutViewingKey& vkOut) const;
 };
 
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CKeyingMaterial;
 typedef std::map<CKeyID, std::pair<CPubKey, std::vector<unsigned char> > > CryptedKeyMap;
-typedef std::map<libzcash::SproutPaymentAddress, std::vector<unsigned char> > CryptedSproutSpendingKeyMap;
+typedef std::map<libvotecoin::SproutPaymentAddress, std::vector<unsigned char> > CryptedSproutSpendingKeyMap;
 
 //! Sapling 
-typedef std::map<libzcash::SaplingExtendedFullViewingKey, std::vector<unsigned char> > CryptedSaplingSpendingKeyMap;
+typedef std::map<libvotecoin::SaplingExtendedFullViewingKey, std::vector<unsigned char> > CryptedSaplingSpendingKeyMap;
 
 #endif // BITCOIN_KEYSTORE_H

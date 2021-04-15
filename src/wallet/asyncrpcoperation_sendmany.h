@@ -1,16 +1,16 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_SENDMANY_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_SENDMANY_H
+#ifndef VOTECOIN_WALLET_ASYNCRPCOPERATION_SENDMANY_H
+#define VOTECOIN_WALLET_ASYNCRPCOPERATION_SENDMANY_H
 
 #include "asyncrpcoperation.h"
 #include "amount.h"
 #include "primitives/transaction.h"
 #include "transaction_builder.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Address.hpp"
+#include "votecoin/JoinSplit.hpp"
+#include "votecoin/Address.hpp"
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
 
@@ -23,7 +23,7 @@
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libvotecoin;
 class TxValues;
 
 class SendManyRecipient {
@@ -206,4 +206,4 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_SENDMANY_H
+#endif // VOTECOIN_WALLET_ASYNCRPCOPERATION_SENDMANY_H

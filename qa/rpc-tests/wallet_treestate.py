@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016 The Zcash developers
+# Copyright (c) 2016 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -37,7 +37,7 @@ class WalletTreeStateTest (BitcoinTestFramework):
         mytaddr = get_coinbase_address(self.nodes[0])
         myzaddr = self.nodes[0].z_getnewaddress()
 
-        # Spend coinbase utxos to create three notes of 10 ZEC minus default fee each
+        # Spend coinbase utxos to create three notes of 10 VOT minus default fee each
         recipients = []
         recipients.append({"address": myzaddr, "amount": Decimal('10.0') - DEFAULT_FEE})
         myopid = self.nodes[0].z_sendmany(mytaddr, recipients)

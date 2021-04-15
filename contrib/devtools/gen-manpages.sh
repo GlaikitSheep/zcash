@@ -5,27 +5,27 @@ TOPDIR=${TOPDIR:-$(git rev-parse --show-toplevel)}
 SRCDIR=${SRCDIR:-$TOPDIR/src}
 MANDIR=${MANDIR:-$TOPDIR/doc/man}
 
-ZCASHD=${ZCASHD:-$SRCDIR/zcashd}
-ZCASHCLI=${ZCASHCLI:-$SRCDIR/zcash-cli}
-ZCASHTX=${ZCASHTX:-$SRCDIR/zcash-tx}
+VOTECOIND=${VOTECOIND:-$SRCDIR/votecoind}
+VOTECOINCLI=${VOTECOINCLI:-$SRCDIR/votecoin-cli}
+VOTECOINTX=${VOTECOINTX:-$SRCDIR/votecoin-tx}
 
-[ ! -x $ZCASHD ] && echo "$ZCASHD not found or not executable." && exit 1
+[ ! -x $VOTECOIND ] && echo "$VOTECOIND not found or not executable." && exit 1
 
 # The autodetected version git tag can screw up manpage output a little bit
-read -r -a ZECVERSTR <<< "$($ZCASHCLI --version | head -n1 | awk '{ print $NF }')"
-read -r -a ZECVER <<< "$(echo $ZECVERSTR | awk -F- '{ OFS="-"; NF--; print $0; }')"
-read -r -a ZECCOMMIT <<< "$(echo $ZECVERSTR | awk -F- '{ print $NF }')"
+read -r -a VOTVERSTR <<< "$($VOTECOINCLI --version | head -n1 | awk '{ print $NF }')"
+read -r -a VOTVER <<< "$(echo $VOTVERSTR | awk -F- '{ OFS="-"; NF--; print $0; }')"
+read -r -a VOTCOMMIT <<< "$(echo $VOTVERSTR | awk -F- '{ print $NF }')"
 
 # Create a footer file with copyright content.
-# This gets autodetected fine for zcashd if --version-string is not set,
-# but has different outcomes for zcash-cli.
+# This gets autodetected fine for votecoind if --version-string is not set,
+# but has different outcomes for votecoin-cli.
 echo "[COPYRIGHT]" > footer.h2m
-$ZCASHD --version | sed -n '1!p' >> footer.h2m
+$VOTECOIND --version | sed -n '1!p' >> footer.h2m
 
-for cmd in $ZCASHD $ZCASHCLI $ZCASHTX; do
+for cmd in $VOTECOIND $VOTECOINCLI $VOTECOINTX; do
   cmdname="${cmd##*/}"
-  help2man -N --version-string=$ZECVER --include=footer.h2m -o ${MANDIR}/${cmdname}.1 ${cmd}
-  sed -i "s/\\\-$ZECCOMMIT//g" ${MANDIR}/${cmdname}.1
+  help2man -N --version-string=$VOTVER --include=footer.h2m -o ${MANDIR}/${cmdname}.1 ${cmd}
+  sed -i "s/\\\-$VOTCOMMIT//g" ${MANDIR}/${cmdname}.1
 done
 
 rm -f footer.h2m

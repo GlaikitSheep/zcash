@@ -21,8 +21,8 @@
 #include "serialize.h"
 #include "streams.h"
 
-#include "zcash/IncrementalMerkleTree.hpp"
-#include "zcash/util.h"
+#include "votecoin/IncrementalMerkleTree.hpp"
+#include "votecoin/util.h"
 
 
 #include "json_test_vectors.h"
@@ -162,13 +162,13 @@ TEST(merkletree, SaplingVectors) {
 }
 
 TEST(merkletree, emptyroots) {
-    libzcash::EmptyMerkleRoots<64, libzcash::SHA256Compress> emptyroots;
-    std::array<libzcash::SHA256Compress, 65> computed;
+    libvotecoin::EmptyMerkleRoots<64, libvotecoin::SHA256Compress> emptyroots;
+    std::array<libvotecoin::SHA256Compress, 65> computed;
 
-    computed.at(0) = libzcash::SHA256Compress::uncommitted();
+    computed.at(0) = libvotecoin::SHA256Compress::uncommitted();
     ASSERT_TRUE(emptyroots.empty_root(0) == computed.at(0));
     for (size_t d = 1; d <= 64; d++) {
-        computed.at(d) = libzcash::SHA256Compress::combine(computed.at(d-1), computed.at(d-1), d-1);
+        computed.at(d) = libvotecoin::SHA256Compress::combine(computed.at(d-1), computed.at(d-1), d-1);
         ASSERT_TRUE(emptyroots.empty_root(d) == computed.at(d));
     }
 
@@ -177,13 +177,13 @@ TEST(merkletree, emptyroots) {
 }
 
 TEST(merkletree, EmptyrootsSapling) {
-    libzcash::EmptyMerkleRoots<62, libzcash::PedersenHash> emptyroots;
-    std::array<libzcash::PedersenHash, 63> computed;
+    libvotecoin::EmptyMerkleRoots<62, libvotecoin::PedersenHash> emptyroots;
+    std::array<libvotecoin::PedersenHash, 63> computed;
 
-    computed.at(0) = libzcash::PedersenHash::uncommitted();
+    computed.at(0) = libvotecoin::PedersenHash::uncommitted();
     ASSERT_TRUE(emptyroots.empty_root(0) == computed.at(0));
     for (size_t d = 1; d <= 62; d++) {
-        computed.at(d) = libzcash::PedersenHash::combine(computed.at(d-1), computed.at(d-1), d-1);
+        computed.at(d) = libvotecoin::PedersenHash::combine(computed.at(d-1), computed.at(d-1), d-1);
         ASSERT_TRUE(emptyroots.empty_root(d) == computed.at(d));
     }
 

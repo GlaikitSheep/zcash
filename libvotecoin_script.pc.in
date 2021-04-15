@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: VoteCoin transparent script verification library
+Description: Library for verifying scripts against the VoteCoin consensus protocol.
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lvotecoin_script
+Cflags: -I${includedir}

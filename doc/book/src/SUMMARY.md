@@ -1,6 +1,6 @@
-# The zcashd Book
+# The votecoind Book
 
-[zcashd](README.md)
+[votecoind](README.md)
 - [User Documentation](user.md)
   - [Metrics](user/metrics.md)
 - [Design](design.md)

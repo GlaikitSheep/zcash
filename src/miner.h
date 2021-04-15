@@ -29,7 +29,7 @@ public:
     friend bool operator<(const InvalidMinerAddress &a, const InvalidMinerAddress &b) { return true; }
 };
 
-typedef std::variant<InvalidMinerAddress, libzcash::SaplingPaymentAddress, boost::shared_ptr<CReserveScript>> MinerAddress;
+typedef std::variant<InvalidMinerAddress, libvotecoin::SaplingPaymentAddress, boost::shared_ptr<CReserveScript>> MinerAddress;
 
 class KeepMinerAddress
 {
@@ -37,7 +37,7 @@ public:
     KeepMinerAddress() {}
 
     void operator()(const InvalidMinerAddress &invalid) const {}
-    void operator()(const libzcash::SaplingPaymentAddress &pa) const {}
+    void operator()(const libvotecoin::SaplingPaymentAddress &pa) const {}
     void operator()(const boost::shared_ptr<CReserveScript> &coinbaseScript) const {
         coinbaseScript->KeepScript();
     }
@@ -53,7 +53,7 @@ public:
     bool operator()(const InvalidMinerAddress &invalid) const {
         return false;
     }
-    bool operator()(const libzcash::SaplingPaymentAddress &pa) const {
+    bool operator()(const libvotecoin::SaplingPaymentAddress &pa) const {
         return true;
     }
     bool operator()(const boost::shared_ptr<CReserveScript> &coinbaseScript) const {

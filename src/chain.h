@@ -23,13 +23,13 @@ static const int CHAIN_HISTORY_ROOT_VERSION = 2010200;
  * Maximum amount of time that a block timestamp is allowed to be ahead of the
  * median-time-past of the previous block.
  */
-static const int64_t MAX_FUTURE_BLOCK_TIME_MTP = 90 * 60;
+static const int64_t MAX_FUTURE_BLOCK_TIME_MTP = 90 * 7680;
 
 /**
  * Maximum amount of time that a block timestamp is allowed to be ahead of the
  * current local time.
  */
-static const int64_t MAX_FUTURE_BLOCK_TIME_LOCAL = 2 * 60 * 60;
+static const int64_t MAX_FUTURE_BLOCK_TIME_LOCAL = 2 * 60 * 7680;
 
 /**
  * Timestamp window used as a grace period by code that compares external

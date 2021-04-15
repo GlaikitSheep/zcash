@@ -4,7 +4,7 @@ Notable changes
 Migration to Clang and static libc++
 ------------------------------------
 
-`zcashd` now builds its C++ (and C) dependencies entirely with a pinned version
+`votecoind` now builds its C++ (and C) dependencies entirely with a pinned version
 of Clang, and statically links libc++ instead of dynamically linking libstdc++.
 This migration enables us to reliably use newer C++ features while supporting
 older LTS platforms, be more confident in the compiler's optimisations, and
@@ -12,7 +12,7 @@ leverage security features such as sanitisers and efficient fuzzing. In future,
 this will also allow optimizing across the boundary between Rust and C++.
 
 The system compiler is still used to compile a few native dependencies (used by
-the build machine to then compile `zcashd` for the target machine). These will
+the build machine to then compile `votecoind` for the target machine). These will
 likely also be migrated to use the pinned Clang in a future release.
 
 Fast sync for initial block download
@@ -109,8 +109,8 @@ Daira Hopwood (29):
       Beef up the CoC to address use of dog-whistles.
       Fix warnings surfaced by compiling with clang++.
       Use the current time as the timestamp if we override a misc warning.
-      qa/zcash/full_test_suite.py: changes needed for macOS. fixes #4785
-      qa/zcash/full_test_suite.py: print immediately if a test fails.
+      qa/votecoin/full_test_suite.py: changes needed for macOS. fixes #4785
+      qa/votecoin/full_test_suite.py: print immediately if a test fails.
       log(x)/log(2.0) can be written as log2(x).
       Fix integer types in DisplayDuration.
       Rename `time` to `duration` in `DisplayDuration`.
@@ -120,7 +120,7 @@ Daira Hopwood (29):
       Add new copyright entries for build-aux/m4/ax_cxx_compile_stdcxx.m4
       Fix death gtests on macOS by switching to the threadsafe style.
       Fix an error reporting bug in "Checksum missing or mismatched ..."
-      Rename the FS_ZIP214_ECC funding stream to FS_ZIP214_BP. See also https://github.com/zcash/zips/pull/412 .
+      Rename the FS_ZIP214_ECC funding stream to FS_ZIP214_BP. See also https://github.com/votecoin/zips/pull/412 .
 
 Dimitris Apostolou (5):
       Remove reference to cargo-checksum.sh
@@ -293,7 +293,7 @@ Pieter Wuille (2):
 Sean Bowe (3):
       Update Rust to 1.44.1.
       cargo update
-      Update to latest zcash_* and zkcrypto crates.
+      Update to latest votecoin_* and zkcrypto crates.
 
 Taylor Hornby (3):
       Fix buffer overflows in P2PKH tests
@@ -355,7 +355,7 @@ Jack Grigg (9):
       LockedPool: Switch to HTTPS URLs in licenses and comments
       test: Fix LFSR period in comments
       httpserver: Code style cleanups
-      depends: Update packages documentation for Zcash
+      depends: Update packages documentation for VoteCoin
       depends: Add untested note to FreeBSD host
       Update example scripted-diff comit in doc/developer-notes.md
       Use HTTPS in script license headers

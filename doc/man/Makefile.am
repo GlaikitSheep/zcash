@@ -1,1 +1,1 @@
-dist_man1_MANS=zcashd.1 zcash-cli.1 zcash-fetch-params.1 zcash-tx.1
+dist_man1_MANS=votecoind.1 votecoin-cli.1 votecoin-fetch-params.1 votecoin-tx.1

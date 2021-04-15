@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Zcash developers
+// Copyright (c) 2018 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -12,7 +12,7 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
     {
         .nBranchId = 0,
         .strName = "Sprout",
-        .strInfo = "The Zcash network at launch",
+        .strInfo = "The VoteCoin network at launch",
     },
     {
         .nBranchId = 0x74736554,

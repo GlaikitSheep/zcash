@@ -1,9 +1,9 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_ASYNCRPCQUEUE_H
-#define ZCASH_ASYNCRPCQUEUE_H
+#ifndef VOTECOIN_ASYNCRPCQUEUE_H
+#define VOTECOIN_ASYNCRPCQUEUE_H
 
 #include "asyncrpcoperation.h"
 
@@ -65,4 +65,4 @@ private:
     std::vector<std::thread> workers_;
 };
 
-#endif // ZCASH_ASYNCRPCQUEUE_H
+#endif // VOTECOIN_ASYNCRPCQUEUE_H

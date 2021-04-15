@@ -1,4 +1,4 @@
-FROM electriccoinco/zcashd-build-centos8
+FROM electriccoinco/votecoind-build-centos8
 
 # Buildbot user
 ARG BUILDBOT_USER=zcbbworker

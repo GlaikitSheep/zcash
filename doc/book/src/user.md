@@ -1,6 +1,6 @@
 # User Documentation
 
-This section contains user documentation specific to `zcashd`.
+This section contains user documentation specific to `votecoind`.
 
-See [here](https://zcash.readthedocs.io/) for more general Zcash documentation, as well as
-installation instructions for `zcashd`.
+See [here](https://votecoin.readthedocs.io/) for more general VoteCoin documentation, as well as
+installation instructions for `votecoind`.

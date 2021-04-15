@@ -18,9 +18,9 @@
 #include <array>
 #include <variant>
 
-#include "zcash/NoteEncryption.hpp"
-#include "zcash/Zcash.h"
-#include "zcash/Proof.hpp"
+#include "votecoin/NoteEncryption.hpp"
+#include "votecoin/VoteCoin.h"
+#include "votecoin/Proof.hpp"
 
 #include <rust/ed25519/types.h>
 
@@ -90,7 +90,7 @@ public:
     uint256 anchor;                //!< A Merkle root of the Sapling note commitment tree at some block height in the past.
     uint256 nullifier;             //!< The nullifier of the input note.
     uint256 rk;                    //!< The randomized public key for spendAuthSig.
-    libzcash::GrothProof zkproof;  //!< A zero-knowledge proof using the spend circuit.
+    libvotecoin::GrothProof zkproof;  //!< A zero-knowledge proof using the spend circuit.
     spend_auth_sig_t spendAuthSig; //!< A signature authorizing this spend.
 
     SpendDescription() { }
@@ -134,9 +134,9 @@ public:
     uint256 cv;                     //!< A value commitment to the value of the output note.
     uint256 cmu;                     //!< The u-coordinate of the note commitment for the output note.
     uint256 ephemeralKey;           //!< A Jubjub public key.
-    libzcash::SaplingEncCiphertext encCiphertext; //!< A ciphertext component for the encrypted output note.
-    libzcash::SaplingOutCiphertext outCiphertext; //!< A ciphertext component for the encrypted output note.
-    libzcash::GrothProof zkproof;   //!< A zero-knowledge proof using the output circuit.
+    libvotecoin::SaplingEncCiphertext encCiphertext; //!< A ciphertext component for the encrypted output note.
+    libvotecoin::SaplingOutCiphertext outCiphertext; //!< A ciphertext component for the encrypted output note.
+    libvotecoin::GrothProof zkproof;   //!< A zero-knowledge proof using the output circuit.
 
     OutputDescription() { }
 
@@ -179,7 +179,7 @@ class SproutProofSerializer
 public:
     SproutProofSerializer(Stream& s, bool useGroth) : s(s), useGroth(useGroth) {}
 
-    void operator()(const libzcash::PHGRProof& proof) const
+    void operator()(const libvotecoin::PHGRProof& proof) const
     {
         if (useGroth) {
             throw std::ios_base::failure("Invalid Sprout proof for transaction format (expected GrothProof, found PHGRProof)");
@@ -187,7 +187,7 @@ public:
         ::Serialize(s, proof);
     }
 
-    void operator()(const libzcash::GrothProof& proof) const
+    void operator()(const libvotecoin::GrothProof& proof) const
     {
         if (!useGroth) {
             throw std::ios_base::failure("Invalid Sprout proof for transaction format (expected PHGRProof, found GrothProof)");
@@ -207,11 +207,11 @@ template<typename Stream, typename T>
 inline void SerReadWriteSproutProof(Stream& s, T& proof, bool useGroth, CSerActionUnserialize ser_action)
 {
     if (useGroth) {
-        libzcash::GrothProof grothProof;
+        libvotecoin::GrothProof grothProof;
         ::Unserialize(s, grothProof);
         proof = grothProof;
     } else {
-        libzcash::PHGRProof pghrProof;
+        libvotecoin::PHGRProof pghrProof;
         ::Unserialize(s, pghrProof);
         proof = pghrProof;
     }
@@ -263,7 +263,7 @@ public:
 
     // JoinSplit proof
     // This is a zk-SNARK which ensures that this JoinSplit is valid.
-    libzcash::SproutProof proof;
+    libvotecoin::SproutProof proof;
 
     JSDescription(): vpub_old(0), vpub_new(0) { }
 

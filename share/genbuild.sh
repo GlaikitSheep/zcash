@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2016-2019 The Zcash developers
+# Copyright (c) 2016-2019 The VoteCoin developers
 # Copyright (c) 2012-2019 The Bitcoin Core developers
 # Copyright (c) 2012-2019 Bitcoin Developers
 # Distributed under the MIT software license, see the accompanying

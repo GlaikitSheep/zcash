@@ -1,4 +1,4 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -15,7 +15,7 @@
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
 #include "wallet/paymentdisclosuredb.h"
-#include "zcash/JoinSplit.hpp"
+#include "votecoin/JoinSplit.hpp"
 
 #include <fstream>
 #include <stdint.h>
@@ -25,13 +25,13 @@
 
 #include <univalue.h>
 
-#include "zcash/Note.hpp"
-#include "zcash/NoteEncryption.hpp"
+#include "votecoin/Note.hpp"
+#include "votecoin/NoteEncryption.hpp"
 
 #include <rust/ed25519.h>
 
 using namespace std;
-using namespace libzcash;
+using namespace libvotecoin;
 
 // Function declaration for function implemented in wallet/rpcwallet.cpp
 bool EnsureWalletIsAvailable(bool avoidException);

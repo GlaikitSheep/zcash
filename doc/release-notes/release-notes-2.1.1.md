@@ -11,10 +11,10 @@ notes into a few larger ones.
 
 In this release we are promoting `z_mergetoaddress` out of experimental status.
 It is now a stable RPC, and any future changes to it will only be additive. See
-`zcash-cli help z_mergetoaddress` for API details and usage.
+`votecoin-cli help z_mergetoaddress` for API details and usage.
 
 Unlike most other RPC methods, `z_mergetoaddress` operates over a particular
-quantity of UTXOs and notes, instead of a particular amount of ZEC. By default,
+quantity of UTXOs and notes, instead of a particular amount of VOT. By default,
 it will merge 50 UTXOs and 10 notes at a time; these limits can be adjusted with
 the parameters `transparent_limit` and `shielded_limit`.
 
@@ -125,7 +125,7 @@ Jack Grigg (32):
       Fix benchmarks after removal of SelectParamsFromCommandLine()
       Handle Equihash and optional miner code in TestChain100Setup
       Add tests covering the current interaction of alerts with subver comments
-      Parameterize zcash.conf in init error message
+      Parameterize votecoin.conf in init error message
       cleanup: Comments
       Wrap long line
       Match alerts both with and without comments
@@ -268,7 +268,7 @@ Taylor Hornby (11):
       Add all-in-one script for starting AFL fuzzing
       Separate AFL build, run fuzz stages, and add afl argument pass-through
       Have make clean delete fuzz.cpp
-      Pass AFL input file path to zcashd
+      Pass AFL input file path to votecoind
       Add fuzzing stub for AddrMan deserialization
       Add fuzzing stub for ReadFeeEstimates
       Add fuzzing stub for CheckBlock

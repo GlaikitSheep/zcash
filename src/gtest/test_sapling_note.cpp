@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "zcash/Address.hpp"
-#include "zcash/Note.hpp"
+#include "votecoin/Address.hpp"
+#include "votecoin/Note.hpp"
 
 #include "amount.h"
 #include "random.h"
@@ -9,9 +9,9 @@
 
 #include <array>
 
-using namespace libzcash;
+using namespace libvotecoin;
 
-// Test data from https://github.com/zcash-hackworks/zcash-test-vectors/blob/master/sapling_key_components.py
+// Test data from https://github.com/votecoin-hackworks/votecoin-test-vectors/blob/master/sapling_key_components.py
 TEST(SaplingNote, TestVectors)
 {
     uint64_t v = 0;

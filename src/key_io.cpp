@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2016 The Bitcoin Core developers
-// Copyright (c) 2016-2018 The Zcash developers
+// Copyright (c) 2016-2018 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -51,7 +51,7 @@ private:
 public:
     PaymentAddressEncoder(const KeyConstants& keyConstants) : keyConstants(keyConstants) {}
 
-    std::string operator()(const libzcash::SproutPaymentAddress& zaddr) const
+    std::string operator()(const libvotecoin::SproutPaymentAddress& zaddr) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zaddr;
@@ -60,7 +60,7 @@ public:
         return EncodeBase58Check(data);
     }
 
-    std::string operator()(const libzcash::SaplingPaymentAddress& zaddr) const
+    std::string operator()(const libvotecoin::SaplingPaymentAddress& zaddr) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zaddr;
@@ -73,7 +73,7 @@ public:
         return bech32::Encode(keyConstants.Bech32HRP(KeyConstants::SAPLING_PAYMENT_ADDRESS), data);
     }
 
-    std::string operator()(const libzcash::InvalidEncoding& no) const { return {}; }
+    std::string operator()(const libvotecoin::InvalidEncoding& no) const { return {}; }
 };
 
 class ViewingKeyEncoder
@@ -84,7 +84,7 @@ private:
 public:
     ViewingKeyEncoder(const KeyConstants& keyConstants) : keyConstants(keyConstants) {}
 
-    std::string operator()(const libzcash::SproutViewingKey& vk) const
+    std::string operator()(const libvotecoin::SproutViewingKey& vk) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << vk;
@@ -95,7 +95,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::SaplingExtendedFullViewingKey& extfvk) const
+    std::string operator()(const libvotecoin::SaplingExtendedFullViewingKey& extfvk) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << extfvk;
@@ -111,7 +111,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::InvalidEncoding& no) const { return {}; }
+    std::string operator()(const libvotecoin::InvalidEncoding& no) const { return {}; }
 };
 
 class SpendingKeyEncoder
@@ -122,7 +122,7 @@ private:
 public:
     SpendingKeyEncoder(const KeyConstants& keyConstants) : keyConstants(keyConstants) {}
 
-    std::string operator()(const libzcash::SproutSpendingKey& zkey) const
+    std::string operator()(const libvotecoin::SproutSpendingKey& zkey) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zkey;
@@ -133,7 +133,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::SaplingExtendedSpendingKey& zkey) const
+    std::string operator()(const libvotecoin::SaplingExtendedSpendingKey& zkey) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zkey;
@@ -149,7 +149,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::InvalidEncoding& no) const { return {}; }
+    std::string operator()(const libvotecoin::InvalidEncoding& no) const { return {}; }
 };
 
 // Sizes of SaplingPaymentAddress, SaplingExtendedFullViewingKey, and
@@ -271,7 +271,7 @@ bool KeyIO::IsValidDestinationString(const std::string& str)
     return IsValidDestination(DecodeDestination(str));
 }
 
-std::string KeyIO::EncodePaymentAddress(const libzcash::PaymentAddress& zaddr)
+std::string KeyIO::EncodePaymentAddress(const libvotecoin::PaymentAddress& zaddr)
 {
     return std::visit(PaymentAddressEncoder(keyConstants), zaddr);
 }
@@ -314,17 +314,17 @@ T1 DecodeAny(
     }
 
     memory_cleanse(data.data(), data.size());
-    return libzcash::InvalidEncoding();
+    return libvotecoin::InvalidEncoding();
 }
 
-libzcash::PaymentAddress KeyIO::DecodePaymentAddress(const std::string& str)
+libvotecoin::PaymentAddress KeyIO::DecodePaymentAddress(const std::string& str)
 {
-    return DecodeAny<libzcash::PaymentAddress,
-        libzcash::SproutPaymentAddress,
-        libzcash::SaplingPaymentAddress>(
+    return DecodeAny<libvotecoin::PaymentAddress,
+        libvotecoin::SproutPaymentAddress,
+        libvotecoin::SaplingPaymentAddress>(
             keyConstants,
             str,
-            std::make_pair(KeyConstants::ZCPAYMENT_ADDRESS, libzcash::SerializedSproutPaymentAddressSize),
+            std::make_pair(KeyConstants::ZCPAYMENT_ADDRESS, libvotecoin::SerializedSproutPaymentAddressSize),
             std::make_pair(KeyConstants::SAPLING_PAYMENT_ADDRESS, ConvertedSaplingPaymentAddressSize)
         );
 }
@@ -333,37 +333,37 @@ bool KeyIO::IsValidPaymentAddressString(const std::string& str) {
     return IsValidPaymentAddress(DecodePaymentAddress(str));
 }
 
-std::string KeyIO::EncodeViewingKey(const libzcash::ViewingKey& vk)
+std::string KeyIO::EncodeViewingKey(const libvotecoin::ViewingKey& vk)
 {
     return std::visit(ViewingKeyEncoder(keyConstants), vk);
 }
 
-libzcash::ViewingKey KeyIO::DecodeViewingKey(const std::string& str)
+libvotecoin::ViewingKey KeyIO::DecodeViewingKey(const std::string& str)
 {
-    return DecodeAny<libzcash::ViewingKey,
-        libzcash::SproutViewingKey,
-        libzcash::SaplingExtendedFullViewingKey>(
+    return DecodeAny<libvotecoin::ViewingKey,
+        libvotecoin::SproutViewingKey,
+        libvotecoin::SaplingExtendedFullViewingKey>(
             keyConstants,
             str,
-            std::make_pair(KeyConstants::ZCVIEWING_KEY, libzcash::SerializedSproutViewingKeySize),
+            std::make_pair(KeyConstants::ZCVIEWING_KEY, libvotecoin::SerializedSproutViewingKeySize),
             std::make_pair(KeyConstants::SAPLING_EXTENDED_FVK, ConvertedSaplingExtendedFullViewingKeySize)
         );
 }
 
-std::string KeyIO::EncodeSpendingKey(const libzcash::SpendingKey& zkey)
+std::string KeyIO::EncodeSpendingKey(const libvotecoin::SpendingKey& zkey)
 {
     return std::visit(SpendingKeyEncoder(keyConstants), zkey);
 }
 
-libzcash::SpendingKey KeyIO::DecodeSpendingKey(const std::string& str)
+libvotecoin::SpendingKey KeyIO::DecodeSpendingKey(const std::string& str)
 {
 
-    return DecodeAny<libzcash::SpendingKey,
-        libzcash::SproutSpendingKey,
-        libzcash::SaplingExtendedSpendingKey>(
+    return DecodeAny<libvotecoin::SpendingKey,
+        libvotecoin::SproutSpendingKey,
+        libvotecoin::SaplingExtendedSpendingKey>(
             keyConstants,
             str,
-            std::make_pair(KeyConstants::ZCSPENDING_KEY, libzcash::SerializedSproutSpendingKeySize),
+            std::make_pair(KeyConstants::ZCSPENDING_KEY, libvotecoin::SerializedSproutSpendingKeySize),
             std::make_pair(KeyConstants::SAPLING_EXTENDED_SPEND_KEY, ConvertedSaplingExtendedSpendingKeySize)
         );
 }

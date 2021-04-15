@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php 
 
@@ -36,7 +36,7 @@ TEST(RecursiveDynamicUsageTests, TestTransactionJoinSplit)
 {
     auto consensusParams = RegtestActivateSapling();
 
-    auto sproutSk = libzcash::SproutSpendingKey::random();
+    auto sproutSk = libvotecoin::SproutSpendingKey::random();
 
     auto wtx = GetValidSproutReceive(sproutSk, 25000, true);
     // 2 vin + 1 vJoinSplit + 1 vShieldedOutput
@@ -50,7 +50,7 @@ TEST(RecursiveDynamicUsageTests, TestTransactionSaplingToSapling)
 {
     auto consensusParams = RegtestActivateSapling();
     
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto testNote = GetTestSaplingNote(sk.default_address(), 50000);
 
     auto builder = TransactionBuilder(consensusParams, 1);
@@ -72,7 +72,7 @@ TEST(RecursiveDynamicUsageTests, TestTransactionTransparentToSapling)
     CBasicKeyStore keystore;
     CKey tsk = AddTestCKeyToKeyStore(keystore);
     auto scriptPubKey = GetScriptForDestination(tsk.GetPubKey().GetID());
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
 
     auto builder = TransactionBuilder(consensusParams, 1, &keystore);
     builder.AddTransparentInput(COutPoint(), scriptPubKey, 50000);
@@ -93,7 +93,7 @@ TEST(RecursiveDynamicUsageTests, TestTransactionSaplingToTransparent)
     CBasicKeyStore keystore;
     CKey tsk = AddTestCKeyToKeyStore(keystore);
     CTxDestination taddr = tsk.GetPubKey().GetID();
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libvotecoin::SaplingSpendingKey::random();
     auto testNote = GetTestSaplingNote(sk.default_address(), 50000);
 
     auto builder = TransactionBuilder(consensusParams, 1, &keystore);

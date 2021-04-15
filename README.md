@@ -1,23 +1,23 @@
-Zcash 4.4.0
+VoteCoin 4.4.0
 <img align="right" width="120" height="80" src="doc/imgs/logo.png">
 ===========
 
-What is Zcash?
+What is VoteCoin?
 --------------
 
-[Zcash](https://z.cash/) is an implementation of the "Zerocash" protocol.
-Based on Bitcoin's code, Zcash intends to offer a far higher standard of privacy
+[VoteCoin](https://z.cash/) is an implementation of the "Zerocash" protocol.
+Based on Bitcoin's code, VoteCoin intends to offer a far higher standard of privacy
 through a sophisticated zero-knowledge proving scheme that preserves
 confidentiality of transaction metadata. More technical details are available
 in our [Protocol Specification](https://zips.z.cash/protocol/protocol.pdf).
 
-This software is the Zcash client. It downloads and stores the entire history
-of Zcash transactions; depending on the speed of your computer and network
+This software is the VoteCoin client. It downloads and stores the entire history
+of VoteCoin transactions; depending on the speed of your computer and network
 connection, the synchronization process could take a day or more once the
 blockchain has reached a significant size.
 
 <p align="center">
-  <img src="doc/imgs/zcashd_screen.gif" height="500">
+  <img src="doc/imgs/votecoind_screen.gif" height="500">
 </p>
 
 #### :lock: Security Warnings
@@ -25,7 +25,7 @@ blockchain has reached a significant size.
 See important security warnings on the
 [Security Information page](https://z.cash/support/security/).
 
-**Zcash is experimental and a work in progress.** Use it at your own risk.
+**VoteCoin is experimental and a work in progress.** Use it at your own risk.
 
 ####  :ledger: Deprecation Policy
 
@@ -36,28 +36,28 @@ height.
 
 ## Getting Started
 
-Please see our [user guide](https://zcash.readthedocs.io/en/latest/rtd_pages/rtd_docs/user_guide.html) for joining the main Zcash network.
+Please see our [user guide](https://votecoin.readthedocs.io/en/latest/rtd_pages/rtd_docs/user_guide.html) for joining the main VoteCoin network.
 
 ### Need Help?
 
-* :blue_book: See the documentation at the [ReadTheDocs](https://zcash.readthedocs.io)
+* :blue_book: See the documentation at the [ReadTheDocs](https://votecoin.readthedocs.io)
   for help and more information.
-* :incoming_envelope: Ask for help on the [Zcash](https://forum.z.cash/) forum.
+* :incoming_envelope: Ask for help on the [VoteCoin](https://forum.z.cash/) forum.
 * :speech_balloon: Join our community on [Discord](https://discordapp.com/invite/PhJY6Pm)
 
-Participation in the Zcash project is subject to a
+Participation in the VoteCoin project is subject to a
 [Code of Conduct](code_of_conduct.md).
 
 ### Building
 
-Build Zcash along with most dependencies from source by running the following command:
+Build VoteCoin along with most dependencies from source by running the following command:
 
 ```
 ./zcutil/build.sh -j$(nproc)
 ```
 
-Currently, Zcash is only officially supported on Debian and Ubuntu. See the
-[Debian / Ubuntu build](https://zcash.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html)
+Currently, VoteCoin is only officially supported on Debian and Ubuntu. See the
+[Debian / Ubuntu build](https://votecoin.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html)
 for detailed instructions.
 
 License

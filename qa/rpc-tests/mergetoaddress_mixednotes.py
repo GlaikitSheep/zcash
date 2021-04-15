@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Zcash developers
+# Copyright (c) 2019 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -23,7 +23,7 @@ class MergeToAddressMixedNotes(BitcoinTestFramework):
         self.nodes[0].generate(102)
         self.sync_all()
 
-        # Send some ZEC to Sprout/Sapling addresses
+        # Send some VOT to Sprout/Sapling addresses
         coinbase_addr = get_coinbase_address(self.nodes[0])
         sproutAddr = self.nodes[0].z_getnewaddress('sprout')
         saplingAddr = self.nodes[0].z_getnewaddress('sapling')

@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2020 The Zcash developers
+// Copyright (c) 2016-2020 The VoteCoin developers
 // Original code from: https://gist.github.com/laanwj/0e689cfa37b52bcbbb44
 
 /*
@@ -27,7 +27,7 @@ Modify the alert parameters, id and message found in this file.
 
 Build and run with -sendalert or -printalert.
 
-./zcashd -printtoconsole -sendalert
+./votecoind -printtoconsole -sendalert
 
 One minute after starting up, the alert will be broadcast. It is then
 flooded through the network until the nRelayUntil time, and will be
@@ -72,7 +72,7 @@ void ThreadSendAlert()
     CAlert alert;
     alert.nRelayUntil   = GetTime() + 15 * 60;
     alert.nExpiration   = GetTime() + 10 * 365 * 24 * 60 * 60;
-    alert.nID           = 1007;  // use https://github.com/zcash/zcash/wiki/specification#assigned-numbers to keep track of alert IDs
+    alert.nID           = 1007;  // use https://github.com/votecoin/votecoin/wiki/specification#assigned-numbers to keep track of alert IDs
     alert.nCancel       = 1006;  // cancels previous messages up to this ID number
 
     // These versions are protocol versions
@@ -92,12 +92,12 @@ void ThreadSendAlert()
     //  4000 or higher will put the RPC into safe mode
     alert.nPriority     = 4000;
     alert.strComment    = "";
-    alert.strStatusBar  = "Your client is out of date and incompatible with the Heartwood network upgrade. Please update to a recent version of Zcash (3.0.0 or later).";
+    alert.strStatusBar  = "Your client is out of date and incompatible with the Heartwood network upgrade. Please update to a recent version of VoteCoin (3.0.0 or later).";
     alert.strRPCError   = alert.strStatusBar;
 
     // Set specific client version/versions here. If setSubVer is empty, no filtering on subver is done:
     // alert.setSubVer.insert(std::string("/MagicBean:0.7.2/"));
-    const std::vector<std::string> useragents = {}; //{"MagicBean", "BeanStalk", "AppleSeed", "EleosZcash"};
+    const std::vector<std::string> useragents = {}; //{"MagicBean", "BeanStalk", "AppleSeed", "EleosVoteCoin"};
 
     for (const std::string& useragent : useragents) {
     }

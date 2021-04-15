@@ -1,5 +1,5 @@
 // This is mostly code copied from metrics_exporter_prometheus. The copied portions are
-// licensed under the same terms as the zcash codebase (reproduced below from
+// licensed under the same terms as the votecoin codebase (reproduced below from
 // https://github.com/metrics-rs/metrics/blob/main/metrics-exporter-prometheus/LICENSE):
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -108,7 +108,7 @@ pub(super) fn install(
     metrics::set_boxed_recorder(Box::new(recorder))?;
 
     thread::Builder::new()
-        .name("zcash-prometheus".to_string())
+        .name("votecoin-prometheus".to_string())
         .spawn(move || {
             runtime.block_on(async move {
                 pin!(exporter);

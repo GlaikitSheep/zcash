@@ -143,7 +143,7 @@ public:
             return std::vector<unsigned char>();
 
         // This could result in undefined behaviour in Bitcoin 0.10.0 and
-        // Zcash prior to https://github.com/zcash/zcash/pull/4454 .
+        // VoteCoin prior to https://github.com/votecoin/votecoin/pull/4454 .
         // Since we only use this implementation for tests, we just assert
         // that the tests are not triggering this case (which is tested
         // separately for the real implementation).
@@ -184,7 +184,7 @@ private:
           return 0;
 
       // This could result in undefined behaviour in Bitcoin 0.10.0 and
-      // Zcash prior to https://github.com/zcash/zcash/pull/4454 .
+      // VoteCoin prior to https://github.com/votecoin/votecoin/pull/4454 .
       // Since we only use this implementation for tests, we just assert
       // that the tests are not triggering this case (which is tested
       // separately for the real implementation).

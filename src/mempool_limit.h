@@ -1,9 +1,9 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_MEMPOOL_LIMIT_H
-#define ZCASH_MEMPOOL_LIMIT_H
+#ifndef VOTECOIN_MEMPOOL_LIMIT_H
+#define VOTECOIN_MEMPOOL_LIMIT_H
 
 #include <deque>
 #include <map>
@@ -128,4 +128,4 @@ public:
 };
 
 
-#endif // ZCASH_MEMPOOL_LIMIT_H
+#endif // VOTECOIN_MEMPOOL_LIMIT_H

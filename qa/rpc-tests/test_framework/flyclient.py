@@ -7,14 +7,14 @@ from .mininode import (CBlockHeader, block_work_from_compact, ser_compactsize, s
 def H(msg: bytes, consensusBranchId: int) -> bytes:
     digest = blake2b(
         digest_size=32,
-        person=b'ZcashHistory' + struct.pack("<I", consensusBranchId))
+        person=b'VoteCoinHistory' + struct.pack("<I", consensusBranchId))
     digest.update(msg)
     return digest.digest()
 
-class ZcashMMRNode():
+class VoteCoinMMRNode():
     # leaf nodes have no children
-    left_child: Optional['ZcashMMRNode']
-    right_child: Optional['ZcashMMRNode']
+    left_child: Optional['VoteCoinMMRNode']
+    right_child: Optional['VoteCoinMMRNode']
 
     # commitments
     hashSubtreeCommitment: bytes
@@ -32,7 +32,7 @@ class ZcashMMRNode():
     consensusBranchId: bytes
 
     @classmethod
-    def from_block(Z, block: CBlockHeader, height, sapling_root, sapling_tx_count, consensusBranchId) -> 'ZcashMMRNode':
+    def from_block(Z, block: CBlockHeader, height, sapling_root, sapling_tx_count, consensusBranchId) -> 'VoteCoinMMRNode':
         '''Create a leaf node from a block'''
         node = Z()
         node.left_child = None
@@ -68,9 +68,9 @@ class ZcashMMRNode():
         return buf
 
 def make_parent(
-        left_child: ZcashMMRNode,
-        right_child: ZcashMMRNode) -> ZcashMMRNode:
-    parent = ZcashMMRNode()
+        left_child: VoteCoinMMRNode,
+        right_child: VoteCoinMMRNode) -> VoteCoinMMRNode:
+    parent = VoteCoinMMRNode()
     parent.left_child = left_child
     parent.right_child = right_child
     parent.hashSubtreeCommitment = H(
@@ -90,12 +90,12 @@ def make_parent(
     parent.consensusBranchId = left_child.consensusBranchId
     return parent
 
-def make_root_commitment(root: ZcashMMRNode) -> bytes:
+def make_root_commitment(root: VoteCoinMMRNode) -> bytes:
     '''Makes the root commitment for a blockheader'''
     return H(root.serialize(), root.consensusBranchId)
 
-def get_peaks(node: ZcashMMRNode) -> List[ZcashMMRNode]:
-    peaks: List[ZcashMMRNode] = []
+def get_peaks(node: VoteCoinMMRNode) -> List[VoteCoinMMRNode]:
+    peaks: List[VoteCoinMMRNode] = []
 
     # Get number of leaves.
     leaves = node.nLatestHeight - (node.nEarliestHeight - 1)
@@ -114,7 +114,7 @@ def get_peaks(node: ZcashMMRNode) -> List[ZcashMMRNode]:
     return peaks
 
 
-def bag_peaks(peaks: List[ZcashMMRNode]) -> ZcashMMRNode:
+def bag_peaks(peaks: List[VoteCoinMMRNode]) -> VoteCoinMMRNode:
     '''
     "Bag" a list of peaks, and return the final root
     '''
@@ -124,11 +124,11 @@ def bag_peaks(peaks: List[ZcashMMRNode]) -> ZcashMMRNode:
     return root
 
 
-def append(root: ZcashMMRNode, leaf: ZcashMMRNode) -> ZcashMMRNode:
+def append(root: VoteCoinMMRNode, leaf: VoteCoinMMRNode) -> VoteCoinMMRNode:
     '''Append a leaf to an existing tree, return the new tree root'''
     # recursively find a list of peaks in the current tree
-    peaks: List[ZcashMMRNode] = get_peaks(root)
-    merged: List[ZcashMMRNode] = []
+    peaks: List[VoteCoinMMRNode] = get_peaks(root)
+    merged: List[VoteCoinMMRNode] = []
 
     # Merge peaks from right to left.
     # This will produce a list of peaks in reverse order
@@ -147,7 +147,7 @@ def append(root: ZcashMMRNode, leaf: ZcashMMRNode) -> ZcashMMRNode:
     # finally, bag the merged peaks
     return bag_peaks(merged[::-1])
 
-def delete(root: ZcashMMRNode) -> ZcashMMRNode:
+def delete(root: VoteCoinMMRNode) -> VoteCoinMMRNode:
     '''
     Delete the rightmost leaf node from an existing MMR
     Return the new tree root

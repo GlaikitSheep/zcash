@@ -15,8 +15,8 @@ export AFL_INSTALL_DIR=$(realpath "./afl-temp")
 
 function help {
     cat <<EOF
-Builds AFL and an instrumented zcashd, then begins fuzzing.
-This script must be run from within the top level directory of a zcash clone.
+Builds AFL and an instrumented votecoind, then begins fuzzing.
+This script must be run from within the top level directory of a votecoin clone.
 Additional arguments are passed-through to AFL.
 
 Usage:

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "fs.h"
-#include "zcash/Address.hpp"
+#include "votecoin/Address.hpp"
 #include "wallet/wallet.h"
 #include "wallet/walletdb.h"
 #include "util.h"
@@ -24,7 +24,7 @@ TEST(WalletZkeysTest, StoreAndLoadSaplingZkeys) {
     LOCK(wallet.cs_wallet);
 
     // wallet should be empty
-    std::set<libzcash::SaplingPaymentAddress> addrs;
+    std::set<libvotecoin::SaplingPaymentAddress> addrs;
     wallet.GetSaplingPaymentAddresses(addrs);
     ASSERT_EQ(0, addrs.size());
 
@@ -47,7 +47,7 @@ TEST(WalletZkeysTest, StoreAndLoadSaplingZkeys) {
     ASSERT_TRUE(wallet.HaveSaplingIncomingViewingKey(address));
     
     // manually add new spending key to wallet
-    auto m = libzcash::SaplingExtendedSpendingKey::Master(seed);
+    auto m = libvotecoin::SaplingExtendedSpendingKey::Master(seed);
     auto sk = m.Derive(0);
     ASSERT_TRUE(wallet.AddSaplingZKey(sk));
 
@@ -56,7 +56,7 @@ TEST(WalletZkeysTest, StoreAndLoadSaplingZkeys) {
     ASSERT_TRUE(wallet.HaveSaplingSpendingKey(extfvk));
 
     // verify spending key stored correctly
-    libzcash::SaplingExtendedSpendingKey keyOut;
+    libvotecoin::SaplingExtendedSpendingKey keyOut;
     wallet.GetSaplingSpendingKey(extfvk, keyOut);
     ASSERT_EQ(sk, keyOut);
 
@@ -119,7 +119,7 @@ TEST(WalletZkeysTest, StoreAndLoadZkeys) {
     LOCK(wallet.cs_wallet);
 
     // wallet should be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libvotecoin::SproutPaymentAddress> addrs;
     wallet.GetSproutPaymentAddresses(addrs);
     ASSERT_EQ(0, addrs.size());
 
@@ -132,7 +132,7 @@ TEST(WalletZkeysTest, StoreAndLoadZkeys) {
     ASSERT_TRUE(wallet.HaveSproutSpendingKey(addr));
 
     // manually add new spending key to wallet
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     ASSERT_TRUE(wallet.AddSproutZKey(sk));
 
     // verify wallet did add it
@@ -140,7 +140,7 @@ TEST(WalletZkeysTest, StoreAndLoadZkeys) {
     ASSERT_TRUE(wallet.HaveSproutSpendingKey(addr));
 
     // verify spending key stored correctly
-    libzcash::SproutSpendingKey keyOut;
+    libvotecoin::SproutSpendingKey keyOut;
     wallet.GetSproutSpendingKey(addr, keyOut);
     ASSERT_EQ(sk, keyOut);
 
@@ -150,7 +150,7 @@ TEST(WalletZkeysTest, StoreAndLoadZkeys) {
     ASSERT_EQ(1, addrs.count(addr));
 
     // Load a third key into the wallet
-    sk = libzcash::SproutSpendingKey::random();
+    sk = libvotecoin::SproutSpendingKey::random();
     ASSERT_TRUE(wallet.LoadZKey(sk));
 
     // attach metadata to this third key
@@ -177,12 +177,12 @@ TEST(WalletZkeysTest, StoreAndLoadViewingKeys) {
     LOCK(wallet.cs_wallet);
 
     // wallet should be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libvotecoin::SproutPaymentAddress> addrs;
     wallet.GetSproutPaymentAddresses(addrs);
     ASSERT_EQ(0, addrs.size());
 
     // manually add new viewing key to wallet
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto vk = sk.viewing_key();
     ASSERT_TRUE(wallet.AddSproutViewingKey(vk));
 
@@ -193,12 +193,12 @@ TEST(WalletZkeysTest, StoreAndLoadViewingKeys) {
     ASSERT_FALSE(wallet.HaveSproutSpendingKey(addr));
 
     // verify viewing key stored correctly
-    libzcash::SproutViewingKey vkOut;
+    libvotecoin::SproutViewingKey vkOut;
     wallet.GetSproutViewingKey(addr, vkOut);
     ASSERT_EQ(vk, vkOut);
 
     // Load a second viewing key into the wallet
-    auto sk2 = libzcash::SproutSpendingKey::random();
+    auto sk2 = libvotecoin::SproutSpendingKey::random();
     ASSERT_TRUE(wallet.LoadSproutViewingKey(sk2.viewing_key()));
 
     // verify wallet did add it
@@ -234,7 +234,7 @@ TEST(WalletZkeysTest, WriteZkeyDirectToDb) {
     ASSERT_TRUE(fFirstRun);
 
     // wallet should be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libvotecoin::SproutPaymentAddress> addrs;
     wallet.GetSproutPaymentAddresses(addrs);
     ASSERT_EQ(0, addrs.size());
 
@@ -246,7 +246,7 @@ TEST(WalletZkeysTest, WriteZkeyDirectToDb) {
     ASSERT_EQ(1, addrs.size());
 
     // create random key and add it to database directly, bypassing wallet
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto addr = sk.address();
     int64_t now = GetTime();
     CKeyMetadata meta(now);
@@ -272,7 +272,7 @@ TEST(WalletZkeysTest, WriteZkeyDirectToDb) {
     ASSERT_TRUE(wallet.HaveSproutSpendingKey(addr));
 
     // check key is the same
-    libzcash::SproutSpendingKey keyOut;
+    libvotecoin::SproutSpendingKey keyOut;
     wallet.GetSproutSpendingKey(addr, keyOut);
     ASSERT_EQ(sk, keyOut);
 
@@ -307,7 +307,7 @@ TEST(WalletZkeysTest, WriteViewingKeyDirectToDB) {
     ASSERT_TRUE(fFirstRun);
 
     // create random viewing key and add it to database directly, bypassing wallet
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libvotecoin::SproutSpendingKey::random();
     auto vk = sk.viewing_key();
     auto addr = sk.address();
     int64_t now = GetTime();
@@ -325,7 +325,7 @@ TEST(WalletZkeysTest, WriteViewingKeyDirectToDB) {
     ASSERT_TRUE(wallet.HaveSproutViewingKey(addr));
 
     // check key is the same
-    libzcash::SproutViewingKey vkOut;
+    libvotecoin::SproutViewingKey vkOut;
     wallet.GetSproutViewingKey(addr, vkOut);
     ASSERT_EQ(vk, vkOut);
 }
@@ -354,7 +354,7 @@ TEST(WalletZkeysTest, WriteCryptedzkeyDirectToDb) {
     ASSERT_TRUE(fFirstRun);
 
     // wallet should be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libvotecoin::SproutPaymentAddress> addrs;
     wallet.GetSproutPaymentAddresses(addrs);
     ASSERT_EQ(0, addrs.size());
 
@@ -394,7 +394,7 @@ TEST(WalletZkeysTest, WriteCryptedzkeyDirectToDb) {
     ASSERT_TRUE(addrs.count(paymentAddress2));
 
     // spending key is crypted, so we can't extract valid payment address
-    libzcash::SproutSpendingKey keyOut;
+    libvotecoin::SproutSpendingKey keyOut;
     wallet2.GetSproutSpendingKey(paymentAddress, keyOut);
     ASSERT_FALSE(paymentAddress == keyOut.address());
     
@@ -432,7 +432,7 @@ TEST(wallet_zkeys_tests, WriteCryptedSaplingZkeyDirectToDb) {
     wallet.GenerateNewSeed();
 
     // wallet should be empty
-    std::set<libzcash::SaplingPaymentAddress> addrs;
+    std::set<libvotecoin::SaplingPaymentAddress> addrs;
     wallet.GetSaplingPaymentAddresses(addrs);
     ASSERT_EQ(0, addrs.size());
 
@@ -445,7 +445,7 @@ TEST(wallet_zkeys_tests, WriteCryptedSaplingZkeyDirectToDb) {
 
     // Generate a diversified address different to the default
     // If we can't get an early diversified address, we are very unlucky
-    libzcash::SaplingExtendedSpendingKey extsk;
+    libvotecoin::SaplingExtendedSpendingKey extsk;
     EXPECT_TRUE(wallet.GetSaplingExtendedSpendingKey(address, extsk));
     blob88 diversifier;
     diversifier.begin()[0] = 10;
@@ -486,11 +486,11 @@ TEST(wallet_zkeys_tests, WriteCryptedSaplingZkeyDirectToDb) {
     ASSERT_TRUE(addrs.count(dpa));
 
     // spending key is crypted, so we can't extract valid payment address
-    libzcash::SaplingExtendedSpendingKey keyOut;
+    libvotecoin::SaplingExtendedSpendingKey keyOut;
     EXPECT_FALSE(wallet2.GetSaplingExtendedSpendingKey(address, keyOut));
 
     // address -> ivk mapping is not crypted
-    libzcash::SaplingIncomingViewingKey ivkOut;
+    libvotecoin::SaplingIncomingViewingKey ivkOut;
     EXPECT_TRUE(wallet2.GetSaplingIncomingViewingKey(dpa, ivkOut));
     EXPECT_EQ(ivk, ivkOut);
 

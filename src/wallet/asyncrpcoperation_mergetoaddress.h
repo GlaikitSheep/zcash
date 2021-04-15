@@ -1,9 +1,9 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The VoteCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
+#ifndef VOTECOIN_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
+#define VOTECOIN_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
 
 #include "amount.h"
 #include "asyncrpcoperation.h"
@@ -11,8 +11,8 @@
 #include "transaction_builder.h"
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
-#include "zcash/Address.hpp"
-#include "zcash/JoinSplit.hpp"
+#include "votecoin/Address.hpp"
+#include "votecoin/JoinSplit.hpp"
 
 #include <array>
 #include <optional>
@@ -23,7 +23,7 @@
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libvotecoin;
 
 // Input UTXO is a tuple of txid, vout, amount, script
 typedef std::tuple<COutPoint, CAmount, CScript> MergeToAddressInputUTXO;
@@ -191,4 +191,4 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
+#endif // VOTECOIN_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H

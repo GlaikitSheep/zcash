@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "miner.h"
-#include "zcash/IncrementalMerkleTree.hpp"
+#include "votecoin/IncrementalMerkleTree.hpp"
 
 class CBlock;
 class CBlockIndex;

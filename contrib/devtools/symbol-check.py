@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright (c) 2014 Wladimir J. van der Laan
-# Copyright (c) 2016-2020 The Zcash developers
+# Copyright (c) 2016-2020 The VoteCoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 '''
@@ -81,7 +81,7 @@ CPPFILT_CMD = os.getenv('CPPFILT', '/usr/bin/c++filt')
 
 # Allowed NEEDED libraries
 ALLOWED_LIBRARIES = {
-    # zcashd
+    # votecoind
     'libgcc_s.so.1',        # GCC support library (also used by clang)
     'libc.so.6',            # C library
     'libpthread.so.0',      # threading

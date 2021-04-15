@@ -25,8 +25,8 @@
 #include "script/sign.h"
 #include "timedata.h"
 #include "utilmoneystr.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Note.hpp"
+#include "votecoin/JoinSplit.hpp"
+#include "votecoin/Note.hpp"
 #include "crypter.h"
 #include "wallet/asyncrpcoperation_saplingmigration.h"
 
@@ -38,7 +38,7 @@
 #include <boost/thread.hpp>
 
 using namespace std;
-using namespace libzcash;
+using namespace libvotecoin;
 
 CWallet* pwalletMain = NULL;
 /** Transaction fee set by the user */
@@ -90,7 +90,7 @@ const CWalletTx* CWallet::GetWalletTx(const uint256& hash) const
 }
 
 // Generate a new spending key and return its public payment address
-libzcash::SproutPaymentAddress CWallet::GenerateNewSproutZKey()
+libvotecoin::SproutPaymentAddress CWallet::GenerateNewSproutZKey()
 {
     AssertLockHeld(cs_wallet); // mapSproutZKeyMetadata
 
@@ -124,7 +124,7 @@ SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
     if (!GetHDSeed(seed))
         throw std::runtime_error("CWallet::GenerateNewSaplingZKey(): HD seed not found");
 
-    auto m = libzcash::SaplingExtendedSpendingKey::Master(seed);
+    auto m = libvotecoin::SaplingExtendedSpendingKey::Master(seed);
     uint32_t bip44CoinType = Params().BIP44CoinType();
 
     // We use a fixed keypath scheme of m/32'/coin_type'/account'
@@ -134,7 +134,7 @@ SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
     auto m_32h_cth = m_32h.Derive(bip44CoinType | ZIP32_HARDENED_KEY_LIMIT);
 
     // Derive account key at next index, skip keys already known to the wallet
-    libzcash::SaplingExtendedSpendingKey xsk;
+    libvotecoin::SaplingExtendedSpendingKey xsk;
     do
     {
         xsk = m_32h_cth.Derive(hdChain.saplingAccountCounter | ZIP32_HARDENED_KEY_LIMIT);
@@ -159,7 +159,7 @@ SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
 }
 
 // Add spending key to keystore 
-bool CWallet::AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &sk)
+bool CWallet::AddSaplingZKey(const libvotecoin::SaplingExtendedSpendingKey &sk)
 {
     AssertLockHeld(cs_wallet); // mapSaplingZKeyMetadata
 
@@ -179,7 +179,7 @@ bool CWallet::AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &sk)
     return true;
 }
 
-bool CWallet::AddSaplingFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk)
+bool CWallet::AddSaplingFullViewingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk)
 {
     AssertLockHeld(cs_wallet);
 
@@ -196,8 +196,8 @@ bool CWallet::AddSaplingFullViewingKey(const libzcash::SaplingExtendedFullViewin
 
 // Add payment address -> incoming viewing key map entry
 bool CWallet::AddSaplingIncomingViewingKey(
-    const libzcash::SaplingIncomingViewingKey &ivk,
-    const libzcash::SaplingPaymentAddress &addr)
+    const libvotecoin::SaplingIncomingViewingKey &ivk,
+    const libvotecoin::SaplingPaymentAddress &addr)
 {
     AssertLockHeld(cs_wallet); // mapSaplingZKeyMetadata
 
@@ -218,7 +218,7 @@ bool CWallet::AddSaplingIncomingViewingKey(
 
 
 // Add spending key to keystore and persist to disk
-bool CWallet::AddSproutZKey(const libzcash::SproutSpendingKey &key)
+bool CWallet::AddSproutZKey(const libvotecoin::SproutSpendingKey &key)
 {
     AssertLockHeld(cs_wallet); // mapSproutZKeyMetadata
     auto addr = key.address();
@@ -316,8 +316,8 @@ bool CWallet::AddCryptedKey(const CPubKey &vchPubKey,
 
 
 bool CWallet::AddCryptedSproutSpendingKey(
-    const libzcash::SproutPaymentAddress &address,
-    const libzcash::ReceivingKey &rk,
+    const libvotecoin::SproutPaymentAddress &address,
+    const libvotecoin::ReceivingKey &rk,
     const std::vector<unsigned char> &vchCryptedSecret)
 {
     if (!CCryptoKeyStore::AddCryptedSproutSpendingKey(address, rk, vchCryptedSecret))
@@ -341,7 +341,7 @@ bool CWallet::AddCryptedSproutSpendingKey(
     return false;
 }
 
-bool CWallet::AddCryptedSaplingSpendingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
+bool CWallet::AddCryptedSaplingSpendingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk,
                                            const std::vector<unsigned char> &vchCryptedSecret)
 {
     if (!CCryptoKeyStore::AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret))
@@ -383,47 +383,47 @@ bool CWallet::LoadCryptedKey(const CPubKey &vchPubKey, const std::vector<unsigne
     return CCryptoKeyStore::AddCryptedKey(vchPubKey, vchCryptedSecret);
 }
 
-bool CWallet::LoadCryptedZKey(const libzcash::SproutPaymentAddress &addr, const libzcash::ReceivingKey &rk, const std::vector<unsigned char> &vchCryptedSecret)
+bool CWallet::LoadCryptedZKey(const libvotecoin::SproutPaymentAddress &addr, const libvotecoin::ReceivingKey &rk, const std::vector<unsigned char> &vchCryptedSecret)
 {
     return CCryptoKeyStore::AddCryptedSproutSpendingKey(addr, rk, vchCryptedSecret);
 }
 
 bool CWallet::LoadCryptedSaplingZKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk,
+    const libvotecoin::SaplingExtendedFullViewingKey &extfvk,
     const std::vector<unsigned char> &vchCryptedSecret)
 {
      return CCryptoKeyStore::AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret);
 }
 
-void CWallet::LoadSaplingZKeyMetadata(const libzcash::SaplingIncomingViewingKey &ivk, const CKeyMetadata &meta)
+void CWallet::LoadSaplingZKeyMetadata(const libvotecoin::SaplingIncomingViewingKey &ivk, const CKeyMetadata &meta)
 {
     AssertLockHeld(cs_wallet); // mapSaplingZKeyMetadata
     mapSaplingZKeyMetadata[ivk] = meta;
 }
 
-bool CWallet::LoadSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key)
+bool CWallet::LoadSaplingZKey(const libvotecoin::SaplingExtendedSpendingKey &key)
 {
     return CCryptoKeyStore::AddSaplingSpendingKey(key);
 }
 
-bool CWallet::LoadSaplingFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk)
+bool CWallet::LoadSaplingFullViewingKey(const libvotecoin::SaplingExtendedFullViewingKey &extfvk)
 {
     return CCryptoKeyStore::AddSaplingFullViewingKey(extfvk);
 }
 
 bool CWallet::LoadSaplingPaymentAddress(
-    const libzcash::SaplingPaymentAddress &addr,
-    const libzcash::SaplingIncomingViewingKey &ivk)
+    const libvotecoin::SaplingPaymentAddress &addr,
+    const libvotecoin::SaplingIncomingViewingKey &ivk)
 {
     return CCryptoKeyStore::AddSaplingIncomingViewingKey(ivk, addr);
 }
 
-bool CWallet::LoadZKey(const libzcash::SproutSpendingKey &key)
+bool CWallet::LoadZKey(const libvotecoin::SproutSpendingKey &key)
 {
     return CCryptoKeyStore::AddSproutSpendingKey(key);
 }
 
-bool CWallet::AddSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWallet::AddSproutViewingKey(const libvotecoin::SproutViewingKey &vk)
 {
     if (!CCryptoKeyStore::AddSproutViewingKey(vk)) {
         return false;
@@ -435,7 +435,7 @@ bool CWallet::AddSproutViewingKey(const libzcash::SproutViewingKey &vk)
     return CWalletDB(strWalletFile).WriteSproutViewingKey(vk);
 }
 
-bool CWallet::RemoveSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWallet::RemoveSproutViewingKey(const libvotecoin::SproutViewingKey &vk)
 {
     AssertLockHeld(cs_wallet);
     if (!CCryptoKeyStore::RemoveSproutViewingKey(vk)) {
@@ -450,7 +450,7 @@ bool CWallet::RemoveSproutViewingKey(const libzcash::SproutViewingKey &vk)
     return true;
 }
 
-bool CWallet::LoadSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWallet::LoadSproutViewingKey(const libvotecoin::SproutViewingKey &vk)
 {
     return CCryptoKeyStore::AddSproutViewingKey(vk);
 }
@@ -526,7 +526,7 @@ bool CWallet::Unlock(const SecureString& strWalletPassphrase)
                 continue; // try another master key
             if (CCryptoKeyStore::Unlock(vMasterKey)) {
                 // Now that the wallet is decrypted, ensure we have an HD seed.
-                // https://github.com/zcash/zcash/issues/3607
+                // https://github.com/votecoin/votecoin/issues/3607
                 if (!this->HaveHDSeed()) {
                     this->GenerateNewSeed();
                 }
@@ -684,17 +684,17 @@ void CWallet::SetBestChain(const CBlockLocator& loc)
     SetBestChainINTERNAL(walletdb, loc);
 }
 
-std::set<std::pair<libzcash::PaymentAddress, uint256>> CWallet::GetNullifiersForAddresses(
-        const std::set<libzcash::PaymentAddress> & addresses)
+std::set<std::pair<libvotecoin::PaymentAddress, uint256>> CWallet::GetNullifiersForAddresses(
+        const std::set<libvotecoin::PaymentAddress> & addresses)
 {
-    std::set<std::pair<libzcash::PaymentAddress, uint256>> nullifierSet;
+    std::set<std::pair<libvotecoin::PaymentAddress, uint256>> nullifierSet;
     // Sapling ivk -> list of addrs map
     // (There may be more than one diversified address for a given ivk.)
-    std::map<libzcash::SaplingIncomingViewingKey, std::vector<libzcash::SaplingPaymentAddress>> ivkMap;
+    std::map<libvotecoin::SaplingIncomingViewingKey, std::vector<libvotecoin::SaplingPaymentAddress>> ivkMap;
     for (const auto & addr : addresses) {
-        auto saplingAddr = std::get_if<libzcash::SaplingPaymentAddress>(&addr);
+        auto saplingAddr = std::get_if<libvotecoin::SaplingPaymentAddress>(&addr);
         if (saplingAddr != nullptr) {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libvotecoin::SaplingIncomingViewingKey ivk;
             this->GetSaplingIncomingViewingKey(*saplingAddr, ivk);
             ivkMap[ivk].push_back(*saplingAddr);
         }
@@ -725,7 +725,7 @@ std::set<std::pair<libzcash::PaymentAddress, uint256>> CWallet::GetNullifiersFor
 }
 
 bool CWallet::IsNoteSproutChange(
-        const std::set<std::pair<libzcash::PaymentAddress, uint256>> & nullifierSet,
+        const std::set<std::pair<libvotecoin::PaymentAddress, uint256>> & nullifierSet,
         const PaymentAddress & address,
         const JSOutPoint & jsop)
 {
@@ -748,8 +748,8 @@ bool CWallet::IsNoteSproutChange(
     return false;
 }
 
-bool CWallet::IsNoteSaplingChange(const std::set<std::pair<libzcash::PaymentAddress, uint256>> & nullifierSet,
-        const libzcash::PaymentAddress & address,
+bool CWallet::IsNoteSaplingChange(const std::set<std::pair<libvotecoin::PaymentAddress, uint256>> & nullifierSet,
+        const libvotecoin::PaymentAddress & address,
         const SaplingOutPoint & op)
 {
     // A Note is marked as "change" if the address that received it
@@ -1847,13 +1847,13 @@ void CWallet::EraseFromWallet(const uint256 &hash)
  * Throws std::runtime_error if the decryptor doesn't match this note
  */
 std::optional<uint256> CWallet::GetSproutNoteNullifier(const JSDescription &jsdesc,
-                                                         const libzcash::SproutPaymentAddress &address,
+                                                         const libvotecoin::SproutPaymentAddress &address,
                                                          const ZCNoteDecryption &dec,
                                                          const uint256 &hSig,
                                                          uint8_t n) const
 {
     std::optional<uint256> ret;
-    auto note_pt = libzcash::SproutNotePlaintext::decrypt(
+    auto note_pt = libvotecoin::SproutNotePlaintext::decrypt(
         dec,
         jsdesc.ciphertexts[n],
         jsdesc.ephemeralKey,
@@ -1863,13 +1863,13 @@ std::optional<uint256> CWallet::GetSproutNoteNullifier(const JSDescription &jsde
 
     // Check note plaintext against note commitment
     if (note.cm() != jsdesc.commitments[n]) {
-        throw libzcash::note_decryption_failed();
+        throw libvotecoin::note_decryption_failed();
     }
 
     // SpendingKeys are only available if:
     // - We have them (this isn't a viewing key)
     // - The wallet is unlocked
-    libzcash::SproutSpendingKey key;
+    libvotecoin::SproutSpendingKey key;
     if (GetSproutSpendingKey(address, key)) {
         ret = note.nullifier(key);
     }
@@ -3342,7 +3342,7 @@ bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int
     vector<pair<CAmount, pair<const CWalletTx*,unsigned int> > > vValue;
     CAmount nTotalLower = 0;
 
-    std::shuffle(vCoins.begin(), vCoins.end(), ZcashRandomEngine());
+    std::shuffle(vCoins.begin(), vCoins.end(), VoteCoinRandomEngine());
 
     for (const COutput &output : vCoins)
     {
@@ -4778,7 +4778,7 @@ bool CWallet::InitLoadWallet(bool clearWitnessCaches)
     if (!walletInstance->HaveHDSeed())
     {
         // We can't set the new HD seed until the wallet is decrypted.
-        // https://github.com/zcash/zcash/issues/3607
+        // https://github.com/votecoin/votecoin/issues/3607
         if (!walletInstance->IsCrypted()) {
             // generate a new HD seed
             walletInstance->GenerateNewSeed();
@@ -4922,8 +4922,8 @@ bool CWallet::ParameterInteraction()
     // Check Sapling migration address if set and is a valid Sapling address
     if (mapArgs.count("-migrationdestaddress")) {
         std::string migrationDestAddress = mapArgs["-migrationdestaddress"];
-        libzcash::PaymentAddress address = keyIO.DecodePaymentAddress(migrationDestAddress);
-        if (std::get_if<libzcash::SaplingPaymentAddress>(&address) == nullptr) {
+        libvotecoin::PaymentAddress address = keyIO.DecodePaymentAddress(migrationDestAddress);
+        if (std::get_if<libvotecoin::SaplingPaymentAddress>(&address) == nullptr) {
             return UIError(_("-migrationdestaddress must be a valid Sapling address."));
         }
     }
@@ -5181,14 +5181,14 @@ void CWallet::GetFilteredNotes(
 // Shielded key and address generalizations
 //
 
-bool PaymentAddressBelongsToWallet::operator()(const libzcash::SproutPaymentAddress &zaddr) const
+bool PaymentAddressBelongsToWallet::operator()(const libvotecoin::SproutPaymentAddress &zaddr) const
 {
     return m_wallet->HaveSproutSpendingKey(zaddr) || m_wallet->HaveSproutViewingKey(zaddr);
 }
 
-bool PaymentAddressBelongsToWallet::operator()(const libzcash::SaplingPaymentAddress &zaddr) const
+bool PaymentAddressBelongsToWallet::operator()(const libvotecoin::SaplingPaymentAddress &zaddr) const
 {
-    libzcash::SaplingIncomingViewingKey ivk;
+    libvotecoin::SaplingIncomingViewingKey ivk;
 
     // If we have a SaplingExtendedSpendingKey in the wallet, then we will
     // also have the corresponding SaplingExtendedFullViewingKey.
@@ -5196,97 +5196,97 @@ bool PaymentAddressBelongsToWallet::operator()(const libzcash::SaplingPaymentAdd
         m_wallet->HaveSaplingFullViewingKey(ivk);
 }
 
-bool PaymentAddressBelongsToWallet::operator()(const libzcash::InvalidEncoding& no) const
+bool PaymentAddressBelongsToWallet::operator()(const libvotecoin::InvalidEncoding& no) const
 {
     return false;
 }
 
-std::optional<libzcash::ViewingKey> GetViewingKeyForPaymentAddress::operator()(
-    const libzcash::SproutPaymentAddress &zaddr) const
+std::optional<libvotecoin::ViewingKey> GetViewingKeyForPaymentAddress::operator()(
+    const libvotecoin::SproutPaymentAddress &zaddr) const
 {
-    libzcash::SproutViewingKey vk;
+    libvotecoin::SproutViewingKey vk;
     if (!m_wallet->GetSproutViewingKey(zaddr, vk)) {
-        libzcash::SproutSpendingKey k;
+        libvotecoin::SproutSpendingKey k;
         if (!m_wallet->GetSproutSpendingKey(zaddr, k)) {
             return std::nullopt;
         }
         vk = k.viewing_key();
     }
-    return libzcash::ViewingKey(vk);
+    return libvotecoin::ViewingKey(vk);
 }
 
-std::optional<libzcash::ViewingKey> GetViewingKeyForPaymentAddress::operator()(
-    const libzcash::SaplingPaymentAddress &zaddr) const
+std::optional<libvotecoin::ViewingKey> GetViewingKeyForPaymentAddress::operator()(
+    const libvotecoin::SaplingPaymentAddress &zaddr) const
 {
-    libzcash::SaplingIncomingViewingKey ivk;
-    libzcash::SaplingExtendedFullViewingKey extfvk;
+    libvotecoin::SaplingIncomingViewingKey ivk;
+    libvotecoin::SaplingExtendedFullViewingKey extfvk;
 
     if (m_wallet->GetSaplingIncomingViewingKey(zaddr, ivk) &&
         m_wallet->GetSaplingFullViewingKey(ivk, extfvk))
     {
-        return libzcash::ViewingKey(extfvk);
+        return libvotecoin::ViewingKey(extfvk);
     } else {
         return std::nullopt;
     }
 }
 
-std::optional<libzcash::ViewingKey> GetViewingKeyForPaymentAddress::operator()(
-    const libzcash::InvalidEncoding& no) const
+std::optional<libvotecoin::ViewingKey> GetViewingKeyForPaymentAddress::operator()(
+    const libvotecoin::InvalidEncoding& no) const
 {
     // Defaults to InvalidEncoding
-    return libzcash::ViewingKey();
+    return libvotecoin::ViewingKey();
 }
 
-bool HaveSpendingKeyForPaymentAddress::operator()(const libzcash::SproutPaymentAddress &zaddr) const
+bool HaveSpendingKeyForPaymentAddress::operator()(const libvotecoin::SproutPaymentAddress &zaddr) const
 {
     return m_wallet->HaveSproutSpendingKey(zaddr);
 }
 
-bool HaveSpendingKeyForPaymentAddress::operator()(const libzcash::SaplingPaymentAddress &zaddr) const
+bool HaveSpendingKeyForPaymentAddress::operator()(const libvotecoin::SaplingPaymentAddress &zaddr) const
 {
-    libzcash::SaplingIncomingViewingKey ivk;
-    libzcash::SaplingExtendedFullViewingKey extfvk;
+    libvotecoin::SaplingIncomingViewingKey ivk;
+    libvotecoin::SaplingExtendedFullViewingKey extfvk;
 
     return m_wallet->GetSaplingIncomingViewingKey(zaddr, ivk) &&
         m_wallet->GetSaplingFullViewingKey(ivk, extfvk) &&
         m_wallet->HaveSaplingSpendingKey(extfvk);
 }
 
-bool HaveSpendingKeyForPaymentAddress::operator()(const libzcash::InvalidEncoding& no) const
+bool HaveSpendingKeyForPaymentAddress::operator()(const libvotecoin::InvalidEncoding& no) const
 {
     return false;
 }
 
-std::optional<libzcash::SpendingKey> GetSpendingKeyForPaymentAddress::operator()(
-    const libzcash::SproutPaymentAddress &zaddr) const
+std::optional<libvotecoin::SpendingKey> GetSpendingKeyForPaymentAddress::operator()(
+    const libvotecoin::SproutPaymentAddress &zaddr) const
 {
-    libzcash::SproutSpendingKey k;
+    libvotecoin::SproutSpendingKey k;
     if (m_wallet->GetSproutSpendingKey(zaddr, k)) {
-        return libzcash::SpendingKey(k);
+        return libvotecoin::SpendingKey(k);
     } else {
         return std::nullopt;
     }
 }
 
-std::optional<libzcash::SpendingKey> GetSpendingKeyForPaymentAddress::operator()(
-    const libzcash::SaplingPaymentAddress &zaddr) const
+std::optional<libvotecoin::SpendingKey> GetSpendingKeyForPaymentAddress::operator()(
+    const libvotecoin::SaplingPaymentAddress &zaddr) const
 {
-    libzcash::SaplingExtendedSpendingKey extsk;
+    libvotecoin::SaplingExtendedSpendingKey extsk;
     if (m_wallet->GetSaplingExtendedSpendingKey(zaddr, extsk)) {
-        return libzcash::SpendingKey(extsk);
+        return libvotecoin::SpendingKey(extsk);
     } else {
         return std::nullopt;
     }
 }
 
-std::optional<libzcash::SpendingKey> GetSpendingKeyForPaymentAddress::operator()(
-    const libzcash::InvalidEncoding& no) const
+std::optional<libvotecoin::SpendingKey> GetSpendingKeyForPaymentAddress::operator()(
+    const libvotecoin::InvalidEncoding& no) const
 {
     // Defaults to InvalidEncoding
-    return libzcash::SpendingKey();
+    return libvotecoin::SpendingKey();
 }
 
-KeyAddResult AddViewingKeyToWallet::operator()(const libzcash::SproutViewingKey &vkey) const {
+KeyAddResult AddViewingKeyToWallet::operator()(const libvotecoin::SproutViewingKey &vkey) const {
     auto addr = vkey.address();
 
     if (m_wallet->HaveSproutSpendingKey(addr)) {
@@ -5300,7 +5300,7 @@ KeyAddResult AddViewingKeyToWallet::operator()(const libzcash::SproutViewingKey 
     }
 }
 
-KeyAddResult AddViewingKeyToWallet::operator()(const libzcash::SaplingExtendedFullViewingKey &extfvk) const {
+KeyAddResult AddViewingKeyToWallet::operator()(const libvotecoin::SaplingExtendedFullViewingKey &extfvk) const {
     if (m_wallet->HaveSaplingSpendingKey(extfvk)) {
         return SpendingKeyExists;
     } else if (m_wallet->HaveSaplingFullViewingKey(extfvk.fvk.in_viewing_key())) {
@@ -5312,11 +5312,11 @@ KeyAddResult AddViewingKeyToWallet::operator()(const libzcash::SaplingExtendedFu
     }
 }
 
-KeyAddResult AddViewingKeyToWallet::operator()(const libzcash::InvalidEncoding& no) const {
+KeyAddResult AddViewingKeyToWallet::operator()(const libvotecoin::InvalidEncoding& no) const {
     throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid viewing key");
 }
 
-KeyAddResult AddSpendingKeyToWallet::operator()(const libzcash::SproutSpendingKey &sk) const {
+KeyAddResult AddSpendingKeyToWallet::operator()(const libvotecoin::SproutSpendingKey &sk) const {
     auto addr = sk.address();
     KeyIO keyIO(Params());
     if (log){
@@ -5332,7 +5332,7 @@ KeyAddResult AddSpendingKeyToWallet::operator()(const libzcash::SproutSpendingKe
     }
 }
 
-KeyAddResult AddSpendingKeyToWallet::operator()(const libzcash::SaplingExtendedSpendingKey &sk) const {
+KeyAddResult AddSpendingKeyToWallet::operator()(const libvotecoin::SaplingExtendedSpendingKey &sk) const {
     auto extfvk = sk.ToXFVK();
     auto ivk = extfvk.fvk.in_viewing_key();
     KeyIO keyIO(Params());
@@ -5368,6 +5368,6 @@ KeyAddResult AddSpendingKeyToWallet::operator()(const libzcash::SaplingExtendedS
     }
 }
 
-KeyAddResult AddSpendingKeyToWallet::operator()(const libzcash::InvalidEncoding& no) const {
+KeyAddResult AddSpendingKeyToWallet::operator()(const libvotecoin::InvalidEncoding& no) const {
     throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid spending key");
 }

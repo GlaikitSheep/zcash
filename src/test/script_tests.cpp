@@ -18,7 +18,7 @@
 #include "test/test_util.h"
 
 #if defined(HAVE_SCRIPT_LIB)
-#include "script/zcash_script.h"
+#include "script/votecoin_script.h"
 #endif
 
 #include <fstream>
@@ -84,7 +84,7 @@ void DoTest(const CScript& scriptPubKey, const CScript& scriptSig, int flags, ui
 #if defined(HAVE_SCRIPT_LIB)
     CDataStream stream(SER_NETWORK, PROTOCOL_VERSION);
     stream << tx2;
-    BOOST_CHECK_MESSAGE(zcash_script_verify(
+    BOOST_CHECK_MESSAGE(votecoin_script_verify(
         begin_ptr(scriptPubKey), scriptPubKey.size(),
         txCredit.vout[0].nValue,
         (const unsigned char*)&stream[0], stream.size(),
